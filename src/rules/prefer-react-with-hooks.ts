@@ -102,7 +102,9 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                 hook:
                   hookNames.length === 1
                     ? hookNames[0]
-                    : `${hookNames.slice(0, -1).join(", ")} and ${hookNames.slice(-1)}`,
+                    : `${hookNames
+                        .slice(0, -1)
+                        .join(", ")} and ${hookNames.slice(-1)}`,
               },
               fix: (fixer) => {
                 const sourceCode = context.getSourceCode();
@@ -202,8 +204,9 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     fixable: "code",
     messages: {
-      preferReact: "Use React.{{hook}} instead of importing {{hook}} directly.",
-      preferReactPrefix: "Prefix {{hook}} with React.",
+      preferReact:
+        "NIMA: Use React.{{hook}} instead of importing {{hook}} directly.",
+      preferReactPrefix: "NIMA: Prefix {{hook}} with React.",
     },
     schema: [
       {
