@@ -46,10 +46,10 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
         node.params.length === 0
           ? "()"
           : node.params.length === 1 &&
-              node.params[0].type === AST_NODE_TYPES.Identifier &&
-              !node.params[0].typeAnnotation
-            ? sourceCode.getText(node.params[0])
-            : `(${node.params.map((p) => sourceCode.getText(p)).join(", ")})`;
+            node.params[0].type === AST_NODE_TYPES.Identifier &&
+            !node.params[0].typeAnnotation
+          ? sourceCode.getText(node.params[0])
+          : `(${node.params.map((p) => sourceCode.getText(p)).join(", ")})`;
       const returnType = node.returnType
         ? `: ${sourceCode.getText(node.returnType.typeAnnotation)}`
         : "";
@@ -183,10 +183,12 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     fixable: "code",
     messages: {
-      preferArrowFunction: "Prefer arrow functions over function declarations.",
+      preferArrowFunction:
+        "NIMA: Prefer arrow functions over function declarations.",
       preferArrowFunctionExpression:
-        "Prefer arrow functions over function expressions.",
-      preferArrowMethod: "Prefer arrow functions over method definitions.",
+        "NIMA: Prefer arrow functions over function expressions.",
+      preferArrowMethod:
+        "NIMA: Prefer arrow functions over method definitions.",
     },
     schema: [
       {
