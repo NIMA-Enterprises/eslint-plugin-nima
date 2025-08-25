@@ -5,18 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@typescript-eslint/parser':
-    specifier: ^8.40.0
-    version: 8.40.0(eslint@9.34.0)(typescript@5.9.2)
   '@typescript-eslint/utils':
     specifier: ^8.40.0
     version: 8.40.0(eslint@9.34.0)(typescript@5.9.2)
   eslint:
-    specifier: ^9.34.0
+    specifier: ^9.0.0
     version: 9.34.0(jiti@2.5.1)
-  typescript:
-    specifier: ^5.9.2
-    version: 5.9.2
 
 devDependencies:
   '@eslint/core':
@@ -37,9 +31,15 @@ devDependencies:
   globals:
     specifier: ^16.3.0
     version: 16.3.0
+  husky:
+    specifier: ^9.1.7
+    version: 9.1.7
   jiti:
     specifier: ^2.5.1
     version: 2.5.1
+  typescript:
+    specifier: ^5.9.2
+    version: 5.9.2
   typescript-eslint:
     specifier: ^8.39.0
     version: 8.40.0(eslint@9.34.0)(typescript@5.9.2)
@@ -208,6 +208,7 @@ packages:
       typescript: 5.9.2
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@typescript-eslint/project-service@8.40.0(typescript@5.9.2):
     resolution: {integrity: sha512-/A89vz7Wf5DEXsGVvcGdYKbVM9F7DyFXj52lNYUDS1L9yJfqjW/fIp5PgMuEJL/KeqVTe2QSbXAGUZljDUpArw==}
@@ -607,6 +608,12 @@ packages:
   /has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
+
+  /husky@9.1.7:
+    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dev: true
 
   /ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}

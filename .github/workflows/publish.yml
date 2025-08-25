@@ -1,0 +1,34 @@
+name: Publish ESLint Plugin
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+
+      - name: Authenticate to npm
+        run: npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build
+        run: pnpm build
+
+      - name: Lint & Type Check
+        run: pnpm validate
+
+      - name: Publish
+        run: npm publish --access public
