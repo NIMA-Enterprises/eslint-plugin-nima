@@ -89,7 +89,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     messages: {
       useObjectParams:
-        "DragonSwap: Function has {{count}} parameter(s). Use a single object parameter instead: {{params}}",
+        "NIMA: Function has {{count}} parameter(s). Use a single object parameter instead: {{params}}",
     },
     schema: [
       {

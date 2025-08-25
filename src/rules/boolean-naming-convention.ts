@@ -335,13 +335,13 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     messages: {
       booleanFunctionName:
-        "DragonSwap: Function '{{name}}' returns a boolean, use a prefix like is{{suggestion}}}",
+        "NIMA: Function '{{name}}' returns a boolean, use a prefix like is{{suggestion}}}",
       booleanParameterName:
-        "DragonSwap: Boolean parameter '{{name}}' should use a prefix like is{{suggestion}}}",
+        "NIMA: Boolean parameter '{{name}}' should use a prefix like is{{suggestion}}}",
       booleanPropertyName:
-        "DragonSwap: Boolean property '{{name}}' should use a prefix like is{{suggestion}}}",
+        "NIMA: Boolean property '{{name}}' should use a prefix like is{{suggestion}}}",
       booleanVariableName:
-        "DragonSwap: Boolean variable '{{name}}' should use a prefix like is{{suggestion}}}",
+        "NIMA: Boolean variable '{{name}}' should use a prefix like is{{suggestion}}}",
     },
     schema: [
       {

@@ -88,7 +88,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     fixable: "code",
     messages: {
       badHandleName:
-        "You shouldn't use handler, please use the handle prefix instead ({{ fnWithGoodName }})",
+        "NIMA: You shouldn't use the handler suffix, use the handle prefix instead ({{ fnWithGoodName }})",
     },
     schema: [],
     type: "suggestion",
