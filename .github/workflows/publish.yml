@@ -21,6 +21,9 @@ jobs:
       - name: Authenticate to npm
         run: npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
 
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+
       - name: Install dependencies
         run: pnpm install
 
