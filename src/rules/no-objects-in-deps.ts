@@ -44,6 +44,9 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
           for (const def of variable.defs) {
             if (def.type === "Variable" && def.node.init) {
               context.report({
+                data: {
+                  object: context.sourceCode.getText(element),
+                },
                 messageId: "noObjects",
                 node: element,
               });
@@ -76,7 +79,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
       description: "Suggests to not use objects in dependency arrays",
     },
     messages: {
-      noObjects: "Please refrain from using objects in dependency arrays",
+      noObjects:
+        "NIMA: Objects inside of dependency arrays aren't allowed. Try doing JSON.stringify({{ object }}).",
     },
     schema: [],
     type: "suggestion",
