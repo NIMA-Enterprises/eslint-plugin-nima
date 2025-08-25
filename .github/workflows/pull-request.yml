@@ -28,9 +28,6 @@ jobs:
       - name: Lint code
         run: pnpm lint
 
-      - name: Lint fix check
-        run: pnpm lint:fix --check
-
       - name: Type check
         run: pnpm check-types
 
