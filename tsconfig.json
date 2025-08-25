@@ -1,0 +1,21 @@
+{
+  "include": ["**/*"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "types": ["node"],
+    "outDir": "dist",
+    "moduleResolution": "bundler",
+    "module": "ESNext",
+    "target": "ESNext",
+    "rootDir": ".",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "tsBuildInfoFile": "./dist/ts-build-info.tsbuildinfo",
+    "declaration": true,
+    "declarationDir": "dist",
+    "removeComments": true,
+    "verbatimModuleSyntax": true,
+    "strict": true,
+    "baseUrl": "."
+  }
+}

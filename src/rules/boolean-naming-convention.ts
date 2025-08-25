@@ -1,0 +1,365 @@
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
+
+import { DEFAULT_PREFIXES } from "../constants/boolean-prefixes.js";
+import { getType } from "../utility/getType.js";
+
+export const name = "boolean-naming-convention";
+
+export const rule = ESLintUtils.RuleCreator.withoutDocs({
+  create: (context, options) => {
+    const allowedPrefixes = options[0].allowedPrefixes;
+    const checkVariables = options[0].checkVariables;
+    const checkFunctions = options[0].checkFunctions;
+    const checkParameters = options[0].checkParameters;
+    const checkProperties = options[0].checkProperties;
+
+    const services = context.sourceCode.parserServices;
+
+    const checker = services?.program?.getTypeChecker();
+
+    function hasValidBooleanPrefix(name: string) {
+      return allowedPrefixes?.some((prefix) =>
+        name.toLowerCase().startsWith(prefix.toLowerCase())
+      );
+    }
+
+    function generateSuggestion(name: string): string {
+      return name.charAt(0).toUpperCase() + name.slice(1);
+    }
+
+    function isBooleanType(node: TSESTree.Node): boolean {
+      try {
+        const type = getType(context, node);
+
+        return type === "boolean" || type === "true" || type === "false";
+      } catch {
+        return false;
+      }
+    }
+
+    const isParamBoolean = (
+      node:
+        | TSESTree.ArrowFunctionExpression
+        | TSESTree.FunctionDeclaration
+        | TSESTree.FunctionExpression
+    ) => {
+      for (const param of node.params) {
+        if (
+          param.type === AST_NODE_TYPES.Identifier &&
+          param.typeAnnotation?.typeAnnotation.type ===
+            AST_NODE_TYPES.TSBooleanKeyword
+        ) {
+          const name = param.name;
+          if (!hasValidBooleanPrefix(name)) {
+            context.report({
+              data: {
+                name,
+                suggestion: generateSuggestion(name),
+              },
+              messageId: "booleanParameterName",
+              node: param,
+            });
+          }
+        }
+      }
+    };
+
+    function functionReturnsBooleanType(node: TSESTree.FunctionLike): boolean {
+      try {
+        const tsNode = services?.esTreeNodeToTSNodeMap?.get(node);
+        if (!tsNode) return false;
+
+        const signature = checker?.getSignatureFromDeclaration(tsNode);
+        if (signature && checker) {
+          const returnType = checker.getReturnTypeOfSignature(signature);
+          const returnTypeString = checker.typeToString(returnType);
+          return (
+            returnTypeString === "boolean" ||
+            returnTypeString === "true" ||
+            returnTypeString === "false"
+          );
+        }
+        return false;
+      } catch {
+        return false;
+      }
+    }
+
+    return {
+      ArrowFunctionExpression(node) {
+        if (checkParameters) {
+          isParamBoolean(node);
+        }
+      },
+
+      FunctionDeclaration: (node) => {
+        if (!checkFunctions) return;
+
+        if (node.id && functionReturnsBooleanType(node)) {
+          const name = node.id.name;
+          if (!hasValidBooleanPrefix(name)) {
+            context.report({
+              data: {
+                name,
+                suggestion: generateSuggestion(name),
+              },
+              messageId: "booleanFunctionName",
+              node: node.id,
+            });
+          }
+        }
+
+        if (checkParameters) {
+          isParamBoolean(node);
+        }
+      },
+
+      FunctionExpression(node) {
+        if (checkParameters) {
+          isParamBoolean(node);
+        }
+      },
+
+      ObjectExpression: (node) => {
+        if (!checkProperties) return;
+
+        for (const prop of node.properties) {
+          if (
+            prop.type === AST_NODE_TYPES.Property &&
+            prop.key.type === AST_NODE_TYPES.Identifier &&
+            !prop.computed &&
+            prop.value
+          ) {
+            if (isBooleanType(prop.value)) {
+              const name = prop.key.name;
+              if (!hasValidBooleanPrefix(name)) {
+                context.report({
+                  data: {
+                    name,
+                    suggestion: generateSuggestion(name),
+                  },
+                  messageId: "booleanPropertyName",
+                  node: prop.key,
+                });
+              }
+            }
+          }
+        }
+      },
+      Property: (node) => {
+        if (!checkParameters) return;
+
+        if (
+          node.key.type === AST_NODE_TYPES.Identifier &&
+          node.value.type === AST_NODE_TYPES.Identifier &&
+          node.parent?.type === AST_NODE_TYPES.ObjectPattern
+        ) {
+          let current: TSESTree.Node | undefined = node.parent;
+          while (current && current.type !== AST_NODE_TYPES.Identifier) {
+            current = current.parent;
+          }
+
+          let param: TSESTree.Node | undefined = node.parent;
+          while (param && param.parent) {
+            if (
+              param.parent.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+              param.parent.type === AST_NODE_TYPES.FunctionExpression ||
+              param.parent.type === AST_NODE_TYPES.FunctionDeclaration
+            ) {
+              break;
+            }
+            param = param.parent;
+          }
+
+          if (param && "typeAnnotation" in param && param.typeAnnotation) {
+            const typeAnnotation =
+              param.typeAnnotation as TSESTree.TSTypeAnnotation;
+            if (
+              typeAnnotation.typeAnnotation.type ===
+              AST_NODE_TYPES.TSTypeLiteral
+            ) {
+              const typeLiteral =
+                typeAnnotation.typeAnnotation as TSESTree.TSTypeLiteral;
+
+              const propertyType = typeLiteral.members.find((member) => {
+                if (
+                  member.type === AST_NODE_TYPES.TSPropertySignature &&
+                  member.key?.type === AST_NODE_TYPES.Identifier &&
+                  (member.key as TSESTree.Identifier).name ===
+                    (node.key as TSESTree.Identifier).name
+                ) {
+                  return (
+                    member.typeAnnotation?.typeAnnotation.type ===
+                    AST_NODE_TYPES.TSBooleanKeyword
+                  );
+                }
+                return false;
+              });
+
+              if (propertyType) {
+                const name = (node.value as TSESTree.Identifier).name;
+                if (!hasValidBooleanPrefix(name)) {
+                  context.report({
+                    data: {
+                      name,
+                      suggestion: generateSuggestion(name),
+                    },
+                    messageId: "booleanParameterName",
+                    node: node.value,
+                  });
+                }
+              }
+            }
+          }
+        }
+      },
+
+      VariableDeclarator: (node) => {
+        if (node.id.type === "ObjectPattern") {
+          if (!checkParameters) return;
+
+          if (node.id.type === AST_NODE_TYPES.ObjectPattern && node.init) {
+            node.id.properties.forEach((prop) => {
+              if (
+                prop.type === AST_NODE_TYPES.Property &&
+                prop.key.type === AST_NODE_TYPES.Identifier &&
+                prop.value.type === AST_NODE_TYPES.Identifier
+              ) {
+                const valueName = prop.value.name;
+
+                try {
+                  const tsNode = services?.esTreeNodeToTSNodeMap?.get(
+                    prop.value
+                  );
+                  if (tsNode && checker) {
+                    const type = checker.getTypeAtLocation(tsNode);
+                    const typeString = checker.typeToString(type);
+
+                    if (
+                      typeString === "boolean" ||
+                      typeString === "true" ||
+                      typeString === "false"
+                    ) {
+                      if (!hasValidBooleanPrefix(valueName)) {
+                        context.report({
+                          data: {
+                            name: valueName,
+                            suggestion: generateSuggestion(valueName),
+                          },
+                          messageId: "booleanVariableName",
+                          node: prop.value,
+                        });
+                      }
+                    }
+                  }
+                } catch {}
+              }
+            });
+          }
+        }
+
+        if (!checkVariables) return;
+
+        if (node.id.type === AST_NODE_TYPES.Identifier) {
+          if (
+            node.id.typeAnnotation?.typeAnnotation.type ===
+            AST_NODE_TYPES.TSBooleanKeyword
+          ) {
+            const name = node.id.name;
+            if (!hasValidBooleanPrefix(name)) {
+              context.report({
+                data: {
+                  name,
+                  suggestion: generateSuggestion(name),
+                },
+                messageId: "booleanVariableName",
+                node: node.id,
+              });
+            }
+            return;
+          }
+
+          if (node.init) {
+            if (
+              (node.init.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+                node.init.type === AST_NODE_TYPES.FunctionExpression) &&
+              functionReturnsBooleanType(node.init)
+            ) {
+              const name = node.id.name;
+              if (!hasValidBooleanPrefix(name)) {
+                context.report({
+                  data: {
+                    name,
+                    suggestion: generateSuggestion(name),
+                  },
+                  messageId: "booleanFunctionName",
+                  node: node.id,
+                });
+              }
+            } else if (isBooleanType(node.init)) {
+              const name = node.id.name;
+              if (!hasValidBooleanPrefix(name)) {
+                context.report({
+                  data: {
+                    name,
+                    suggestion: generateSuggestion(name),
+                  },
+                  messageId: "booleanVariableName",
+                  node: node.id,
+                });
+              }
+            }
+          }
+        }
+      },
+    };
+  },
+  defaultOptions: [
+    {
+      allowedPrefixes: DEFAULT_PREFIXES,
+      checkFunctions: true,
+      checkParameters: true,
+      checkProperties: true,
+      checkVariables: true,
+    },
+  ],
+
+  meta: {
+    docs: {
+      description:
+        "Enforces boolean variables to use appropriate prefixes (is, has, can, should, etc.)",
+    },
+    messages: {
+      booleanFunctionName:
+        "DragonSwap: Function '{{name}}' returns a boolean, use a prefix like is{{suggestion}}}",
+      booleanParameterName:
+        "DragonSwap: Boolean parameter '{{name}}' should use a prefix like is{{suggestion}}}",
+      booleanPropertyName:
+        "DragonSwap: Boolean property '{{name}}' should use a prefix like is{{suggestion}}}",
+      booleanVariableName:
+        "DragonSwap: Boolean variable '{{name}}' should use a prefix like is{{suggestion}}}",
+    },
+    schema: [
+      {
+        additionalProperties: false,
+        properties: {
+          allowedPrefixes: {
+            default: DEFAULT_PREFIXES,
+            items: { type: "string" },
+            type: "array",
+          },
+          checkFunctions: { default: true, type: "boolean" },
+          checkParameters: { default: true, type: "boolean" },
+          checkProperties: { default: true, type: "boolean" },
+          checkVariables: { default: true, type: "boolean" },
+        },
+        type: "object",
+      },
+    ],
+    type: "suggestion",
+  },
+});
