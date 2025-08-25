@@ -43,5 +43,6 @@
   "engines": {
     "node": ">=16.0.0"
   },
+  "packageManager": "pnpm@8.9.0",
   "license": "MIT"
 }
