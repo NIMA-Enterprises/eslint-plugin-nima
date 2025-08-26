@@ -1,5 +1,7 @@
 import { ESLintUtils } from "@typescript-eslint/utils";
 
+import { CONSOLES } from "../constants/consoles";
+
 type Messages = "noConsole";
 
 type Options = {
@@ -25,6 +27,10 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options[], Messages>({
           node.callee.property.type === "Identifier"
         ) {
           const methodName = node.callee.property.name;
+
+          if (!CONSOLES.has(methodName)) {
+            return;
+          }
 
           if (
             (methodName === "error" && !noConsoleError) ||

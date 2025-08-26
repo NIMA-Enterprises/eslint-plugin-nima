@@ -1,6 +1,6 @@
 import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
 
-import { HOOKS_WITH_DEPS } from "../constants/hooks.js";
+import { HOOKS_WITH_DEPS } from "../constants/hooks";
 
 export const name = "no-objects-in-deps";
 
@@ -33,6 +33,9 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
 
       if (invalidExpression) {
         context.report({
+          data: {
+            object: context.sourceCode.getText(element),
+          },
           messageId: "noObjects",
           node: element,
         });

@@ -221,7 +221,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     fixable: "code",
     messages: {
-      addReactImport: "NIMA: React must be imported to use React.FC.",
       requireReactFC:
         "NIMA: Component functions must use React.FC type annotation.",
     },
