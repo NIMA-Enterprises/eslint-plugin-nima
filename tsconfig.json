@@ -1,17 +1,14 @@
 {
-  "exclude": ["node_modules"],
   "compilerOptions": {
-    "types": ["node"],
-    "outDir": "dist",
-    "moduleResolution": "bundler",
-    "module": "ESNext",
+    "module": "node16",
+    "moduleResolution": "node16",
     "target": "ES2019",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "declaration": true,
-    "declarationDir": "dist",
-    "verbatimModuleSyntax": true,
+    "sourceMap": true,
     "strict": true,
-    "sourceMap": true
-  }
+    "strictNullChecks": false,
+    "declaration": true,
+    "outDir": "dist"
+  },
+  "exclude": ["node_modules", "dist"]
 }
