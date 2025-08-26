@@ -4,7 +4,7 @@ import {
   type TSESTree,
 } from "@typescript-eslint/utils";
 
-import { REACT_HOOKS } from "../constants/hooks.js";
+import { REACT_HOOKS } from "../constants/hooks";
 
 export const name = "prefer-react-with-hooks";
 
@@ -12,6 +12,31 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
   create: (context) => {
     let hasReactImport = false;
     let reactImportNode: null | TSESTree.ImportDeclaration = null;
+    let isAnalysisComplete = false;
+
+    const analyzeImports = () => {
+      if (isAnalysisComplete) return;
+
+      const sourceCode = context.getSourceCode();
+      const program = sourceCode.ast;
+
+      for (const node of program.body) {
+        if (
+          node.type === AST_NODE_TYPES.ImportDeclaration &&
+          node.source.value === "react"
+        ) {
+          reactImportNode = node;
+          hasReactImport = node.specifiers.some(
+            (spec) =>
+              spec.type === AST_NODE_TYPES.ImportDefaultSpecifier ||
+              (spec.type === AST_NODE_TYPES.ImportNamespaceSpecifier &&
+                spec.local.name === "React")
+          );
+          break;
+        }
+      }
+      isAnalysisComplete = true;
+    };
 
     return {
       CallExpression: (node) => {
@@ -19,47 +44,51 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
           node.callee.type === AST_NODE_TYPES.Identifier &&
           REACT_HOOKS.has(node.callee.name)
         ) {
+          analyzeImports();
+
           const hookName = node.callee.name;
           context.report({
             data: { hook: hookName },
             fix: (fixer) => {
-              const fixes = [fixer.insertTextBefore(node.callee, "React.")];
+              const fixes = [];
+              const sourceCode = context.getSourceCode();
+              const program = sourceCode.ast;
 
-              if (!hasReactImport && !reactImportNode) {
-                const sourceCode = context.getSourceCode();
-                const program = sourceCode.ast;
+              if (!hasReactImport) {
+                if (reactImportNode) {
+                  const importText = sourceCode.getText(reactImportNode);
 
-                if (program.body.length > 0) {
-                  fixes.push(
-                    fixer.insertTextBefore(
-                      program.body[0],
-                      'import React from "react";\n'
-                    )
-                  );
+                  if (
+                    importText.includes("{") &&
+                    !importText.match(/^import\s+\w+\s*,/)
+                  ) {
+                    fixes.push(
+                      fixer.replaceText(
+                        reactImportNode,
+                        importText.replace(/^import\s*{/, "import React, {")
+                      )
+                    );
+                  }
                 } else {
-                  fixes.push(
-                    fixer.insertTextAfter(
-                      program,
-                      'import React from "react";\n'
-                    )
-                  );
-                }
-              } else if (reactImportNode && !hasReactImport) {
-                const sourceCode = context.getSourceCode();
-                const importText = sourceCode.getText(reactImportNode);
-
-                if (
-                  importText.includes("{") &&
-                  !importText.match(/^import\s+\w+\s*,/)
-                ) {
-                  fixes.push(
-                    fixer.replaceText(
-                      reactImportNode,
-                      importText.replace(/^import\s*{/, "import React, {")
-                    )
-                  );
+                  if (program.body.length > 0) {
+                    fixes.push(
+                      fixer.insertTextBefore(
+                        program.body[0],
+                        'import React from "react";\n'
+                      )
+                    );
+                  } else {
+                    fixes.push(
+                      fixer.insertTextBefore(
+                        node,
+                        'import React from "react";\n'
+                      )
+                    );
+                  }
                 }
               }
+
+              fixes.push(fixer.insertTextBefore(node.callee, "React."));
 
               return fixes;
             },

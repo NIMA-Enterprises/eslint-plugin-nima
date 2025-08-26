@@ -4,8 +4,8 @@ import {
   type TSESTree,
 } from "@typescript-eslint/utils";
 
-import { DEFAULT_PREFIXES } from "../constants/boolean-prefixes.js";
-import { getType } from "../utility/getType.js";
+import { DEFAULT_PREFIXES } from "../constants/boolean-prefixes";
+import { getType } from "../utility/getType";
 
 export const name = "boolean-naming-convention";
 
@@ -28,7 +28,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     }
 
     function generateSuggestion(name: string): string {
-      return name.charAt(0).toUpperCase() + name.slice(1);
+      return "is" + name.charAt(0).toUpperCase() + name.slice(1);
     }
 
     function isBooleanType(node: TSESTree.Node): boolean {
@@ -53,20 +53,51 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
           param.typeAnnotation?.typeAnnotation.type ===
             AST_NODE_TYPES.TSBooleanKeyword
         ) {
-          const name = param.name;
-          if (!hasValidBooleanPrefix(name)) {
-            context.report({
-              data: {
-                name,
-                suggestion: generateSuggestion(name),
-              },
-              messageId: "booleanParameterName",
-              node: param,
-            });
+          checkName(param.name, param);
+        }
+
+        if (
+          param.type === AST_NODE_TYPES.Identifier &&
+          param.typeAnnotation?.typeAnnotation.type ===
+            AST_NODE_TYPES.TSTypeLiteral
+        ) {
+          for (const member of param.typeAnnotation.typeAnnotation.members) {
+            if (
+              member.type === AST_NODE_TYPES.TSPropertySignature &&
+              member.typeAnnotation?.typeAnnotation.type ===
+                AST_NODE_TYPES.TSBooleanKeyword &&
+              member.key.type === AST_NODE_TYPES.Identifier
+            ) {
+              checkName(member.key.name, member);
+            }
+          }
+        }
+
+        if (param.type === AST_NODE_TYPES.ObjectPattern) {
+          for (const prop of param.properties) {
+            if (
+              prop.type === AST_NODE_TYPES.Property &&
+              prop.key.type === AST_NODE_TYPES.Identifier &&
+              prop.value.type === AST_NODE_TYPES.Identifier &&
+              prop.value.typeAnnotation?.typeAnnotation.type ===
+                AST_NODE_TYPES.TSBooleanKeyword
+            ) {
+              checkName(prop.key.name, prop.key);
+            }
           }
         }
       }
     };
+
+    function checkName(name: string, node: TSESTree.Node) {
+      if (!hasValidBooleanPrefix(name)) {
+        context.report({
+          data: { name, suggestion: generateSuggestion(name) },
+          messageId: "booleanParameterName",
+          node,
+        });
+      }
+    }
 
     function functionReturnsBooleanType(node: TSESTree.FunctionLike): boolean {
       try {
@@ -134,7 +165,12 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
             !prop.computed &&
             prop.value
           ) {
-            if (isBooleanType(prop.value)) {
+            if (
+              isBooleanType(prop.value) ||
+              ((prop.value.type === AST_NODE_TYPES.FunctionExpression ||
+                prop.value.type === AST_NODE_TYPES.ArrowFunctionExpression) &&
+                functionReturnsBooleanType(prop.value))
+            ) {
               const name = prop.key.name;
               if (!hasValidBooleanPrefix(name)) {
                 context.report({
@@ -150,6 +186,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
           }
         }
       },
+
       Property: (node) => {
         if (!checkParameters) return;
 
@@ -335,13 +372,13 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     messages: {
       booleanFunctionName:
-        "NIMA: Function '{{name}}' returns a boolean, use a prefix like is{{suggestion}}}",
+        "NIMA: Function '{{name}}' returns a boolean, use a prefix like {{suggestion}}",
       booleanParameterName:
-        "NIMA: Boolean parameter '{{name}}' should use a prefix like is{{suggestion}}}",
+        "NIMA: Boolean parameter '{{name}}' should use a prefix like {{suggestion}}",
       booleanPropertyName:
-        "NIMA: Boolean property '{{name}}' should use a prefix like is{{suggestion}}}",
+        "NIMA: Boolean property '{{name}}' should use a prefix like {{suggestion}}",
       booleanVariableName:
-        "NIMA: Boolean variable '{{name}}' should use a prefix like is{{suggestion}}}",
+        "NIMA: Boolean variable '{{name}}' should use a prefix like {{suggestion}}",
     },
     schema: [
       {

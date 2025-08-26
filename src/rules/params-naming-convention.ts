@@ -4,7 +4,7 @@ import {
   type TSESTree,
 } from "@typescript-eslint/utils";
 
-import { getFunctionName } from "../utility/getFunctionName.js";
+import { getFunctionName } from "../utility/getFunctionName";
 
 export const name = "params-naming-convention";
 
