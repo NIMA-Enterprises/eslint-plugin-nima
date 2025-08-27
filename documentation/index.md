@@ -66,7 +66,7 @@ This rule requires booleans to start with appropriate prefixes. It makes them ea
 1. **checkProperties** - default: true. Enables or disables checking of property names.
 1. **checkVariables** - default: true. Enables or disables checking of variable names.
 
-See the dedicated [boolean-naming-convention documentation](documentation/rules/boolean-naming-convention.md) for full details.
+See the dedicated [boolean-naming-convention documentation](./rules/boolean-naming-convention.md) for full details.
 
 **Examples:**
 
@@ -107,7 +107,7 @@ This rule enforces using objects as parameters to improve readability and mainta
 1. **ignoreFunctions** - default: `reduce`. Disables this rule for specific functions.
 1. **ignorePrefixes** - default: `$`. Disables this rule for parameters with certain prefixes.
 
-See the dedicated [params-naming-convention documentation](documentation/rules/params-naming-convention.md) for full details.
+See the dedicated [params-naming-convention documentation](./rules/params-naming-convention.md) for full details.
 
 **Examples:**
 
@@ -135,7 +135,7 @@ This rule disallows the use of console methods.
 1. **allowConsoleError** - default: false. Enables or disables `console.error`.
 1. **allowConsoleWarn** - default: false. Enables or disables `console.warn`.
 
-See the dedicated [restrict-console-methods documentation](documentation/rules/restrict-console-methods.md) for full details.
+See the dedicated [restrict-console-methods documentation](./rules/restrict-console-methods.md) for full details.
 
 **Examples:**
 
@@ -167,7 +167,7 @@ This rule allows restricting the usage of functions in specific files or folders
 1. **files** - target files for the configuration.
 1. **folders** - target folders for the configuration.
 
-By default, this rule does nothing. See the dedicated [restrict-function-usage documentation](documentation/rules/restrict-function-usage.md) for full details.
+By default, this rule does nothing. See the dedicated [restrict-function-usage documentation](./rules/restrict-function-usage.md) for full details.
 
 ---
 
@@ -177,7 +177,7 @@ This rule prevents placing objects in dependency arrays to avoid unpredictable s
 
 **Configuration options:** none.
 
-See the dedicated [no-objects-in-deps documentation](documentation/rules/no-objects-in-deps.md) for full details.
+See the dedicated [no-objects-in-deps documentation](./rules/no-objects-in-deps.md) for full details.
 
 **Example:**
 
@@ -194,7 +194,7 @@ This rule enforces the convention of using the `handle` prefix instead of the `h
 
 **Configuration options:** none.
 
-See the dedicated [no-handler-suffix documentation](documentation/rules/no-handler-suffix.md) for full details.
+See the dedicated [no-handler-suffix documentation](./rules/no-handler-suffix.md) for full details.
 
 **Example:**
 
@@ -220,7 +220,7 @@ This rule enforces writing arrow functions and discourages declarations or expre
 1. **allowGenerators** - default: true.
 1. **allowMethodDefinitions** - default: false.
 
-See the dedicated [prefer-arrow-functions documentation](documentation/rules/prefer-arrow-functions.md) for full details.
+See the dedicated [prefer-arrow-functions documentation](./rules/prefer-arrow-functions.md) for full details.
 
 **Examples:**
 
@@ -249,7 +249,7 @@ This rule enforces exporting components under their declaration, disallowing inl
 
 **Configuration options:** none.
 
-See the dedicated [prefer-export-under-components documentation](documentation/rules/prefer-export-under-components.md) for full details.
+See the dedicated [prefer-export-under-components documentation](./rules/prefer-export-under-components.md) for full details.
 
 **Examples:**
 
@@ -273,7 +273,7 @@ This rule enforces typing components as `React.FC` (unless using another library
 
 **Configuration options:** none.
 
-See the dedicated [prefer-react-fc documentation](documentation/rules/prefer-react-fc.md) for full details.
+See the dedicated [prefer-react-fc documentation](./rules/prefer-react-fc.md) for full details.
 
 **Example:**
 
@@ -290,7 +290,7 @@ This rule enforces prefixing hooks with `React.`.
 
 **Configuration options:** none.
 
-See the dedicated [prefer-react-with-hooks documentation](documentation/rules/prefer-react-with-hooks.md) for full details.
+See the dedicated [prefer-react-with-hooks documentation](./rules/prefer-react-with-hooks.md) for full details.
 
 **Example:**
 
@@ -310,13 +310,13 @@ All rules have their own dedicated page with detailed configuration, usage, and 
 
 ### Rule documentation pages
 
-- [boolean-naming-convention](documentation/rules/boolean-naming-convention.md)
-- [params-naming-convention](documentation/rules/params-naming-convention.md)
-- [restrict-console-methods](documentation/rules/restrict-console-methods.md)
-- [restrict-function-usage](documentation/rules/restrict-function-usage.md)
-- [no-objects-in-deps](documentation/rules/no-objects-in-deps.md)
-- [no-handler-suffix](documentation/rules/no-handler-suffix.md)
-- [prefer-export-under-components](documentation/rules/prefer-export-under-components.md)
-- [prefer-arrow-functions](documentation/rules/prefer-arrow-functions.md)
-- [prefer-react-fc](documentation/rules/prefer-react-fc.md)
-- [prefer-react-with-hooks](documentation/rules/prefer-react-with-hooks.md)
+- [boolean-naming-convention](./rules/boolean-naming-convention.md)
+- [params-naming-convention](./rules/params-naming-convention.md)
+- [restrict-console-methods](./rules/restrict-console-methods.md)
+- [restrict-function-usage](./rules/restrict-function-usage.md)
+- [no-objects-in-deps](./rules/no-objects-in-deps.md)
+- [no-handler-suffix](./rules/no-handler-suffix.md)
+- [prefer-export-under-components](./rules/prefer-export-under-components.md)
+- [prefer-arrow-functions](./rules/prefer-arrow-functions.md)
+- [prefer-react-fc](./rules/prefer-react-fc.md)
+- [prefer-react-with-hooks](./rules/prefer-react-with-hooks.md)
