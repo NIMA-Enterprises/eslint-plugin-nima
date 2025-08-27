@@ -12,10 +12,7 @@ import {
 export const name = "prefer-react-fc";
 
 export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
-  create(context, [options]) {
-    const { allowArrowFunctions = true, allowFunctionDeclarations = true } =
-      options;
-
+  create(context) {
     function isReactComponent(node: TSESTree.FunctionLike) {
       const fnName = getFunctionName(node);
 
@@ -176,7 +173,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
 
     return {
       ArrowFunctionExpression(node) {
-        if (typeof options !== "string" && !allowArrowFunctions) return;
         if (
           isReactComponent(node) &&
           !hasReactFCAnnotation(node) &&
@@ -189,7 +185,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
         }
       },
       FunctionDeclaration(node) {
-        if (typeof options !== "string" && !allowFunctionDeclarations) return;
         if (
           isReactComponent(node) &&
           !hasReactFCAnnotation(node) &&

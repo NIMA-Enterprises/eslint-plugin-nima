@@ -1,5 +1,5 @@
-import { Messages } from "@models/seperate-export-from-component";
-import * as PreferNamedExport from "@rules/seperate-export-from-component";
+import { Messages } from "@models/prefer-export-under-component";
+import * as PreferNamedExport from "@rules/prefer-export-under-component";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester({
