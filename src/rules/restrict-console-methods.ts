@@ -1,30 +1,24 @@
-import { ESLintUtils } from "@typescript-eslint/utils";
-
-import { CONSOLES } from "../constants/consoles";
-
-type Messages = "noConsole";
-
-type Options = {
-  noConsoleError?: boolean;
-  noConsoleLog?: boolean;
-  noConsoleWarn?: boolean;
-};
+import { CONSOLES } from "@constants/consoles";
+import { Messages, type Options } from "@models/restrict-console-methods.model";
+import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
 
 export const name = "restrict-console-methods";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options[], Messages>({
-  create(context, options) {
-    const noConsoleError = options[0].noConsoleError;
-    const noConsoleLog = options[0].noConsoleLog;
-    const noConsoleWarn = options[0].noConsoleWarn;
+export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+  create(context, [options]) {
+    const {
+      allowConsoleError = false,
+      allowConsoleLog = false,
+      allowConsoleWarn = false,
+    } = options;
 
     return {
       CallExpression(node) {
         if (
-          node.callee.type === "MemberExpression" &&
-          node.callee.object.type === "Identifier" &&
+          node.callee.type === AST_NODE_TYPES.MemberExpression &&
+          node.callee.object.type === AST_NODE_TYPES.Identifier &&
           node.callee.object.name === "console" &&
-          node.callee.property.type === "Identifier"
+          node.callee.property.type === AST_NODE_TYPES.Identifier
         ) {
           const methodName = node.callee.property.name;
 
@@ -33,9 +27,9 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options[], Messages>({
           }
 
           if (
-            (methodName === "error" && !noConsoleError) ||
-            (methodName === "log" && !noConsoleLog) ||
-            (methodName === "warn" && !noConsoleWarn)
+            (methodName === "error" && allowConsoleError) ||
+            (methodName === "log" && allowConsoleLog) ||
+            (methodName === "warn" && allowConsoleWarn)
           ) {
             return;
           }
@@ -44,7 +38,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options[], Messages>({
             data: {
               console: node.callee.property.name,
             },
-            messageId: "noConsole",
+            messageId: Messages.NO_CONSOLE,
             node,
           });
         }
@@ -54,9 +48,9 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options[], Messages>({
 
   defaultOptions: [
     {
-      noConsoleError: true,
-      noConsoleLog: true,
-      noConsoleWarn: true,
+      allowConsoleError: false,
+      allowConsoleLog: false,
+      allowConsoleWarn: false,
     },
   ],
 
@@ -65,22 +59,23 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options[], Messages>({
       description: "Restrict the usage of console in the codebase",
     },
     messages: {
-      noConsole: "NIMA: The usage of console.{{ console }} is restricted.",
+      [Messages.NO_CONSOLE]:
+        "NIMA: The usage of console.{{ console }} is restricted.",
     },
     schema: [
       {
         additionalProperties: false,
         properties: {
-          noConsoleError: {
-            default: true,
+          allowConsoleError: {
+            default: false,
             type: "boolean",
           },
-          noConsoleLog: {
-            default: true,
+          allowConsoleLog: {
+            default: false,
             type: "boolean",
           },
-          noConsoleWarn: {
-            default: true,
+          allowConsoleWarn: {
+            default: false,
             type: "boolean",
           },
         },

@@ -1,6 +1,6 @@
+import { Messages } from "@models/no-handle-suffix.model";
+import * as NoHandlerSuffix from "@rules/no-handler-suffix";
 import { RuleTester } from "@typescript-eslint/rule-tester";
-
-import * as NoHandlerSuffix from "../../src/rules/no-handler-suffix";
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -21,7 +21,7 @@ ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
           data: {
             fnWithGoodName: "handleClick",
           },
-          messageId: "badHandleName",
+          messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleClick = () => {}",
@@ -33,7 +33,7 @@ ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
           data: {
             fnWithGoodName: "handle",
           },
-          messageId: "badHandleName",
+          messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handle = () => {}",

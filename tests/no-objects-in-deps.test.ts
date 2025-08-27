@@ -1,7 +1,7 @@
+import { Messages } from "@models/no-objects-in-deps.model";
+import * as NoObjectsInDeps from "@rules/no-objects-in-deps";
 import * as parser from "@typescript-eslint/parser";
 import { RuleTester } from "@typescript-eslint/rule-tester";
-
-import * as NoObjectsInDeps from "../../src/rules/no-objects-in-deps";
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -25,7 +25,7 @@ ruleTester.run("no-objects-in-deps", NoObjectsInDeps.rule, {
           data: {
             object: "{ NIMA: 'labs' }",
           },
-          messageId: "noObjects",
+          messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES,
         },
       ],
     },
@@ -36,7 +36,7 @@ ruleTester.run("no-objects-in-deps", NoObjectsInDeps.rule, {
           data: {
             object: "{ NIMA: 'Enterprises' }",
           },
-          messageId: "noObjects",
+          messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES,
         },
       ],
     },

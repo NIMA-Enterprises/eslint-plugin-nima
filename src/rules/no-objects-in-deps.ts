@@ -1,23 +1,33 @@
-import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
-
-import { HOOKS_WITH_DEPS } from "../constants/hooks";
+import { HOOKS_WITH_DEPS } from "@constants/hooks";
+import { Messages, Options } from "@models/no-objects-in-deps.model";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  TSESTree,
+} from "@typescript-eslint/utils";
 
 export const name = "no-objects-in-deps";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs({
+export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
   create: (context) => {
-    function getCalleeName(node: TSESTree.CallExpression): null | string {
+    function getCalleeName(node: TSESTree.CallExpression) {
       const callee = node.callee;
 
-      if (callee.type === "Identifier") {
+      if (callee.type === AST_NODE_TYPES.Identifier) {
         return callee.name;
       }
 
-      if (callee.type === "MemberExpression") {
-        if (!callee.computed && callee.property.type === "Identifier") {
+      if (callee.type === AST_NODE_TYPES.MemberExpression) {
+        if (
+          !callee.computed &&
+          callee.property.type === AST_NODE_TYPES.Identifier
+        ) {
           return callee.property.name;
         }
-        if (callee.computed && callee.property.type === "Literal") {
+        if (
+          callee.computed &&
+          callee.property.type === AST_NODE_TYPES.Literal
+        ) {
           return String(callee.property.value);
         }
       }
@@ -27,19 +37,19 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
 
     const checkDep = (element: TSESTree.Expression, node: TSESTree.Node) => {
       const invalidExpression =
-        element.type === "ObjectExpression" ||
-        element.type === "ArrayExpression" ||
-        element.type === "NewExpression";
+        element.type === AST_NODE_TYPES.ObjectExpression ||
+        element.type === AST_NODE_TYPES.ArrayExpression ||
+        element.type === AST_NODE_TYPES.NewExpression;
 
       if (invalidExpression) {
         context.report({
           data: {
             object: context.sourceCode.getText(element),
           },
-          messageId: "noObjects",
+          messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES,
           node: element,
         });
-      } else if (element.type === "Identifier") {
+      } else if (element.type === AST_NODE_TYPES.Identifier) {
         const scope = context.sourceCode.getScope(node);
         const variable = scope.variables.find((v) => v.name === element.name);
 
@@ -50,7 +60,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                 data: {
                   object: context.sourceCode.getText(element),
                 },
-                messageId: "noObjects",
+                messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES,
                 node: element,
               });
             }
@@ -65,7 +75,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
         if (!calleeName || !HOOKS_WITH_DEPS.has(calleeName)) return;
 
         const deps = node.arguments[1];
-        if (deps?.type === "ArrayExpression") {
+        if (deps?.type === AST_NODE_TYPES.ArrayExpression) {
           for (const element of deps.elements) {
             if (!element) continue;
             checkDep(element as TSESTree.Expression, node);
@@ -82,7 +92,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
       description: "Suggests to not use objects in dependency arrays",
     },
     messages: {
-      noObjects:
+      [Messages.NO_OBJECTS_IN_DEPENDENCIES]:
         "NIMA: Objects inside of dependency arrays aren't allowed. Try doing JSON.stringify({{ object }}).",
     },
     schema: [],

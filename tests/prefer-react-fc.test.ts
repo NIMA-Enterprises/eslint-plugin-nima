@@ -1,6 +1,6 @@
+import { Messages } from "@models/prefer-react-fc.model";
+import * as PreferReactFc from "@rules/prefer-react-fc";
 import { RuleTester } from "@typescript-eslint/rule-tester";
-
-import * as PreferReactFc from "../../src/rules/prefer-react-fc";
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -18,7 +18,7 @@ ruleTester.run("prefer-react-fc", PreferReactFc.rule, {
       code: "const Component = () => <div></div>",
       errors: [
         {
-          messageId: "requireReactFC",
+          messageId: Messages.REQUIRE_REACT_FC,
         },
       ],
     },

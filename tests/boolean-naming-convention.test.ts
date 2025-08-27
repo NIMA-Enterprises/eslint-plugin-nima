@@ -1,7 +1,7 @@
+import { Messages } from "@models/boolean-naming-convention.model";
+import * as BooleanNamingConventions from "@rules/boolean-naming-convention";
 import * as parser from "@typescript-eslint/parser";
 import { RuleTester } from "@typescript-eslint/rule-tester";
-
-import * as BooleanNamingConventions from "../../src/rules/boolean-naming-convention";
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -28,7 +28,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
             name: "NIMA",
             suggestion: "isNIMA",
           },
-          messageId: "booleanFunctionName",
+          messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
         },
       ],
     },
@@ -40,7 +40,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
             name: "NIMA",
             suggestion: "isNIMA",
           },
-          messageId: "booleanVariableName",
+          messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
         },
       ],
     },
@@ -52,7 +52,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
             name: "nima",
             suggestion: "isNima",
           },
-          messageId: "booleanParameterName",
+          messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
         },
       ],
     },
@@ -64,7 +64,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
             name: "nima",
             suggestion: "isNima",
           },
-          messageId: "booleanPropertyName",
+          messageId: Messages.BAD_PROPERTY_BOOLEAN_PREFIX,
         },
       ],
     },
@@ -76,7 +76,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
             name: "nima",
             suggestion: "isNima",
           },
-          messageId: "booleanPropertyName",
+          messageId: Messages.BAD_PROPERTY_BOOLEAN_PREFIX,
         },
       ],
     },

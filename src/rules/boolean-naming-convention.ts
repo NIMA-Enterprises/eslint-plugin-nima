@@ -1,21 +1,23 @@
+import { DEFAULT_PREFIXES } from "@constants/boolean-prefixes";
+import { Messages, Options } from "@models/boolean-naming-convention.model";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-
-import { DEFAULT_PREFIXES } from "../constants/boolean-prefixes";
-import { getType } from "../utility/getType";
+import { getType } from "@utility/type-helpers";
 
 export const name = "boolean-naming-convention";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs({
-  create: (context, options) => {
-    const allowedPrefixes = options[0].allowedPrefixes;
-    const checkVariables = options[0].checkVariables;
-    const checkFunctions = options[0].checkFunctions;
-    const checkParameters = options[0].checkParameters;
-    const checkProperties = options[0].checkProperties;
+export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+  create: (context, [options]) => {
+    const {
+      allowedPrefixes = DEFAULT_PREFIXES,
+      checkFunctions = true,
+      checkParameters = true,
+      checkProperties = true,
+      checkVariables = true,
+    } = options;
 
     const services = context.sourceCode.parserServices;
 
@@ -27,11 +29,11 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
       );
     }
 
-    function generateSuggestion(name: string): string {
+    function generateSuggestion(name: string) {
       return "is" + name.charAt(0).toUpperCase() + name.slice(1);
     }
 
-    function isBooleanType(node: TSESTree.Node): boolean {
+    function isBooleanType(node: TSESTree.Node) {
       try {
         const type = getType(context, node);
 
@@ -41,12 +43,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
       }
     }
 
-    const isParamBoolean = (
-      node:
-        | TSESTree.ArrowFunctionExpression
-        | TSESTree.FunctionDeclaration
-        | TSESTree.FunctionExpression
-    ) => {
+    const isParamBoolean = (node: TSESTree.FunctionLike) => {
       for (const param of node.params) {
         if (
           param.type === AST_NODE_TYPES.Identifier &&
@@ -93,13 +90,13 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
       if (!hasValidBooleanPrefix(name)) {
         context.report({
           data: { name, suggestion: generateSuggestion(name) },
-          messageId: "booleanParameterName",
+          messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
           node,
         });
       }
     }
 
-    function functionReturnsBooleanType(node: TSESTree.FunctionLike): boolean {
+    function functionReturnsBooleanType(node: TSESTree.FunctionLike) {
       try {
         const tsNode = services?.esTreeNodeToTSNodeMap?.get(node);
         if (!tsNode) return false;
@@ -138,7 +135,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                 name,
                 suggestion: generateSuggestion(name),
               },
-              messageId: "booleanFunctionName",
+              messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
               node: node.id,
             });
           }
@@ -178,7 +175,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                     name,
                     suggestion: generateSuggestion(name),
                   },
-                  messageId: "booleanPropertyName",
+                  messageId: Messages.BAD_PROPERTY_BOOLEAN_PREFIX,
                   node: prop.key,
                 });
               }
@@ -219,8 +216,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
               typeAnnotation.typeAnnotation.type ===
               AST_NODE_TYPES.TSTypeLiteral
             ) {
-              const typeLiteral =
-                typeAnnotation.typeAnnotation as TSESTree.TSTypeLiteral;
+              const typeLiteral = typeAnnotation.typeAnnotation;
 
               const propertyType = typeLiteral.members.find((member) => {
                 if (
@@ -245,7 +241,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                       name,
                       suggestion: generateSuggestion(name),
                     },
-                    messageId: "booleanParameterName",
+                    messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
                     node: node.value,
                   });
                 }
@@ -287,7 +283,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                             name: valueName,
                             suggestion: generateSuggestion(valueName),
                           },
-                          messageId: "booleanVariableName",
+                          messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
                           node: prop.value,
                         });
                       }
@@ -313,7 +309,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                   name,
                   suggestion: generateSuggestion(name),
                 },
-                messageId: "booleanVariableName",
+                messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
                 node: node.id,
               });
             }
@@ -333,7 +329,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                     name,
                     suggestion: generateSuggestion(name),
                   },
-                  messageId: "booleanFunctionName",
+                  messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
                   node: node.id,
                 });
               }
@@ -345,7 +341,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                     name,
                     suggestion: generateSuggestion(name),
                   },
-                  messageId: "booleanVariableName",
+                  messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
                   node: node.id,
                 });
               }
@@ -371,13 +367,13 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
         "Enforces boolean variables to use appropriate prefixes (is, has, can, should, etc.)",
     },
     messages: {
-      booleanFunctionName:
+      [Messages.BAD_FUNCTION_BOOLEAN_PREFIX]:
         "NIMA: Function '{{name}}' returns a boolean, use a prefix like {{suggestion}}",
-      booleanParameterName:
+      [Messages.BAD_PARAMETER_BOOLEAN_PREFIX]:
         "NIMA: Boolean parameter '{{name}}' should use a prefix like {{suggestion}}",
-      booleanPropertyName:
+      [Messages.BAD_PROPERTY_BOOLEAN_PREFIX]:
         "NIMA: Boolean property '{{name}}' should use a prefix like {{suggestion}}",
-      booleanVariableName:
+      [Messages.BAD_VARIABLE_BOOLEAN_PREFIX]:
         "NIMA: Boolean variable '{{name}}' should use a prefix like {{suggestion}}",
     },
     schema: [

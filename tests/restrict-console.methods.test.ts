@@ -1,6 +1,6 @@
+import { Messages } from "@models/restrict-console-methods.model";
+import * as RestrictConsoleMethods from "@rules/restrict-console-methods";
 import { RuleTester } from "@typescript-eslint/rule-tester";
-
-import * as RestrictConsoleMethods from "../../src/rules/restrict-console-methods";
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -21,7 +21,7 @@ ruleTester.run("restrict-console-methods", RestrictConsoleMethods.rule, {
           data: {
             console: "error",
           },
-          messageId: "noConsole",
+          messageId: Messages.NO_CONSOLE,
         },
       ],
     },
