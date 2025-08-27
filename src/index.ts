@@ -9,11 +9,11 @@ import * as NoHandlerSuffix from "@rules/no-handler-suffix";
 import * as NoObjectsInDeps from "@rules/no-objects-in-deps";
 import * as ParamsNamingConvention from "@rules/params-naming-convention";
 import * as PreferArrowFunctions from "@rules/prefer-arrow-functions";
+import * as PreferNamedExport from "@rules/prefer-export-under-component";
 import * as PreferReactFc from "@rules/prefer-react-fc";
 import * as PreferReactWithHooks from "@rules/prefer-react-with-hooks";
 import * as RestrictConsoleMethods from "@rules/restrict-console-methods";
 import * as ManageFunctions from "@rules/restrict-function-usage";
-import * as PreferNamedExport from "@rules/seperate-export-from-component";
 
 const rules = {
   [BooleanNamingConvention.name]: BooleanNamingConvention.rule,

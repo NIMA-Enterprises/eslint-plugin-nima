@@ -9,9 +9,7 @@ import {
 export const name = "prefer-react-with-hooks";
 
 export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
-  create: (context, [options]) => {
-    const { autoFix = true } = options;
-
+  create: (context) => {
     const sourceCode = context.sourceCode;
     const program = sourceCode.ast;
 
@@ -126,10 +124,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
                         .join(", ")} and ${hookNames.slice(-1)}`,
               },
               fix: (fixer) => {
-                if (!autoFix) {
-                  return;
-                }
-
                 const sourceCode = context.sourceCode;
                 const fixes = [];
 
@@ -215,11 +209,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     };
   },
 
-  defaultOptions: [
-    {
-      autoFix: true,
-    },
-  ],
+  defaultOptions: [],
 
   meta: {
     docs: {
@@ -231,18 +221,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
         "NIMA: Use React.{{hook}} instead of importing {{hook}} directly.",
       [Messages.PREFER_REACT_PREFIX]: "NIMA: Prefix {{hook}} with React.",
     },
-    schema: [
-      {
-        additionalProperties: false,
-        properties: {
-          autoFix: {
-            default: true,
-            type: "boolean",
-          },
-        },
-        type: "object",
-      },
-    ],
+    schema: [],
     type: "problem",
   },
 });

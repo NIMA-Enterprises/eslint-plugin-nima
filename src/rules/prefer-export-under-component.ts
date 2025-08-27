@@ -1,4 +1,4 @@
-import { Messages, Options } from "@models/seperate-export-from-component";
+import { Messages, Options } from "@models/prefer-export-under-component";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
