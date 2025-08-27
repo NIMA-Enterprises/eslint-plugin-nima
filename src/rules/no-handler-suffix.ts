@@ -1,10 +1,15 @@
 import type { Scope } from "@typescript-eslint/utils/ts-eslint";
 
-import { ESLintUtils, type TSESTree } from "@typescript-eslint/utils";
+import { Messages, Options } from "@models/no-handle-suffix.model";
+import {
+  AST_NODE_TYPES,
+  ESLintUtils,
+  type TSESTree,
+} from "@typescript-eslint/utils";
 
 export const name = "no-handler-suffix";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs({
+export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
   create: (context) => {
     function generateUniqueName(base: string, scope: Scope.Scope) {
       let candidate = base;
@@ -43,7 +48,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
             }
             return fixes;
           },
-          messageId: "badHandleName",
+          messageId: Messages.BAD_HANDLER_NAME,
           node,
         });
       }
@@ -53,8 +58,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
       ArrowFunctionExpression(node) {
         const parent = node.parent;
         if (
-          parent?.type === "VariableDeclarator" &&
-          parent.id.type === "Identifier"
+          parent?.type === AST_NODE_TYPES.VariableDeclarator &&
+          parent.id.type === AST_NODE_TYPES.Identifier
         ) {
           checkName(parent.id, parent.id.name);
         }
@@ -70,8 +75,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
           checkName(node.id, node.id.name);
         }
         if (
-          parent?.type === "VariableDeclarator" &&
-          parent.id.type === "Identifier"
+          parent?.type === AST_NODE_TYPES.VariableDeclarator &&
+          parent.id.type === AST_NODE_TYPES.Identifier
         ) {
           checkName(parent.id, parent.id.name);
         }
@@ -87,7 +92,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     fixable: "code",
     messages: {
-      badHandleName:
+      [Messages.BAD_HANDLER_NAME]:
         "NIMA: You shouldn't use the handler suffix, use the handle prefix instead ({{ fnWithGoodName }})",
     },
     schema: [],

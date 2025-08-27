@@ -1,6 +1,6 @@
+import { Messages } from "@models/prefer-arrow-functions.model";
+import * as PreferArrowFunctions from "@rules/prefer-arrow-functions";
 import { RuleTester } from "@typescript-eslint/rule-tester";
-
-import * as PreferArrowFunctions from "../../src/rules/prefer-arrow-functions";
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -18,7 +18,7 @@ ruleTester.run("prefer-arrow-functions", PreferArrowFunctions.rule, {
       code: "function NIMALabs() {}",
       errors: [
         {
-          messageId: "preferArrowFunction",
+          messageId: Messages.PREFER_ARROW_FUNCTIONS,
         },
       ],
       output: "const NIMALabs = () => {}",
@@ -27,7 +27,7 @@ ruleTester.run("prefer-arrow-functions", PreferArrowFunctions.rule, {
       code: "const NIMALabs = function () {}",
       errors: [
         {
-          messageId: "preferArrowFunctionExpression",
+          messageId: Messages.PREFER_ARROW_FUNCTION_EXPRESSION,
         },
       ],
       output: "const NIMALabs = () => {}",
@@ -36,7 +36,7 @@ ruleTester.run("prefer-arrow-functions", PreferArrowFunctions.rule, {
       code: "const NIMA = {\nNIMALabs() {}}",
       errors: [
         {
-          messageId: "preferArrowMethod",
+          messageId: Messages.PREFER_ARROW_METHOD,
         },
       ],
       output: "const NIMA = {\nNIMALabs: () => {}}",

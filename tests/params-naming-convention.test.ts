@@ -1,6 +1,6 @@
+import { Messages } from "@models/params-naming-convention.model";
+import * as ParamsNamingConventions from "@rules/params-naming-convention";
 import { RuleTester } from "@typescript-eslint/rule-tester";
-
-import * as ParamsNamingConventions from "../../src/rules/params-naming-convention";
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -20,9 +20,9 @@ ruleTester.run("params-naming-convention", ParamsNamingConventions.rule, {
         {
           data: {
             count: "2",
-            params: "amar, murga",
+            params: "$amar, $murga",
           },
-          messageId: "useObjectParams",
+          messageId: Messages.USE_OBJECT_PARAMETERS,
         },
       ],
     },
@@ -32,9 +32,9 @@ ruleTester.run("params-naming-convention", ParamsNamingConventions.rule, {
         {
           data: {
             count: "1",
-            params: "amar",
+            params: "$amar",
           },
-          messageId: "useObjectParams",
+          messageId: Messages.USE_OBJECT_PARAMETERS,
         },
       ],
     },
@@ -44,9 +44,9 @@ ruleTester.run("params-naming-convention", ParamsNamingConventions.rule, {
         {
           data: {
             count: "2",
-            params: "element, idx",
+            params: "$element, $idx",
           },
-          messageId: "useObjectParams",
+          messageId: Messages.USE_OBJECT_PARAMETERS,
         },
       ],
     },
@@ -56,9 +56,9 @@ ruleTester.run("params-naming-convention", ParamsNamingConventions.rule, {
         {
           data: {
             count: "1",
-            params: "idx",
+            params: "$idx",
           },
-          messageId: "useObjectParams",
+          messageId: Messages.USE_OBJECT_PARAMETERS,
         },
       ],
     },

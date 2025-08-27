@@ -1,6 +1,6 @@
+import { Messages } from "@models/prefer-react-with-hooks.model";
+import * as PreferReactWithHooks from "@rules/prefer-react-with-hooks";
 import { RuleTester } from "@typescript-eslint/rule-tester";
-
-import * as PreferReactWithHooks from "../../src/rules/prefer-react-with-hooks";
 
 const ruleTester = new RuleTester({
   languageOptions: {
@@ -21,7 +21,7 @@ ruleTester.run("prefer-react-with-hooks", PreferReactWithHooks.rule, {
           data: {
             hook: "useEffect",
           },
-          messageId: "preferReactPrefix",
+          messageId: Messages.PREFER_REACT_PREFIX,
         },
       ],
       output: `import React from "react";\nReact.useEffect()`,

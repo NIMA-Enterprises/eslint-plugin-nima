@@ -1,69 +1,69 @@
+import { Messages, type Options } from "@models/params-naming-convention.model";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
-
-import { getFunctionName } from "../utility/getFunctionName";
+import { getFunctionName } from "@utility/function-helpers";
 
 export const name = "params-naming-convention";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs({
-  create: (context, options) => {
-    const ignore = options[0].ignore;
-    const ignorePrefixes = options[0].ignorePrefixes;
-    const allowedParameters = options[0].allowedParameters;
-    const ignoreFunctions = options[0].ignoreFunctions;
+export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+  create: (context, [options]) => {
+    const {
+      allowedParameters = 1,
+      ignore = ["e"],
+      ignoreFunctions = ["reduce"],
+      ignorePrefixes = ["$"],
+    } = options;
 
-    function checkParams(
-      node:
-        | TSESTree.ArrowFunctionExpression
-        | TSESTree.FunctionDeclaration
-        | TSESTree.FunctionExpression
-    ) {
-      if (node.params.length <= allowedParameters) {
+    function checkParams(node: TSESTree.FunctionLike) {
+      const parameters = node.params;
+      const fnName = getFunctionName(node);
+
+      if (parameters.length <= allowedParameters) {
         return;
       }
 
-      const fnName = getFunctionName(node);
-
-      if (fnName && ignoreFunctions?.includes(fnName)) {
+      if (fnName && ignoreFunctions.includes(fnName)) {
         return;
       }
 
       if (
-        node.params.length > 1 &&
-        node.params[1].type === AST_NODE_TYPES.Identifier &&
-        node.params[1].name === "index"
+        parameters.length === 1 &&
+        parameters[0].type === AST_NODE_TYPES.ObjectPattern
+      )
+        return;
+
+      if (
+        parameters.length > 1 &&
+        parameters[1].type === AST_NODE_TYPES.Identifier &&
+        parameters[1].name === "index"
       ) {
         return;
       }
 
-      if (
-        node.params[0] &&
-        node.params[0].type === AST_NODE_TYPES.ObjectPattern
-      )
-        return;
+      const identifiers = parameters.filter(
+        (p): p is TSESTree.Identifier => p.type === AST_NODE_TYPES.Identifier
+      );
 
-      const paramNames = node.params
-        .map((p) => {
-          if (p.type === AST_NODE_TYPES.Identifier) return p.name;
-          return null;
-        })
-        .filter((name): name is string => !!name)
-        .filter(
-          (name) =>
-            !ignore.includes(name) &&
-            !ignorePrefixes?.some((prefix) => name.startsWith(prefix))
-        );
+      const parameterNames = identifiers.filter(
+        (p) =>
+          !ignore.includes(p.name) &&
+          !ignorePrefixes?.some((prefix) => p.name.startsWith(prefix))
+      );
 
-      if (paramNames.length > 0) {
+      const suggestedParameters = ignorePrefixes.flatMap((ignoredPrefix) =>
+        parameterNames.map((parameter) => ignoredPrefix + parameter.name)
+      );
+
+      if (parameterNames.length > 0) {
         context.report({
           data: {
-            count: paramNames.length.toString(),
-            params: paramNames.join(", "),
+            count: suggestedParameters.length.toString(),
+            params: suggestedParameters.join(", "),
           },
-          messageId: "useObjectParams",
+          messageId: Messages.USE_OBJECT_PARAMETERS,
           node,
         });
       }
@@ -88,8 +88,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
       description: "Enforce using a single object parameter for all functions",
     },
     messages: {
-      useObjectParams:
-        "NIMA: Function has {{count}} parameter(s). Use a single object parameter instead: {{params}}",
+      [Messages.USE_OBJECT_PARAMETERS]:
+        "NIMA: Function has {{count}} parameter(s). Either prefix them: {{params}}, or put all parameters in one object.",
     },
     schema: [
       {

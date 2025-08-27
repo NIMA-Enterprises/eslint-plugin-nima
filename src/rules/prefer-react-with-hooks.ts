@@ -1,24 +1,26 @@
+import { REACT_HOOKS } from "@constants/hooks";
+import { Messages, Options } from "@models/prefer-react-with-hooks.model";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
   type TSESTree,
 } from "@typescript-eslint/utils";
 
-import { REACT_HOOKS } from "../constants/hooks";
-
 export const name = "prefer-react-with-hooks";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs({
-  create: (context) => {
+export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+  create: (context, [options]) => {
+    const { autoFix = true } = options;
+
+    const sourceCode = context.sourceCode;
+    const program = sourceCode.ast;
+
     let hasReactImport = false;
     let reactImportNode: null | TSESTree.ImportDeclaration = null;
     let isAnalysisComplete = false;
 
     const analyzeImports = () => {
       if (isAnalysisComplete) return;
-
-      const sourceCode = context.getSourceCode();
-      const program = sourceCode.ast;
 
       for (const node of program.body) {
         if (
@@ -51,8 +53,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
             data: { hook: hookName },
             fix: (fixer) => {
               const fixes = [];
-              const sourceCode = context.getSourceCode();
-              const program = sourceCode.ast;
 
               if (!hasReactImport) {
                 if (reactImportNode) {
@@ -69,30 +69,20 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                       )
                     );
                   }
-                } else {
-                  if (program.body.length > 0) {
-                    fixes.push(
-                      fixer.insertTextBefore(
-                        program.body[0],
-                        'import React from "react";\n'
-                      )
-                    );
-                  } else {
-                    fixes.push(
-                      fixer.insertTextBefore(
-                        node,
-                        'import React from "react";\n'
-                      )
-                    );
-                  }
                 }
+                fixes.push(
+                  fixer.insertTextBefore(
+                    program.body.length > 0 ? program.body[0] : node,
+                    'import React from "react";\n'
+                  )
+                );
               }
 
               fixes.push(fixer.insertTextBefore(node.callee, "React."));
 
               return fixes;
             },
-            messageId: "preferReactPrefix",
+            messageId: Messages.PREFER_REACT_PREFIX,
             node: node.callee,
           });
         }
@@ -136,7 +126,11 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
                         .join(", ")} and ${hookNames.slice(-1)}`,
               },
               fix: (fixer) => {
-                const sourceCode = context.getSourceCode();
+                if (!autoFix) {
+                  return;
+                }
+
+                const sourceCode = context.sourceCode;
                 const fixes = [];
 
                 const remainingSpecifiers = node.specifiers.filter(
@@ -212,7 +206,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
 
                 return fixes;
               },
-              messageId: "preferReact",
+              messageId: Messages.PREFER_REACT,
               node: firstHookImport,
             });
           }
@@ -223,7 +217,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
 
   defaultOptions: [
     {
-      autoFix: false,
+      autoFix: true,
     },
   ],
 
@@ -233,9 +227,9 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     fixable: "code",
     messages: {
-      preferReact:
+      [Messages.PREFER_REACT]:
         "NIMA: Use React.{{hook}} instead of importing {{hook}} directly.",
-      preferReactPrefix: "NIMA: Prefix {{hook}} with React.",
+      [Messages.PREFER_REACT_PREFIX]: "NIMA: Prefix {{hook}} with React.",
     },
     schema: [
       {

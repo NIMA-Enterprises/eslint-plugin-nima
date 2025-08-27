@@ -1,39 +1,36 @@
+import { Messages, type Options } from "@models/prefer-react-fc.model";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
   TSESTree,
 } from "@typescript-eslint/utils";
+import {
+  getFunctionName,
+  isComponentFunction,
+} from "@utility/function-helpers";
 
 export const name = "prefer-react-fc";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs({
-  create(context, options) {
-    const allowArrowFunctions = options[0].allowArrowFunctions;
-    const allowFunctionDeclarations = options[0].allowFunctionDeclarations;
+export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+  create(context, [options]) {
+    const { allowArrowFunctions = true, allowFunctionDeclarations = true } =
+      options;
 
     function isReactComponent(node: TSESTree.FunctionLike) {
-      let functionName = "";
-      if (node.type === AST_NODE_TYPES.FunctionDeclaration && node.id) {
-        functionName = node.id.name;
-      } else if (
-        node.parent?.type === AST_NODE_TYPES.VariableDeclarator &&
-        node.parent.id.type === AST_NODE_TYPES.Identifier
-      ) {
-        functionName = node.parent.id.name;
-      } else if (
-        node.parent?.type === AST_NODE_TYPES.Property &&
-        node.parent.key.type === AST_NODE_TYPES.Identifier
-      ) {
-        functionName = node.parent.key.name;
+      const fnName = getFunctionName(node);
+
+      if (!isComponentFunction(fnName)) {
+        return;
       }
-      if (!functionName || !/^[A-Z]/.test(functionName)) {
-        return false;
-      }
+
       return hasJSXReturn(node);
     }
 
     function hasJSXReturn(node: TSESTree.FunctionLike) {
-      if (!node.body) return false;
+      if (!node.body) {
+        return false;
+      }
+
       if (node.body.type === AST_NODE_TYPES.BlockStatement) {
         return checkBlockForJSX(node.body);
       } else {
@@ -186,7 +183,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
           !hasCustomComponentTypeAnnotation(node)
         ) {
           context.report({
-            messageId: "requireReactFC",
+            messageId: Messages.REQUIRE_REACT_FC,
             node,
           });
         }
@@ -199,7 +196,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
           !hasCustomComponentTypeAnnotation(node)
         ) {
           context.report({
-            messageId: "requireReactFC",
+            messageId: Messages.REQUIRE_REACT_FC,
             node: node.id || node,
           });
         }
@@ -221,7 +218,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     fixable: "code",
     messages: {
-      requireReactFC:
+      [Messages.REQUIRE_REACT_FC]:
         "NIMA: Component functions must use React.FC type annotation.",
     },
     schema: [

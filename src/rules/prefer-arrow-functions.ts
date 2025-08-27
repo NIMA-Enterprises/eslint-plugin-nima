@@ -1,3 +1,4 @@
+import { Messages, type Options } from "@models/prefer-arrow-functions.model";
 import {
   AST_NODE_TYPES,
   ESLintUtils,
@@ -6,14 +7,18 @@ import {
 
 export const name = "prefer-arrow-functions";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs({
-  create: (context, options) => {
-    const allowConstructors = options[0].allowConstructors;
-    const allowAsync = options[0].allowAsync;
-    const allowFunctionDeclarations = options[0].allowFunctionDeclarations;
-    const allowFunctionExpressions = options[0].allowFunctionExpressions;
-    const allowGenerators = options[0].allowGenerators;
-    const allowMethodDefinitions = options[0].allowMethodDefinitions;
+export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+  create: (context, [options]) => {
+    const {
+      allowAsync = true,
+      allowConstructors = true,
+      allowFunctionDeclarations = true,
+      allowFunctionExpressions = true,
+      allowGenerators = true,
+      allowMethodDefinitions = true,
+    } = options;
+
+    const sourceCode = context.sourceCode;
 
     const shouldSkipFunction = (node: TSESTree.FunctionLike) => {
       if (
@@ -23,10 +28,10 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
       ) {
         return true;
       }
-      if (allowGenerators && "generator" in node && node.generator) {
+      if (allowGenerators && node?.generator) {
         return true;
       }
-      if (!allowAsync && "async" in node && node.async) {
+      if (!allowAsync && node?.async) {
         return false;
       }
       if (node.type === AST_NODE_TYPES.TSEmptyBodyFunctionExpression) {
@@ -34,13 +39,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
       }
       return false;
     };
-    const generateArrowFunction = (
-      node:
-        | TSESTree.FunctionDeclaration
-        | TSESTree.FunctionExpression
-        | TSESTree.TSEmptyBodyFunctionExpression
-    ) => {
-      const sourceCode = context.getSourceCode();
+    const generateArrowFunction = (node: TSESTree.FunctionLike) => {
       const asyncKeyword = node.async ? "async " : "";
       const params =
         node.params.length === 0
@@ -83,7 +82,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
               return fixer.replaceText(node, replacement);
             }
           },
-          messageId: "preferArrowFunction",
+          messageId: Messages.PREFER_ARROW_FUNCTIONS,
           node: node.id || node,
         });
       },
@@ -105,7 +104,7 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
             const arrowFunction = generateArrowFunction(node);
             return fixer.replaceText(node, arrowFunction);
           },
-          messageId: "preferArrowFunctionExpression",
+          messageId: Messages.PREFER_ARROW_FUNCTION_EXPRESSION,
           node,
         });
       },
@@ -124,14 +123,13 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
         ) {
           context.report({
             fix: (fixer) => {
-              const sourceCode = context.getSourceCode();
               const key = sourceCode.getText(node.key);
               const arrowFunction = generateArrowFunction(node.value);
               const static_ = node.static ? "static " : "";
               const replacement = `${static_}${key} = ${arrowFunction}`;
               return fixer.replaceText(node, replacement);
             },
-            messageId: "preferArrowMethod",
+            messageId: Messages.PREFER_ARROW_METHOD,
             node: node.key,
           });
         }
@@ -151,13 +149,12 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
 
           context.report({
             fix: (fixer) => {
-              const sourceCode = context.getSourceCode();
               const key = sourceCode.getText(node.key);
               const arrowFunction = generateArrowFunction(fn);
               const replacement = `${key}: ${arrowFunction}`;
               return fixer.replaceText(node, replacement);
             },
-            messageId: "preferArrowMethod",
+            messageId: Messages.PREFER_ARROW_METHOD,
             node: node.key,
           });
         }
@@ -183,11 +180,11 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs({
     },
     fixable: "code",
     messages: {
-      preferArrowFunction:
-        "NIMA: Prefer arrow functions over function declarations.",
-      preferArrowFunctionExpression:
+      [Messages.PREFER_ARROW_FUNCTION_EXPRESSION]:
         "NIMA: Prefer arrow functions over function expressions.",
-      preferArrowMethod:
+      [Messages.PREFER_ARROW_FUNCTIONS]:
+        "NIMA: Prefer arrow functions over function declarations.",
+      [Messages.PREFER_ARROW_METHOD]:
         "NIMA: Prefer arrow functions over method definitions.",
     },
     schema: [
