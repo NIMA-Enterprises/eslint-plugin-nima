@@ -8,7 +8,16 @@
     "strict": true,
     "strictNullChecks": false,
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "paths": {
+      "@utility/*": ["src/utility/*"],
+      "@models/*": ["src/models/*"],
+      "@rules/*": ["src/rules/*"],
+      "@constants/*": ["src/constants/*"]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }
