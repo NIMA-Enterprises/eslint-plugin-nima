@@ -25,7 +25,8 @@ Consistent prefixes improve readability and make boolean intent explicit.
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
-- [Versioning](#versioning)
+- [Confguration](#quick-configuration-snippets)
+- [Versioning](#version)
 
 ---
 
@@ -76,14 +77,12 @@ type Options = [
 }
 ```
 
-> Note: the real default is read from `DEFAULT_PREFIXES` in your codebase. The array above is a common example — replace it with your project's defaults if different.
-
 ### Option details
 
 #### allowedPrefixes
 
 - **Type:** `string[]`
-- **Default:** `DEFAULT_PREFIXES` (commonly `["is", "has", "can", "should"]`)
+- **Default:** `["is", "has", "can", "should"]`
 - **Description:** List of prefixes that are considered valid for boolean identifiers. Matching is case-insensitive.
 - **Example:** `["is","has","should","can","will"]`
 
@@ -324,12 +323,6 @@ NIMA: Function 'active' returns a boolean, use a prefix like isActive
 
 ---
 
-## Version
-
-Introduced in `eslint-plugin-nima@1.0.0` (or the version you ship with your plugin).
-
----
-
 ## Quick configuration snippets
 
 ### Flat ESLint config (eslint.config.js)
@@ -375,5 +368,11 @@ export default [
   }
 }
 ```
+
+---
+
+## Version
+
+Introduced in `eslint-plugin-nima@1.0.0`.
 
 ---

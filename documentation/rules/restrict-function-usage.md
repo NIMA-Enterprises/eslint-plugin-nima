@@ -26,7 +26,8 @@ This rule provides fine-grained control over function usage across your codebase
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
 - [Common use cases](#common-use-cases)
-- [Versioning](#versioning)
+- [Configuration](#quick-configuration-snippets)
+- [Version](#version)
 
 ---
 
@@ -457,12 +458,6 @@ Do not use fetch inside src/components/UserList.js.
 
 ---
 
-## Versioning
-
-Introduced in `eslint-plugin-nima@1.0.0` (or the version you ship with your plugin).
-
----
-
 ## Quick configuration snippets
 
 ### Flat ESLint config (eslint.config.js)
@@ -538,5 +533,11 @@ export default [
   }
 }
 ```
+
+---
+
+## Version
+
+Introduced in `eslint-plugin-nima@1.0.0`.
 
 ---

@@ -28,7 +28,8 @@ Arrow functions provide lexical `this` binding, shorter syntax, and more consist
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
-- [Versioning](#versioning)
+- [Configuration](#quick-configuration-snippets)
+- [Version](#version)
 
 ---
 
@@ -447,12 +448,6 @@ NIMA: Prefer arrow functions over function declarations.
 
 ---
 
-## Versioning
-
-Introduced in `eslint-plugin-nima@1.0.0` (or the version you ship with your plugin).
-
----
-
 ## Quick configuration snippets
 
 ### Flat ESLint config (eslint.config.js)
@@ -500,5 +495,11 @@ export default [
   }
 }
 ```
+
+---
+
+## Version
+
+Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---

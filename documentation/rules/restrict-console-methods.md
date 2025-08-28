@@ -20,7 +20,8 @@ Console statements are often left behind during development and should be remove
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
-- [Versioning](#versioning)
+- [Configuration](#quick-configuration-snippets)
+- [Version](#version)
 
 ---
 
@@ -249,12 +250,6 @@ logger.warn("Feature deprecated", {
 
 ---
 
-## Versioning
-
-Introduced in `eslint-plugin-nima@1.0.0` (or the version you ship with your plugin).
-
----
-
 ## Quick configuration snippets
 
 ### Flat ESLint config (eslint.config.js)
@@ -316,5 +311,11 @@ For development environments where some console usage might be acceptable:
   }
 }
 ```
+
+---
+
+## Version
+
+Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---

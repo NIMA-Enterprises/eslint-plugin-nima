@@ -19,7 +19,8 @@ Consistent prefixes improve readability and make function intent more explicit.
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
-- [Versioning](#versioning)
+- [Configuration](#quick-configuration-snippets)
+- [Version](#version)
 
 ---
 
@@ -249,12 +250,6 @@ NIMA: You shouldn't use the handler suffix, use the handle prefix instead (handl
 
 ---
 
-## Versioning
-
-Introduced in `eslint-plugin-nima@1.0.0` (or the version you ship with your plugin).
-
----
-
 ## Quick configuration snippets
 
 ### Flat ESLint config (eslint.config.js)
@@ -282,5 +277,11 @@ export default [
   }
 }
 ```
+
+---
+
+## Version
+
+Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---

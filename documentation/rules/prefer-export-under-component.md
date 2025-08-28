@@ -20,7 +20,8 @@ This improves code readability, debugging experience, and component organization
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
-- [Versioning](#versioning)
+- [Configuration](#quick-configuration-snippets)
+- [Version](#version)
 
 ---
 
@@ -393,12 +394,6 @@ NIMA: Declare React component 'MyComponent' separately from its export statement
 
 ---
 
-## Versioning
-
-Introduced in `eslint-plugin-nima@1.0.0` (or the version you ship with your plugin).
-
----
-
 ## Quick configuration snippets
 
 ### Flat ESLint config (eslint.config.js)
@@ -426,5 +421,11 @@ export default [
   }
 }
 ```
+
+---
+
+## Version
+
+Introduced in `eslint-plugin-nima@1.0.0`.
 
 ---
