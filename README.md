@@ -104,6 +104,8 @@ Each rule has three levels of explanation:
 - **Medium**: sentences with examples (on the overview page).
 - **Full**: dedicated docs per rule.
 
+The plugin currently provides these rules:
+
 - [no-handler-suffix](documentation/rules/no-handler-suffix.md)
 - [restrict-console-methods](documentation/rules/restrict-console-methods.md)
 - [prefer-export-under-component](documentation/rules/prefer-export-under-component.md)
