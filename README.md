@@ -104,6 +104,8 @@ Each rule has three levels of explanation:
 - **Medium**: sentences with examples (on the overview page).
 - **Full**: dedicated docs per rule.
 
+Before diving deep into what each rule does, I recommend readign the [Rule Overview Page](documentation/rules/index.md) where you can read a little bit about each rule and then you can see which one you want to dig into.
+
 The plugin currently provides these rules:
 
 - [no-handler-suffix](documentation/rules/no-handler-suffix.md)
