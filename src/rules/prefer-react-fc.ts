@@ -1,9 +1,6 @@
 import { Messages, type Options } from "@models/prefer-react-fc.model";
-import {
-  AST_NODE_TYPES,
-  ESLintUtils,
-  TSESTree,
-} from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 import {
   getFunctionName,
   isComponentFunction,
@@ -11,7 +8,7 @@ import {
 
 export const name = "prefer-react-fc";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create(context) {
     function isReactComponent(node: TSESTree.FunctionLike) {
       const fnName = getFunctionName(node);
@@ -198,7 +195,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
       },
     };
   },
-
   defaultOptions: [
     {
       allowArrowFunctions: true,
@@ -210,6 +206,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     docs: {
       description:
         "Enforce React.FC type annotation for React component functions",
+      recommended: true,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/prefer-react-fc.md",
     },
     fixable: "code",
     messages: {
@@ -234,4 +232,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     ],
     type: "problem",
   },
+
+  name,
 });

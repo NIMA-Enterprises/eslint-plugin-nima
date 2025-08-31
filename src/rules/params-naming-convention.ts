@@ -1,14 +1,11 @@
 import { Messages, type Options } from "@models/params-naming-convention.model";
-import {
-  AST_NODE_TYPES,
-  ESLintUtils,
-  type TSESTree,
-} from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 import { getFunctionName } from "@utility/function-helpers";
 
 export const name = "params-naming-convention";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create: (context, [options]) => {
     const {
       allowedParameters = 1,
@@ -73,7 +70,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
         checkParams,
     };
   },
-
   defaultOptions: [
     {
       allowedParameters: 1,
@@ -86,6 +82,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
   meta: {
     docs: {
       description: "Enforce using a single object parameter for all functions",
+      recommended: false,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/params-naming-convention.md",
     },
     messages: {
       [Messages.USE_OBJECT_PARAMETERS]:
@@ -117,4 +115,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     ],
     type: "problem",
   },
+
+  name,
 });

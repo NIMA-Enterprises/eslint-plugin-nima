@@ -1,15 +1,12 @@
 import { DEFAULT_PREFIXES } from "@constants/boolean-prefixes";
 import { Messages, Options } from "@models/boolean-naming-convention.model";
-import {
-  AST_NODE_TYPES,
-  ESLintUtils,
-  type TSESTree,
-} from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 import { getType } from "@utility/type-helpers";
 
 export const name = "boolean-naming-convention";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create: (context, [options]) => {
     const {
       allowedPrefixes = DEFAULT_PREFIXES,
@@ -360,11 +357,12 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
       checkVariables: true,
     },
   ],
-
   meta: {
     docs: {
       description:
         "Enforces boolean variables to use appropriate prefixes (is, has, can, should, etc.)",
+      recommended: false,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/boolean-naming-convention.md",
     },
     messages: {
       [Messages.BAD_FUNCTION_BOOLEAN_PREFIX]:
@@ -395,4 +393,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     ],
     type: "suggestion",
   },
+
+  name,
 });

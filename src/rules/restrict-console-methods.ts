@@ -1,10 +1,11 @@
 import { CONSOLES } from "@constants/consoles";
 import { Messages, type Options } from "@models/restrict-console-methods.model";
-import { AST_NODE_TYPES, ESLintUtils } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 
 export const name = "restrict-console-methods";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create(context, [options]) {
     const {
       allowConsoleError = false,
@@ -45,7 +46,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
       },
     };
   },
-
   defaultOptions: [
     {
       allowConsoleError: false,
@@ -57,6 +57,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
   meta: {
     docs: {
       description: "Restrict the usage of console in the codebase",
+      recommended: true,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/restrict-console-methods.md",
     },
     messages: {
       [Messages.NO_CONSOLE]:
@@ -84,4 +86,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     ],
     type: "suggestion",
   },
+
+  name,
 });
