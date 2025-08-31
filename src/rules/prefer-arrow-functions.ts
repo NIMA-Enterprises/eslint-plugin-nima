@@ -1,13 +1,10 @@
 import { Messages, type Options } from "@models/prefer-arrow-functions.model";
-import {
-  AST_NODE_TYPES,
-  ESLintUtils,
-  TSESTree,
-} from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 
 export const name = "prefer-arrow-functions";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create: (context, [options]) => {
     const {
       allowAsync = true,
@@ -161,7 +158,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
       },
     };
   },
-
   defaultOptions: [
     {
       allowAsync: true,
@@ -177,6 +173,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     docs: {
       description:
         "Prefer arrow functions over function declarations and expressions",
+      recommended: true,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/prefer-arrow-functions.md",
     },
     fixable: "code",
     messages: {
@@ -229,4 +227,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     ],
     type: "suggestion",
   },
+
+  name,
 });

@@ -1,14 +1,11 @@
 import { HOOKS_WITH_DEPS } from "@constants/hooks";
 import { Messages, Options } from "@models/no-objects-in-deps.model";
-import {
-  AST_NODE_TYPES,
-  ESLintUtils,
-  TSESTree,
-} from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 
 export const name = "no-objects-in-deps";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create: (context) => {
     function getCalleeName(node: TSESTree.CallExpression) {
       const callee = node.callee;
@@ -84,12 +81,13 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
       },
     };
   },
-
   defaultOptions: [],
 
   meta: {
     docs: {
       description: "Suggests to not use objects in dependency arrays",
+      recommended: false,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/no-objects-in-deps.md",
     },
     messages: {
       [Messages.NO_OBJECTS_IN_DEPENDENCIES]:
@@ -98,4 +96,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     schema: [],
     type: "suggestion",
   },
+
+  name,
 });

@@ -1,14 +1,11 @@
 import { REACT_HOOKS } from "@constants/hooks";
 import { Messages, Options } from "@models/prefer-react-with-hooks.model";
-import {
-  AST_NODE_TYPES,
-  ESLintUtils,
-  type TSESTree,
-} from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 
 export const name = "prefer-react-with-hooks";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create: (context) => {
     const sourceCode = context.sourceCode;
     const program = sourceCode.ast;
@@ -208,12 +205,13 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
       },
     };
   },
-
   defaultOptions: [],
 
   meta: {
     docs: {
       description: "Enforce React.use* over named use* imports",
+      recommended: false,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/prefer-react-with-hooks.md",
     },
     fixable: "code",
     messages: {
@@ -224,4 +222,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     schema: [],
     type: "problem",
   },
+
+  name,
 });

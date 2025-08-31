@@ -1,9 +1,6 @@
 import { Messages, Options } from "@models/prefer-export-under-component";
-import {
-  AST_NODE_TYPES,
-  ESLintUtils,
-  type TSESTree,
-} from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 import {
   getFunctionName,
   isComponentFunction,
@@ -12,7 +9,7 @@ import {
 
 export const name = "prefer-export-under-component";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create: (context) => {
     return {
       ExportDefaultDeclaration: (node: TSESTree.ExportDefaultDeclaration) => {
@@ -112,13 +109,14 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
       },
     };
   },
-
   defaultOptions: [{}],
 
   meta: {
     docs: {
       description:
         "Enforce separate declaration and export for React components",
+      recommended: true,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/prefer-export-under-component.md",
     },
     fixable: "code",
     messages: {
@@ -128,4 +126,6 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     schema: [],
     type: "problem",
   },
+
+  name,
 });

@@ -1,15 +1,12 @@
 import type { Scope } from "@typescript-eslint/utils/ts-eslint";
 
 import { Messages, Options } from "@models/no-handle-suffix.model";
-import {
-  AST_NODE_TYPES,
-  ESLintUtils,
-  type TSESTree,
-} from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 
 export const name = "no-handler-suffix";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create: (context) => {
     function generateUniqueName(base: string, scope: Scope.Scope) {
       let candidate = base;
@@ -83,12 +80,13 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
       },
     };
   },
-
   defaultOptions: [],
 
   meta: {
     docs: {
       description: "Suggests to use handleFn instead of fnHandler",
+      recommended: true,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/no-handler-suffix.md",
     },
     fixable: "code",
     messages: {
@@ -96,6 +94,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
         "NIMA: You shouldn't use the handler suffix, use the handle prefix instead ({{ fnWithGoodName }})",
     },
     schema: [],
-    type: "suggestion",
+    type: "problem",
   },
+
+  name,
 });

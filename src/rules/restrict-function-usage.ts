@@ -1,11 +1,12 @@
 import { Messages, Options } from "@models/restrict-function-usage.model";
-import { ESLintUtils, TSESTree } from "@typescript-eslint/utils";
+import { TSESTree } from "@typescript-eslint/utils";
+import { createRule } from "@utility/core";
 import { minimatch } from "minimatch";
 import path from "path";
 
 export const name = "restrict-function-usage";
 
-export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
+export const rule = createRule<Options, Messages>({
   create(context, [options = []]) {
     function isFileMatched(
       filename: string,
@@ -121,6 +122,8 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     docs: {
       description:
         "Disallow use of any functions in any files or folders unless explicitly allowed.",
+      recommended: false,
+      url: "https://github.com/NIMA-Enterprises/eslint-plugin-nima/blob/main/documentation/rules/restrict-function-usage.md",
     },
     messages: {
       [Messages.FUNCTION_DISALLOWED]:
@@ -143,4 +146,5 @@ export const rule = ESLintUtils.RuleCreator.withoutDocs<Options, Messages>({
     ],
     type: "problem",
   },
+  name,
 });
