@@ -140,6 +140,39 @@ ruleTester.run("prefer-arrow-functions", PreferArrowFunctions.rule, {
         const example = () => {}
       `,
     },
+    {
+      code: "function funcWithDefaultParams(a = 1) {}",
+      errors: [{ messageId: Messages.PREFER_ARROW_FUNCTIONS }],
+      output: "const funcWithDefaultParams = (a = 1) => {}",
+    },
+    {
+      code: "function funcWithRestParams(a, ...rest) {}",
+      errors: [{ messageId: Messages.PREFER_ARROW_FUNCTIONS }],
+      output: "const funcWithRestParams = (a, ...rest) => {}",
+    },
+    {
+      code: "function funcWithGeneric<T>(a: T) {}",
+      errors: [{ messageId: Messages.PREFER_ARROW_FUNCTIONS }],
+      output: "const funcWithGeneric = <T>(a: T) => {}",
+    },
+    {
+      code: "function funcReturningObject() { return { a: 1 }; }",
+      errors: [{ messageId: Messages.PREFER_ARROW_FUNCTIONS }],
+      output: "const funcReturningObject = () => { return { a: 1 }; }",
+    },
+    {
+      code: `
+        function outer() {
+          function inner() {}
+        }
+      `,
+      errors: [{ line: 3, messageId: Messages.PREFER_ARROW_FUNCTIONS }],
+      output: `
+        function outer() {
+          const inner = () => {}
+        }
+      `,
+    },
   ],
   valid: [
     "const NIMALabs = () => {}",
@@ -195,6 +228,27 @@ ruleTester.run("prefer-arrow-functions", PreferArrowFunctions.rule, {
     {
       code: "const myObject = { myMethod() {} };",
       options: [{ allowMethodDefinitions: true }],
+    },
+    {
+      code: "class F { myMethod = () => { this.doSomething(); } }",
+      options: [{ allowMethodDefinitions: false }],
+    },
+    {
+      code: `
+        function render() {
+          return () => <div>Hello</div>;
+        }
+      `,
+    },
+    {
+      code: `
+        class MyComponent extends React.Component {
+          render() {
+            return <div />;
+          }
+        }
+      `,
+      options: [{ allowMethodDefinitions: false }],
     },
   ],
 });
