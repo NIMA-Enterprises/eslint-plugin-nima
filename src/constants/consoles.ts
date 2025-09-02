@@ -1,1 +1,21 @@
-export const CONSOLES = new Set(["error", "log", "warn"]);
+export const CONSOLES = new Set([
+  "assert",
+  "clear",
+  "count",
+  "countReset",
+  "debug",
+  "dir",
+  "dirxml",
+  "error",
+  "group",
+  "groupEnd",
+  "info",
+  "log",
+  "profile",
+  "profileEnd",
+  "table",
+  "time",
+  "timeEnd",
+  "trace",
+  "warn",
+]);

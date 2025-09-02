@@ -7,11 +7,7 @@ export const name = "restrict-console-methods";
 
 export const rule = createRule<Options, Messages>({
   create(context, [options]) {
-    const {
-      allowConsoleError = false,
-      allowConsoleLog = false,
-      allowConsoleWarn = false,
-    } = options;
+    const { allow = [] } = options;
 
     return {
       CallExpression(node) {
@@ -27,11 +23,7 @@ export const rule = createRule<Options, Messages>({
             return;
           }
 
-          if (
-            (methodName === "error" && allowConsoleError) ||
-            (methodName === "log" && allowConsoleLog) ||
-            (methodName === "warn" && allowConsoleWarn)
-          ) {
+          if (allow.includes(methodName)) {
             return;
           }
 
@@ -40,7 +32,7 @@ export const rule = createRule<Options, Messages>({
               console: node.callee.property.name,
             },
             messageId: Messages.NO_CONSOLE,
-            node,
+            node: node.callee.property,
           });
         }
       },
@@ -48,9 +40,7 @@ export const rule = createRule<Options, Messages>({
   },
   defaultOptions: [
     {
-      allowConsoleError: false,
-      allowConsoleLog: false,
-      allowConsoleWarn: false,
+      allow: [],
     },
   ],
 
@@ -68,17 +58,9 @@ export const rule = createRule<Options, Messages>({
       {
         additionalProperties: false,
         properties: {
-          allowConsoleError: {
-            default: false,
-            type: "boolean",
-          },
-          allowConsoleLog: {
-            default: false,
-            type: "boolean",
-          },
-          allowConsoleWarn: {
-            default: false,
-            type: "boolean",
+          allow: {
+            items: { type: "string" },
+            type: "array",
           },
         },
         type: "object",

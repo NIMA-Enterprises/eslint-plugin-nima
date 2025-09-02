@@ -17,19 +17,9 @@ const ruleTester = new RuleTester({
 
 ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
   invalid: [
-    // Original test cases
-    {
-      code: "const NIMA = () => true",
-      errors: [
-        {
-          data: {
-            name: "NIMA",
-            suggestion: "isNIMA",
-          },
-          messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
-        },
-      ],
-    },
+    // === VARIABLE TESTS ===
+
+    // 1. Variable: inferred boolean, missing prefix
     {
       code: "const NIMA = true",
       errors: [
@@ -42,72 +32,8 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
         },
       ],
     },
-    {
-      code: "const NIMA = (nima: boolean) => {}",
-      errors: [
-        {
-          data: {
-            name: "nima",
-            suggestion: "isNima",
-          },
-          messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
-        },
-      ],
-    },
-    {
-      code: "const NIMA = {\nnima: true}",
-      errors: [
-        {
-          data: {
-            name: "nima",
-            suggestion: "isNima",
-          },
-          messageId: Messages.BAD_PROPERTY_BOOLEAN_PREFIX,
-        },
-      ],
-    },
-    {
-      code: "const NIMA = {\nnima: () => true}",
-      errors: [
-        {
-          data: {
-            name: "nima",
-            suggestion: "isNima",
-          },
-          messageId: Messages.BAD_PROPERTY_BOOLEAN_PREFIX,
-        },
-      ],
-    },
 
-    // Function declarations
-    {
-      code: "function checkUser(): boolean { return true; }",
-      errors: [
-        {
-          data: {
-            name: "checkUser",
-            suggestion: "isCheckUser",
-          },
-          messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
-        },
-      ],
-    },
-
-    // Arrow functions with explicit return types
-    {
-      code: "const validate = (): boolean => true",
-      errors: [
-        {
-          data: {
-            name: "validate",
-            suggestion: "isValidate",
-          },
-          messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
-        },
-      ],
-    },
-
-    // TypeScript boolean literals
+    // 2. Variable: explicit true type, missing prefix
     {
       code: "const flag: true = true",
       errors: [
@@ -120,6 +46,8 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
         },
       ],
     },
+
+    // 3. Variable: explicit false type, missing prefix
     {
       code: "const status: false = false",
       errors: [
@@ -133,7 +61,21 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
       ],
     },
 
-    // Object destructuring with boolean types
+    // 4. Variable: let with inferred boolean, missing prefix
+    {
+      code: "let active = false",
+      errors: [
+        {
+          data: {
+            name: "active",
+            suggestion: "isActive",
+          },
+          messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
+        },
+      ],
+    },
+
+    // 5. Variable: destructured boolean, missing prefix
     {
       code: "const { active }: { active: boolean } = obj",
       errors: [
@@ -147,7 +89,81 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
       ],
     },
 
-    // Function parameters with object destructuring
+    // === FUNCTION TESTS ===
+
+    // 6. Arrow function returns boolean, missing prefix
+    {
+      code: "const NIMA = () => true",
+      errors: [
+        {
+          data: {
+            name: "NIMA",
+            suggestion: "isNIMA",
+          },
+          messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
+        },
+      ],
+    },
+
+    // 7. Function expression returns boolean, missing prefix
+    {
+      code: "const validate = function(): boolean { return true; }",
+      errors: [
+        {
+          data: {
+            name: "validate",
+            suggestion: "isValidate",
+          },
+          messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
+        },
+      ],
+    },
+
+    // 8. Function declaration returns boolean, missing prefix
+    {
+      code: "function checkUser(): boolean { return true; }",
+      errors: [
+        {
+          data: {
+            name: "checkUser",
+            suggestion: "isCheckUser",
+          },
+          messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
+        },
+      ],
+    },
+
+    // 9. Arrow function with explicit boolean return, missing prefix
+    {
+      code: "const validate = (): boolean => true",
+      errors: [
+        {
+          data: {
+            name: "validate",
+            suggestion: "isValidate",
+          },
+          messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
+        },
+      ],
+    },
+
+    // === PARAMETER TESTS ===
+
+    // 10. Function parameter of type boolean, missing prefix
+    {
+      code: "const NIMA = (nima: boolean) => {}",
+      errors: [
+        {
+          data: {
+            name: "nima",
+            suggestion: "isNima",
+          },
+          messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
+        },
+      ],
+    },
+
+    // 11. Function declaration with object parameter, missing prefix
     {
       code: "function test({ enabled }: { enabled: boolean }) {}",
       errors: [
@@ -161,7 +177,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
       ],
     },
 
-    // Arrow function parameters with object destructuring
+    // 12. Arrow function with object parameter, missing prefix
     {
       code: "const fn = ({ visible }: { visible: boolean }) => {}",
       errors: [
@@ -175,7 +191,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
       ],
     },
 
-    // Multiple boolean parameters
+    // 13. Function declaration with multiple boolean parameters, missing prefix
     {
       code: "function test(active: boolean, enabled: boolean) {}",
       errors: [
@@ -196,7 +212,62 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
       ],
     },
 
-    // Object properties with boolean functions
+    // 14. Function declaration with nested object parameter, missing prefix
+    {
+      code: `function process({ 
+        settings: { active, visible } 
+      }: { 
+        settings: { active: boolean, visible: boolean } 
+      }) {}`,
+      errors: [
+        {
+          data: {
+            name: "active",
+            suggestion: "isActive",
+          },
+          messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
+        },
+        {
+          data: {
+            name: "visible",
+            suggestion: "isVisible",
+          },
+          messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
+        },
+      ],
+    },
+
+    // === PROPERTY TESTS ===
+
+    // 15. Object property with boolean value, missing prefix
+    {
+      code: "const NIMA = {\nnima: true}",
+      errors: [
+        {
+          data: {
+            name: "nima",
+            suggestion: "isNima",
+          },
+          messageId: Messages.BAD_PROPERTY_BOOLEAN_PREFIX,
+        },
+      ],
+    },
+
+    // 16. Object property with boolean function, missing prefix
+    {
+      code: "const NIMA = {\nnima: () => true}",
+      errors: [
+        {
+          data: {
+            name: "nima",
+            suggestion: "isNima",
+          },
+          messageId: Messages.BAD_PROPERTY_BOOLEAN_PREFIX,
+        },
+      ],
+    },
+
+    // 17. Object property with boolean-returning function expression, missing prefix
     {
       code: "const obj = { validate: function(): boolean { return true; } }",
       errors: [
@@ -210,7 +281,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
       ],
     },
 
-    // Object with multiple boolean properties
+    // 18. Multiple object properties with boolean values/functions, missing prefix
     {
       code: `const config = {
         active: true,
@@ -242,60 +313,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
       ],
     },
 
-    // Complex object destructuring in parameters
-    {
-      code: `function process({ 
-        settings: { active, visible } 
-      }: { 
-        settings: { active: boolean, visible: boolean } 
-      }) {}`,
-      errors: [
-        {
-          data: {
-            name: "active",
-            suggestion: "isActive",
-          },
-          messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
-        },
-        {
-          data: {
-            name: "visible",
-            suggestion: "isVisible",
-          },
-          messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
-        },
-      ],
-    },
-
-    // Function expressions assigned to variables
-    {
-      code: "const validate = function(): boolean { return true; }",
-      errors: [
-        {
-          data: {
-            name: "validate",
-            suggestion: "isValidate",
-          },
-          messageId: Messages.BAD_FUNCTION_BOOLEAN_PREFIX,
-        },
-      ],
-    },
-
-    // Boolean variables with inferred types
-    {
-      code: "let active = false",
-      errors: [
-        {
-          data: {
-            name: "active",
-            suggestion: "isActive",
-          },
-          messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
-        },
-      ],
-    },
-
-    // Nested object properties
+    // 19. Nested object properties with boolean values/functions, missing prefix
     {
       code: `const config = {
         ui: {
@@ -320,84 +338,89 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
         },
       ],
     },
+
+    // 20. Variable with union type including boolean, missing prefix
+    {
+      code: "const value: string | boolean = true",
+      errors: [
+        {
+          data: {
+            name: "value",
+            suggestion: "isValue",
+          },
+          messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
+        },
+      ],
+    },
   ],
 
   valid: [
-    // Original valid test cases
-    "const isNIMA = () => true",
-    "const isNIMA = true",
-    "const isNIMA = (isNima: boolean) => {}",
-    "const NIMA = {\nisNima: true}",
-    "const NIMA = {\nisNima: () => true}",
+    // === VARIABLE TESTS (valid) ===
 
-    // Valid function declarations with proper prefixes
-    "function isValid(): boolean { return true; }",
-    "function hasPermission(): boolean { return false; }",
-    "function canEdit(): boolean { return true; }",
-    "function shouldUpdate(): boolean { return false; }",
-    "function willRender(): boolean { return true; }",
+    // 21. Variable: valid boolean prefix
+    "const isNIMA = true", // 21.
+    "const isEnabled: boolean = true", // 22.
+    "const hasValue = false", // 23.
+    "const canSubmit: true = true", // 24.
+    "const shouldRender: false = false", // 25.
+    "const IS_VALID = true", // 26.
+    "const Has_Data = false", // 27.
+    "const { isActive }: { isActive: boolean } = obj", // 28.
+    "const { hasData, canEdit }: { hasData: boolean, canEdit: boolean } = config", // 29.
 
-    // Valid arrow functions
-    "const isActive = (): boolean => true",
-    "const hasData = () => false",
-    "const canProcess = (): boolean => true",
+    // === FUNCTION TESTS (valid) ===
 
-    // Valid variables
-    "const isEnabled: boolean = true",
-    "const hasValue = false",
-    "const canSubmit: true = true",
-    "const shouldRender: false = false",
+    // 30. Arrow function with valid boolean prefix
+    "const isNIMA = () => true", // 30.
+    "function isValid(): boolean { return true; }", // 31.
+    "function hasPermission(): boolean { return false; }", // 32.
+    "function canEdit(): boolean { return true; }", // 33.
+    "function shouldUpdate(): boolean { return false; }", // 34.
+    "function willRender(): boolean { return true; }", // 35.
+    "const isActive = (): boolean => true", // 36.
+    "const hasData = () => false", // 37.
+    "const can_edit = () => true", // 38.
+    "const canProcess = (): boolean => true", // 39.
 
-    // Valid object properties
+    // === PARAMETER TESTS (valid) ===
+
+    // 40. Function parameter with valid boolean prefix
+    "const isNIMA = (isNima: boolean) => {}", // 40.
+    "function test(isActive: boolean, hasData: boolean) {}", // 41.
+    "const fn = (isVisible: boolean) => {}", // 42.
+    "function process({ isEnabled }: { isEnabled: boolean }) {}", // 43.
+    "function test(isActive?: boolean) {}", // 44.
+
+    // === PROPERTY TESTS (valid) ===
+
+    // 45. Object property with valid boolean prefix
+    "const NIMA = {\nisNima: true}", // 45.
+    "const NIMA = {\nisNima: () => true}", // 46.
     `const config = {
       isActive: true,
       hasData: false,
       canEdit: () => true,
       shouldUpdate: function(): boolean { return false; }
-    }`,
+    }`, // 47.
 
-    // Valid parameters
-    "function test(isActive: boolean, hasData: boolean) {}",
-    "const fn = (isVisible: boolean) => {}",
-    "function process({ isEnabled }: { isEnabled: boolean }) {}",
+    // === NON-BOOLEAN/EDGE CASES (should not trigger) ===
 
-    // Valid object destructuring
-    "const { isActive }: { isActive: boolean } = obj",
-    "const { hasData, canEdit }: { hasData: boolean, canEdit: boolean } = config",
-
-    // Non-boolean cases (should not trigger)
-    "const user = 'john'",
-    "const age = 25",
-    "const getData = () => 'data'",
-    "function getName(): string { return 'name'; }",
-    "const config = { name: 'test', value: 42 }",
-    "function process(name: string, age: number) {}",
-
-    // Mixed types (only boolean should trigger)
-    "function test(name: string, isActive: boolean, age: number) {}",
+    // 48. Non-boolean variables and functions
+    "const user = 'john'", // 48.
+    "const age = 25", // 49.
+    "const getData = () => 'data'", // 50.
+    "function getName(): string { return 'name'; }", // 51.
+    "const config = { name: 'test', value: 42 }", // 52.
+    "function process(name: string, age: number) {}", // 53.
+    "function test(name: string, isActive: boolean, age: number) {}", // 54.
     `const config = {
       name: 'test',
       isActive: true,
       count: 42,
       hasData: false
-    }`,
-
-    // Edge cases with existing valid prefixes
-    "const IS_VALID = true", // uppercase with valid prefix
-    "const Has_Data = false", // mixed case with valid prefix
-    "const can_edit = () => true", // snake_case with valid prefix
-
-    // Functions that don't return boolean (should not trigger)
-    "function validate() { return 'valid'; }",
-    "const check = () => ({ status: 'ok' })",
-
-    // Optional boolean parameters (valid)
-    "function test(isActive?: boolean) {}",
-
-    // Union types including boolean (edge case)
-    "const value: string | boolean = true", // This might be tricky for the rule
-
-    // Complex destructuring with mixed types
+    }`, // 55.
+    "function validate() { return 'valid'; }", // 56.
+    "const check = () => ({ status: 'ok' })", // 57.
     `function process({ 
       name, 
       isActive, 
@@ -406,7 +429,7 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
       name: string, 
       isActive: boolean, 
       age: number 
-    }) {}`,
+    }) {}`, // 58.
   ],
 });
 
@@ -416,6 +439,7 @@ ruleTester.run(
   BooleanNamingConventions.rule,
   {
     invalid: [
+      // 59. Custom allowedPrefixes option
       {
         code: "const active = true",
         errors: [
@@ -431,10 +455,12 @@ ruleTester.run(
       },
     ],
     valid: [
+      // 60. Variable with allowed custom prefix
       {
         code: "const isActive = true",
         options: [{ allowedPrefixes: ["is", "has"] }],
       },
+      // 61. Variable with another allowed custom prefix
       {
         code: "const hasData = true",
         options: [{ allowedPrefixes: ["is", "has"] }],
@@ -449,7 +475,7 @@ ruleTester.run(
   BooleanNamingConventions.rule,
   {
     invalid: [
-      // Only variables should be checked
+      // 62. Only variables should be checked
       {
         code: "const active = true",
         errors: [
@@ -472,15 +498,17 @@ ruleTester.run(
       },
     ],
     valid: [
-      // These should not trigger errors when their respective checks are disabled
+      // 63. Function should not trigger when checkFunctions is false
       {
         code: "function validate(): boolean { return true; }",
         options: [{ checkFunctions: false }],
       },
+      // 64. Parameter should not trigger when checkParameters is false
       {
         code: "const fn = (active: boolean) => {}",
         options: [{ checkParameters: false }],
       },
+      // 65. Property should not trigger when checkProperties is false
       {
         code: "const obj = { active: true }",
         options: [{ checkProperties: false }],

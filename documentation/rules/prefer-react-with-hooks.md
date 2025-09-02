@@ -11,7 +11,7 @@ This provides consistent namespacing, clearer hook identification, and better co
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
 - [Examples (by option)](#examples-by-option)
-  - [Default behaviour](#default-behaviour)
+  - [Default behavior](#default-behavior)
   - [Direct hook imports](#direct-hook-imports)
   - [Mixed import patterns](#mixed-import-patterns)
   - [Hook usage without imports](#hook-usage-without-imports)
@@ -62,7 +62,7 @@ type Options = [];
 
 ## Examples (by option)
 
-### Default behaviour
+### Default behavior
 
 #### ❌ Incorrect
 

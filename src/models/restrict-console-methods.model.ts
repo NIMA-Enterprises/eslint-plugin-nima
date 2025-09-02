@@ -4,8 +4,6 @@ export const enum Messages {
 
 export type Options = [
   Partial<{
-    allowConsoleError: boolean;
-    allowConsoleLog: boolean;
-    allowConsoleWarn: boolean;
+    allow: string[];
   }>
 ];

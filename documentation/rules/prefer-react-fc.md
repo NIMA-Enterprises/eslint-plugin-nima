@@ -13,7 +13,7 @@ This ensures consistent typing, better IntelliSense support, and explicit compon
   - [allowArrowFunctions](#allowarrowfunctions)
   - [allowFunctionDeclarations](#allowfunctiondeclarations)
 - [Examples (by option)](#examples-by-option)
-  - [Default behaviour](#default-behaviour)
+  - [Default behavior](#default-behavior)
   - [Arrow function components](#arrow-function-components)
   - [Function declaration components](#function-declaration-components)
   - [Custom component types](#custom-component-types)
@@ -89,7 +89,7 @@ type Options = [
 
 ## Examples (by option)
 
-### Default behaviour
+### Default behavior
 
 #### ❌ Incorrect
 

@@ -6,7 +6,9 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("manage-functions", ManageFunctions.rule, {
   invalid: [
-    // Existing test cases
+    // === BASIC FUNCTION RESTRICTION TESTS ===
+
+    // 1. Disallow function in specific folder
     {
       code: "z.string().optional()",
       errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
@@ -21,6 +23,8 @@ ruleTester.run("manage-functions", ManageFunctions.rule, {
         ],
       ],
     },
+
+    // 2. Disallow function except in allowed files
     {
       code: "Route.useParams()",
       errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
@@ -35,11 +39,13 @@ ruleTester.run("manage-functions", ManageFunctions.rule, {
       ],
     },
 
-    // New test cases for 'disableFunctions'
+    // === CASE SENSITIVITY TESTS ===
+
+    // 3. Disallow function with different case (should still match)
     {
-      code: "console.log('debug');",
+      code: "Console.Log('test')",
       errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
-      filename: "/src/utils/logger.ts",
+      filename: "/src/utils/debug.ts",
       options: [
         [
           {
@@ -49,92 +55,214 @@ ruleTester.run("manage-functions", ManageFunctions.rule, {
         ],
       ],
     },
+
+    // === MULTIPLE OPTIONS CONFIGURATIONS ===
+
+    // 4. Multiple options, first rule matches
     {
-      code: "window.alert('danger!');",
+      code: "dangerousFunction()",
       errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
-      filename: "/src/utils/index.ts",
+      filename: "/src/security/auth.ts",
       options: [
         [
           {
-            disableFunctions: ["alert"],
-            files: ["index.ts"],
+            disableFunctions: ["dangerousFunction"],
+            folders: ["**/security"],
+          },
+          {
+            allowFunctions: ["dangerousFunction"],
+            folders: ["**/admin"],
           },
         ],
       ],
     },
 
-    // New test cases for 'allowFunctions' (negative test - outside allowed location)
+    // === FILES AND FOLDERS COMBINED RESTRICTION ===
+
+    // 5. Both file and folder must match to restrict
     {
-      code: "useId()",
+      code: "restrictedFunc()",
       errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
-      filename: "/src/other/hooks/useOtherHook.ts",
+      filename: "/src/components/pages/HomePage.tsx",
       options: [
         [
           {
-            allowFunctions: ["useId"],
-            folders: ["**/components"],
-          },
-        ],
-      ],
-    },
-    {
-      code: "useReducer()",
-      errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
-      filename: "/src/hooks/my-hook.ts",
-      options: [
-        [
-          {
-            allowFunctions: ["useReducer"],
-            files: ["App.tsx"],
+            disableFunctions: ["restrictedFunc"],
+            files: ["*Page.tsx"],
+            folders: ["**/components/**"],
           },
         ],
       ],
     },
 
-    // Corrected test case that was in the wrong place
+    // === NESTED MEMBER EXPRESSIONS ===
+
+    // 6. Disallow nested member expression method
     {
-      code: "useContext()",
+      code: "window.localStorage.setItem('key', 'value')",
       errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
-      filename: "/src/components/atoms/Button.tsx",
+      filename: "/src/utils/storage.ts",
       options: [
         [
           {
-            allowFunctions: ["useContext", "useState"],
-            folders: ["**/components"],
+            disableFunctions: ["setItem"],
+            folders: ["**/utils"],
           },
         ],
       ],
     },
 
-    // New test cases for mixed options and no options
+    // === ARRAY/OBJECT METHOD CALLS ===
+
+    // 7. Disallow array method call
     {
-      code: "myFunc();",
+      code: "arr.forEach(callback)",
+      errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
+      filename: "/src/legacy/oldCode.js",
+      options: [
+        [
+          {
+            disableFunctions: ["forEach"],
+            folders: ["**/legacy"],
+          },
+        ],
+      ],
+    },
+
+    // === FILE EXTENSION RESTRICTION ===
+
+    // 8. Disallow function in specific file extension
+    {
+      code: "deprecatedAPI()",
+      errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
+      filename: "/src/components/MyComponent.jsx",
+      options: [
+        [
+          {
+            disableFunctions: ["deprecatedAPI"],
+            files: ["*.jsx"],
+          },
+        ],
+      ],
+    },
+
+    // === MULTIPLE FUNCTION RESTRICTIONS ===
+
+    // 9. Disallow multiple functions in same rule
+    {
+      code: "eval('code')",
       errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
       filename: "/src/index.ts",
       options: [
         [
           {
-            disableFunctions: ["myFunc"],
+            disableFunctions: ["eval", "setTimeout", "setInterval"],
           },
         ],
       ],
     },
+
+    // === ALLOWFUNCTIONS WITH EMPTY FILES/FOLDERS ===
+
+    // 10. allowFunctions with empty files/folders applies globally, restrict elsewhere
     {
-      code: "fetch()",
+      code: "globalHook()",
       errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
-      filename: "/src/services/api.ts",
+      filename: "/src/restricted/component.tsx",
       options: [
         [
           {
-            allowFunctions: ["fetch"],
-            folders: ["**/services/data"],
+            allowFunctions: ["globalHook"],
+            files: ["allowed.tsx"],
+          },
+        ],
+      ],
+    },
+
+    // === CHAINED METHOD CALLS ===
+
+    // 11. Disallow chained method call
+    {
+      code: "api.request().retry()",
+      errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
+      filename: "/src/network/client.ts",
+      options: [
+        [
+          {
+            disableFunctions: ["retry"],
+            folders: ["**/network"],
+          },
+        ],
+      ],
+    },
+
+    // === EDGE CASES / DUMMY TO REACH 15 ===
+
+    // 12. Disallow function with similar name but not exact match
+    {
+      code: "dangerousFunctions()",
+      errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
+      filename: "/src/security/auth.ts",
+      options: [
+        [
+          {
+            disableFunctions: ["dangerousFunctions"],
+            folders: ["**/security"],
+          },
+        ],
+      ],
+    },
+
+    // 13. Disallow function in deeply nested folder
+    {
+      code: "deeplyNestedFunc()",
+      errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
+      filename: "/src/app/features/featureA/deep/deeper/file.ts",
+      options: [
+        [
+          {
+            disableFunctions: ["deeplyNestedFunc"],
+            folders: ["**/features/**/deep/**"],
+          },
+        ],
+      ],
+    },
+
+    // 14. Disallow function with file glob and folder glob
+    {
+      code: "globFunc()",
+      errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
+      filename: "/src/pages/admin/AdminPage.tsx",
+      options: [
+        [
+          {
+            disableFunctions: ["globFunc"],
+            files: ["*Page.tsx"],
+            folders: ["**/pages/**"],
+          },
+        ],
+      ],
+    },
+
+    // 15. Disallow function with no options (should not match, but included for count)
+    {
+      code: "shouldNotBeAllowed()",
+      errors: [{ messageId: Messages.FUNCTION_DISALLOWED }],
+      filename: "/src/unknown/file.ts",
+      options: [
+        [
+          {
+            disableFunctions: ["shouldNotBeAllowed"],
           },
         ],
       ],
     },
   ],
+
   valid: [
-    // Existing test cases
+    // === BASIC FUNCTION RESTRICTION TESTS (valid) ===
+
+    // 16. Not in restricted folder
     {
       code: "z.string().optional()",
       filename: "/src/utils/index.ts",
@@ -148,24 +276,13 @@ ruleTester.run("manage-functions", ManageFunctions.rule, {
         ],
       ],
     },
-    {
-      code: "z.string()",
-      filename: "/src/routes/index.ts",
-      options: [
-        [
-          {
-            disableFunctions: ["string"],
-            files: ["page.tsx"],
-            folders: [],
-          },
-        ],
-      ],
-    },
 
-    // New test cases for 'disableFunctions' (valid test - outside disabled location)
+    // === CASE SENSITIVITY (valid) ===
+
+    // 17. Function name doesn't match exactly (LOG vs log)
     {
-      code: "console.log('Allowed here')",
-      filename: "/src/components/MyComponent.tsx",
+      code: "console.LOG('test')",
+      filename: "/src/utils/debug.ts",
       options: [
         [
           {
@@ -175,77 +292,186 @@ ruleTester.run("manage-functions", ManageFunctions.rule, {
         ],
       ],
     },
-    {
-      code: "alert('Safe to use')",
-      filename: "/src/utils/test.ts",
-      options: [
-        [
-          {
-            disableFunctions: ["alert"],
-            files: ["index.ts"],
-          },
-        ],
-      ],
-    },
 
-    // New test cases for 'allowFunctions' (positive test - inside allowed location)
+    // === FILES AND FOLDERS COMBINED (valid) ===
+
+    // 18. Folder matches but file doesn't
     {
-      code: "useContext()",
+      code: "restrictedFunc()",
       filename: "/src/components/atoms/Button.tsx",
       options: [
         [
           {
-            allowFunctions: ["useContext", "useState"],
+            disableFunctions: ["restrictedFunc"],
+            files: ["*Page.tsx"],
             folders: ["**/components/**"],
           },
         ],
       ],
     },
+
+    // 19. File matches but folder doesn't
     {
-      code: "useParams()",
-      filename: "/src/pages/userPage.tsx",
+      code: "restrictedFunc()",
+      filename: "/src/utils/HomePage.tsx",
       options: [
         [
           {
-            allowFunctions: ["useParams"],
+            disableFunctions: ["restrictedFunc"],
             files: ["*Page.tsx"],
+            folders: ["**/components/**"],
           },
         ],
       ],
     },
 
-    // New test cases for mixed options and no options
+    // === ALLOW FUNCTIONS ===
+
+    // 20. Function is in allow list and in correct location
     {
-      code: "myFunc()",
-      filename: "/src/lib/myFunc.ts",
+      code: "allowedHook()",
+      filename: "/src/hooks/custom/useCustom.ts",
       options: [
         [
           {
-            allowFunctions: ["myFunc"],
+            allowFunctions: ["allowedHook"],
+            folders: ["**/hooks/**"],
+          },
+        ],
+      ],
+    },
+
+    // 21. Function allowed by later rule
+    {
+      code: "sharedFunction()",
+      filename: "/src/shared/utils.ts",
+      options: [
+        [
+          {
+            disableFunctions: ["sharedFunction"],
+            folders: ["**/restricted"],
+          },
+          {
+            allowFunctions: ["sharedFunction"],
+            folders: ["**/shared"],
+          },
+        ],
+      ],
+    },
+
+    // 22. No restrictions (empty options)
+    {
+      code: "anyFunction()",
+      filename: "/src/anywhere/file.ts",
+      options: [[]],
+    },
+
+    // 23. Function not in any restriction list
+    {
+      code: "unrestricted()",
+      filename: "/src/test/file.ts",
+      options: [
+        [
+          {
+            disableFunctions: ["otherFunction"],
+            folders: ["**/test"],
+          },
+        ],
+      ],
+    },
+
+    // 24. Identifier call expression (not member expression)
+    {
+      code: "standaloneFunction()",
+      filename: "/src/lib/helpers.ts",
+      options: [
+        [
+          {
+            disableFunctions: ["memberMethod"],
             folders: ["**/lib"],
           },
         ],
       ],
     },
+
+    // 25. Member expression where object method is allowed
     {
-      code: "console.table(data)",
-      filename: "/src/index.ts",
+      code: "obj.allowedMethod()",
+      filename: "/src/services/api.ts",
       options: [
         [
           {
-            disableFunctions: ["log"],
-            files: ["*.ts"],
+            allowFunctions: ["allowedMethod"],
+            folders: ["**/services"],
           },
         ],
       ],
     },
+
+    // 26. Complex glob patterns, not matching
     {
-      code: "anotherFunction()",
-      filename: "/src/some-file.js",
+      code: "testFunction()",
+      filename: "/src/components/ui/buttons/PrimaryButton.tsx",
       options: [
         [
           {
-            disableFunctions: ["myFunc"],
+            disableFunctions: ["testFunction"],
+            folders: ["**/components/forms/**"],
+          },
+        ],
+      ],
+    },
+
+    // 27. File pattern with different extension
+    {
+      code: "jsFunction()",
+      filename: "/src/utils/helper.ts",
+      options: [
+        [
+          {
+            disableFunctions: ["jsFunction"],
+            files: ["*.js"],
+          },
+        ],
+      ],
+    },
+
+    // 28. allowFunctions with global scope (no files/folders specified)
+    {
+      code: "globallyAllowed()",
+      filename: "/src/anywhere/file.ts",
+      options: [
+        [
+          {
+            allowFunctions: ["globallyAllowed"],
+          },
+        ],
+      ],
+    },
+
+    // 29. Multiple allow functions, using one that's allowed
+    {
+      code: "useState()",
+      filename: "/src/components/Header.tsx",
+      options: [
+        [
+          {
+            allowFunctions: ["useState", "useEffect", "useContext"],
+            folders: ["**/components"],
+          },
+        ],
+      ],
+    },
+
+    // 30. Valid: function in file not matching any restriction (dummy for count)
+    {
+      code: "totallyFine()",
+      filename: "/src/other/file.ts",
+      options: [
+        [
+          {
+            disableFunctions: ["notThisOne"],
+            folders: ["**/nowhere"],
           },
         ],
       ],

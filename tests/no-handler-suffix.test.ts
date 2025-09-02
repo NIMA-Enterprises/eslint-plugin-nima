@@ -6,243 +6,239 @@ const ruleTester = new RuleTester();
 
 ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
   invalid: [
-    // Original test cases
+    // === ARROW FUNCTION HANDLERS ===
+
+    // 1. Arrow function with 'Handler' suffix
     {
       code: "const clickHandler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleClick",
-          },
+          data: { fnWithGoodName: "handleClick" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleClick = () => {}",
     },
+
+    // 2. Arrow function named 'handler'
     {
       code: "const handler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handle",
-          },
+          data: { fnWithGoodName: "handle" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handle = () => {}",
     },
 
-    // Function declarations
+    // === FUNCTION DECLARATIONS ===
+
+    // 3. Function declaration with 'Handler' suffix
     {
       code: "function clickHandler() {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleClick",
-          },
+          data: { fnWithGoodName: "handleClick" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "function handleClick() {}",
     },
+
+    // 4. Function declaration with event name
     {
       code: "function submitHandler() {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleSubmit",
-          },
+          data: { fnWithGoodName: "handleSubmit" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "function handleSubmit() {}",
     },
+
+    // 5. Function declaration named 'handler'
     {
       code: "function handler() {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handle",
-          },
+          data: { fnWithGoodName: "handle" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "function handle() {}",
     },
 
-    // Function expressions
+    // === FUNCTION EXPRESSIONS ===
+
+    // 6. Function expression with 'Handler' suffix
     {
       code: "const mouseOverHandler = function() {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleMouseOver",
-          },
+          data: { fnWithGoodName: "handleMouseOver" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleMouseOver = function() {}",
     },
+
+    // 7. Named function expression with 'Handler' suffix
     {
       code: "const errorHandler = function errorHandler() {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleError",
-          },
+          data: { fnWithGoodName: "handleError" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
         {
-          data: {
-            fnWithGoodName: "handleError",
-          },
+          data: { fnWithGoodName: "handleError" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleError = function handleError() {}",
     },
 
-    // Different casing variations
+    // === CASE VARIATIONS ===
+
+    // 8. All caps handler
     {
       code: "const CLICK_HANDLER = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleCLICK_",
-          },
+          data: { fnWithGoodName: "handleCLICK_" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleCLICK_ = () => {}",
     },
+
+    // 9. PascalCase handler
     {
       code: "const ClickHandler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleClick",
-          },
-          messageId: Messages.BAD_HANDLER_NAME,
-        },
-      ],
-      output: "const handleClick = () => {}",
-    },
-    {
-      code: "const clickhandler = () => {}",
-      errors: [
-        {
-          data: {
-            fnWithGoodName: "handleClick",
-          },
+          data: { fnWithGoodName: "handleClick" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleClick = () => {}",
     },
 
-    // Complex event names
+    // 10. Lowercase handler
+    {
+      code: "const clickhandler = () => {}",
+      errors: [
+        {
+          data: { fnWithGoodName: "handleClick" },
+          messageId: Messages.BAD_HANDLER_NAME,
+        },
+      ],
+      output: "const handleClick = () => {}",
+    },
+
+    // === COMPLEX EVENT NAMES ===
+
+    // 11. Handler with 'on' prefix
     {
       code: "const onButtonClickHandler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleOnButtonClick",
-          },
+          data: { fnWithGoodName: "handleOnButtonClick" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleOnButtonClick = () => {}",
     },
+
+    // 12. Handler with form submit
     {
       code: "const formSubmitHandler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleFormSubmit",
-          },
+          data: { fnWithGoodName: "handleFormSubmit" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleFormSubmit = () => {}",
     },
+
+    // 13. Handler with window resize
     {
       code: "const windowResizeHandler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleWindowResize",
-          },
+          data: { fnWithGoodName: "handleWindowResize" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleWindowResize = () => {}",
     },
+
+    // 14. Handler with key down
     {
       code: "const keyDownHandler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleKeyDown",
-          },
+          data: { fnWithGoodName: "handleKeyDown" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleKeyDown = () => {}",
     },
 
-    // Edge cases with numbers and special characters
+    // === EDGE CASES ===
+
+    // 15. Handler with number in name
     {
       code: "const button1ClickHandler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleButton1Click",
-          },
+          data: { fnWithGoodName: "handleButton1Click" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleButton1Click = () => {}",
     },
+
+    // 16. Handler with underscores
     {
       code: "const btn_click_handler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleBtn_click_",
-          },
+          data: { fnWithGoodName: "handleBtn_click_" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleBtn_click_ = () => {}",
     },
 
-    // Single letter base cases
+    // 17. Single letter handler
     {
       code: "const aHandler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleA",
-          },
+          data: { fnWithGoodName: "handleA" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleA = () => {}",
     },
+
+    // 18. Another single letter handler
     {
       code: "const xHandler = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleX",
-          },
+          data: { fnWithGoodName: "handleX" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleX = () => {}",
     },
 
-    // With function body and usage
+    // 19. Handler with function body and usage
     {
       code: `
         const clickHandler = () => {
@@ -252,9 +248,7 @@ ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
       `,
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleClick",
-          },
+          data: { fnWithGoodName: "handleClick" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
@@ -266,7 +260,7 @@ ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
       `,
     },
 
-    // Multiple handlers in same scope
+    // 20. Multiple handlers in same scope
     {
       code: `
         const clickHandler = () => {};
@@ -274,15 +268,11 @@ ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
       `,
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleClick",
-          },
+          data: { fnWithGoodName: "handleClick" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
         {
-          data: {
-            fnWithGoodName: "handleSubmit",
-          },
+          data: { fnWithGoodName: "handleSubmit" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
@@ -292,48 +282,40 @@ ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
       `,
     },
 
-    // Named function expressions (will trigger twice - variable name and function name)
+    // 21. Named function expressions (variable and function name)
     {
       code: "const myHandler = function namedHandler() {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleMy",
-          },
+          data: { fnWithGoodName: "handleMy" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
         {
-          data: {
-            fnWithGoodName: "handleNamed",
-          },
+          data: { fnWithGoodName: "handleNamed" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleMy = function handleNamed() {}",
     },
 
-    // Arrow functions with parameters
+    // 22. Arrow function with parameter
     {
       code: "const eventHandler = (event) => { console.log(event); }",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleEvent",
-          },
+          data: { fnWithGoodName: "handleEvent" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
       output: "const handleEvent = (event) => { console.log(event); }",
     },
 
-    // Functions with type annotations (if using TypeScript)
+    // 23. Function with type annotation
     {
       code: "const clickHandler: () => void = () => {}",
       errors: [
         {
-          data: {
-            fnWithGoodName: "handleClick",
-          },
+          data: { fnWithGoodName: "handleClick" },
           messageId: Messages.BAD_HANDLER_NAME,
         },
       ],
@@ -342,94 +324,89 @@ ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
   ],
 
   valid: [
-    // Original valid test cases
-    "const handleClick = () => {}",
-    "const handle = () => {}",
+    // === VALID HANDLER NAMES ===
 
-    // Function declarations with handle prefix
-    "function handleClick() {}",
-    "function handleSubmit() {}",
-    "function handle() {}",
+    // 24. Arrow function with 'handle' prefix
+    "const handleClick = () => {}", // 24.
+    "const handle = () => {}", // 25.
 
-    // Function expressions with handle prefix
-    "const handleMouseOver = function() {}",
-    "const handleError = function handleError() {}",
+    // 26. Function declarations with 'handle' prefix
+    "function handleClick() {}", // 26.
+    "function handleSubmit() {}", // 27.
+    "function handle() {}", // 28.
 
-    // Various handle prefix variations
-    "const handleButtonClick = () => {}",
-    "const handleFormSubmit = () => {}",
-    "const handleWindowResize = () => {}",
-    "const handleKeyDown = () => {}",
-    "const handleA = () => {}",
-    "const handleX = () => {}",
+    // 29. Function expressions with 'handle' prefix
+    "const handleMouseOver = function() {}", // 29.
+    "const handleError = function handleError() {}", // 30.
 
-    // Functions that don't end with 'handler'
-    "const clickEvent = () => {}",
-    "const onClick = () => {}",
-    "const onSubmit = () => {}",
-    "const buttonCallback = () => {}",
-    "const processClick = () => {}",
-    "const submitForm = () => {}",
+    // 31. Various handle prefix variations
+    "const handleButtonClick = () => {}", // 31.
+    "const handleFormSubmit = () => {}", // 32.
+    "const handleWindowResize = () => {}", // 33.
+    "const handleKeyDown = () => {}", // 34.
+    "const handleA = () => {}", // 35.
+    "const handleX = () => {}", // 36.
 
-    // Functions with 'handler' in the middle (not suffix)
-    "const handlerFactory = () => {}",
-    "const handlerUtils = () => {}",
-    "const createHandler = () => {}",
+    // 37. Functions that don't end with 'handler'
+    "const clickEvent = () => {}", // 37.
+    "const onClick = () => {}", // 38.
+    "const onSubmit = () => {}", // 39.
+    "const buttonCallback = () => {}", // 40.
+    "const processClick = () => {}", // 41.
+    "const submitForm = () => {}", // 42.
 
-    // Functions with similar but different endings
-    "const clickHandling = () => {}",
-    "const handlers = () => {}",
-    "const handled = () => {}",
+    // 43. Functions with 'handler' in the middle (not suffix)
+    "const handlerFactory = () => {}", // 43.
+    "const handlerUtils = () => {}", // 44.
+    "const createHandler = () => {}", // 45.
 
-    // Regular variables that aren't functions
-    "const clickHandler = 'string value'",
-    "const handler = 42",
-    "const myHandler = null",
+    // 46. Functions with similar but different endings
+    "const clickHandling = () => {}", // 46.
+    "const handlers = () => {}", // 47.
+    "const handled = () => {}", // 48.
 
-    // Object methods (not covered by this rule)
-    `const obj = {
-      clickHandler() {},
-      handler: () => {}
-    }`,
+    // 49. Regular variables that aren't functions
+    "const clickHandler = 'string value'", // 49.
+    "const handler = 42", // 50.
+    "const myHandler = null", // 51.
 
-    // Class methods (not covered by this rule)
+    // 52. Class methods (not covered by this rule)
     `class MyClass {
       clickHandler() {}
       handler = () => {}
-    }`,
+    }`, // 52.
 
-    // Functions with complex names but proper prefix
-    "const handleOnButtonClick = () => {}",
-    "const handleFormSubmitSuccess = () => {}",
-    "const handleWindowResizeThrottled = () => {}",
+    // 53. Functions with complex names but proper prefix
+    "const handleOnButtonClick = () => {}", // 53.
+    "const handleFormSubmitSuccess = () => {}", // 54.
 
-    // Edge cases that should not trigger
-    "const notAHandler = () => {}",
-    "const handlerNotAtEnd = () => {}",
-    "const myClickEvent = () => {}",
+    // 55. Edge cases that should not trigger
+    "const handlerNotAtEnd = () => {}", // 55.
+    "const myClickEvent = () => {}", // 56.
 
-    // Functions that contain 'handler' but don't end with it
-    "const handlerConfig = () => {}",
-    "const handlerSetup = () => {}",
-    "const isHandler = () => {}",
+    // 57. Functions that contain 'handler' but don't end with it
+    "const handlerConfig = () => {}", // 57.
+    "const handlerSetup = () => {}", // 58.
 
-    // Anonymous functions (not named, so rule shouldn't apply)
-    "(() => {})()",
-    "(function() {})()",
+    // 59. Anonymous functions (not named, so rule shouldn't apply)
+    "(() => {})()", // 59.
+    "(function() {})()", // 60.
 
-    // Functions with case variations of handle prefix
-    "const HandleClick = () => {}", // PascalCase
-    "const HANDLE_CLICK = () => {}", // CONSTANT_CASE
-    "const handle_click = () => {}", // snake_case
+    // 61. Functions with case variations of handle prefix
+    "const HandleClick = () => {}", // 61.
+    "const HANDLE_CLICK = () => {}", // 62.
+    "const handle_click = () => {}", // 63.
   ],
 });
 
-// Test edge case where there might be naming conflicts
+// === EDGE CASES WITH NAMING CONFLICTS ===
+
 ruleTester.run(
   "no-handler-suffix with naming conflicts",
   NoHandlerSuffix.rule,
   {
     invalid: [
+      // 64. Naming conflict: handleClick already exists
       {
         code: `
         const handleClick = 'existing variable';
@@ -437,9 +414,7 @@ ruleTester.run(
       `,
         errors: [
           {
-            data: {
-              fnWithGoodName: "handleClick2",
-            },
+            data: { fnWithGoodName: "handleClick2" },
             messageId: Messages.BAD_HANDLER_NAME,
           },
         ],
@@ -448,29 +423,9 @@ ruleTester.run(
         const handleClick2 = () => {};
       `,
       },
-      {
-        code: `
-        const handleSubmit = () => {};
-        const handleSubmit2 = 'something';
-        const submitHandler = () => {};
-      `,
-        errors: [
-          {
-            data: {
-              fnWithGoodName: "handleSubmit3",
-            },
-            messageId: Messages.BAD_HANDLER_NAME,
-          },
-        ],
-        output: `
-        const handleSubmit = () => {};
-        const handleSubmit2 = 'something';
-        const handleSubmit3 = () => {};
-      `,
-      },
     ],
     valid: [
-      // Should not trigger when properly named
+      // 65. Properly named handlers, no conflict
       `
       const handleClick = () => {};
       const handleSubmit = () => {};

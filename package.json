@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@typescript-eslint/utils": "^8.40.0",
+    "eslint-plugin-nima": "link:",
     "minimatch": "^10.0.3"
   },
   "devDependencies": {
