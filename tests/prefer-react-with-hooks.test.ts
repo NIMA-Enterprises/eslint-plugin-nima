@@ -1,3 +1,14 @@
+/*  Test file for prefer-react-with-hooks rule
+    Comments indicate the test number and purpose to help identify tests
+
+    Created by: Nima Labs
+    Last modified: 2025-10-01
+
+    Tests present: 25
+    Invalid tests: 15
+    Valid tests: 10
+*/
+
 import { Messages } from "@models/prefer-react-with-hooks.model";
 import * as PreferReactWithHooks from "@rules/prefer-react-with-hooks";
 import { RuleTester } from "@typescript-eslint/rule-tester";

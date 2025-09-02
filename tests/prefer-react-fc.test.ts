@@ -1,3 +1,14 @@
+/*  Test file for prefer-react-fc rule
+    Comments indicate the test number and purpose to help identify tests
+
+    Created by: Nima Labs
+    Last modified: 2025-10-01
+
+    Tests present: 20
+    Invalid tests: 10
+    Valid tests: 10
+*/
+
 import { Messages } from "@models/prefer-react-fc.model";
 import * as PreferReactFc from "@rules/prefer-react-fc";
 import { RuleTester } from "@typescript-eslint/rule-tester";

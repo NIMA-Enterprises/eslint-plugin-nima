@@ -1,3 +1,14 @@
+/*  Test file for prefer-export-under-component rule
+    Comments indicate the test number and purpose to help identify tests
+
+    Created by: Nima Labs
+    Last modified: 2025-10-01
+
+    Tests present: 50
+    Invalid tests: 20
+    Valid tests: 30
+*/
+
 import { Messages } from "@models/prefer-arrow-functions.model";
 import * as PreferArrowFunctions from "@rules/prefer-arrow-functions";
 import { RuleTester } from "@typescript-eslint/rule-tester";

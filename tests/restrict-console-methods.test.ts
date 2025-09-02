@@ -1,3 +1,14 @@
+/*  Test file for restrict-console-methods rule
+    Comments indicate the test number and purpose to help identify tests
+
+    Created by: Nima Labs
+    Last modified: 2025-10-01
+
+    Tests present: 45
+    Invalid tests: 25
+    Valid tests: 20
+*/
+
 import { Messages } from "@models/restrict-console-methods.model";
 import * as RestrictConsoleMethods from "@rules/restrict-console-methods";
 import { RuleTester } from "@typescript-eslint/rule-tester";

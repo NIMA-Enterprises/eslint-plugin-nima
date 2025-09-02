@@ -1,3 +1,14 @@
+/*  Test file for boolean-naming-convention rule
+    Comments indicate the test number and purpose to help identify tests
+
+    Created by: Nima Labs
+    Last modified: 2025-10-01
+
+    Tests present: 65
+    Invalid tests: 20
+    Valid tests: 45
+*/
+
 import { Messages } from "@models/boolean-naming-convention.model";
 import * as BooleanNamingConventions from "@rules/boolean-naming-convention";
 import * as parser from "@typescript-eslint/parser";

@@ -1,3 +1,14 @@
+/*  Test file for no-handler-suffix rule
+    Comments indicate the test number and purpose to help identify tests
+    
+    Created by: Nima Labs
+    Last modified: 2025-10-01
+
+    Tests present: 65
+    Invalid tests: 20
+    Valid tests: 45
+*/
+
 import { Messages } from "@models/no-handle-suffix.model";
 import * as NoHandlerSuffix from "@rules/no-handler-suffix";
 import { RuleTester } from "@typescript-eslint/rule-tester";

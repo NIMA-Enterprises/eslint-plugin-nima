@@ -1,3 +1,14 @@
+/*  Test file for restrict-function-usage rule
+    Comments indicate the test number and purpose to help identify tests
+
+    Created by: Nima Labs
+    Last modified: 2025-10-01
+
+    Tests present: 30
+    Invalid tests: 15
+    Valid tests: 15
+*/
+
 import { Messages } from "@models/restrict-function-usage.model";
 import * as ManageFunctions from "@rules/restrict-function-usage";
 import { RuleTester } from "@typescript-eslint/rule-tester";

@@ -1,3 +1,14 @@
+/*  Test file for params-naming-convention rule
+    Comments indicate the test number and purpose to help identify tests
+
+    Created by: Nima Labs
+    Last modified: 2025-10-01
+
+    Tests present: 70
+    Invalid tests: 30
+    Valid tests: 40
+*/
+
 import { Messages } from "@models/params-naming-convention.model";
 import * as ParamsNamingConventions from "@rules/params-naming-convention";
 import { RuleTester } from "@typescript-eslint/rule-tester";
