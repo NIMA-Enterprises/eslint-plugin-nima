@@ -1,5 +1,5 @@
 import { Messages, type Options } from "@models/prefer-arrow-functions.model";
-import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import { createRule } from "@utility/core";
 
 export const name = "prefer-arrow-functions";
@@ -9,10 +9,10 @@ export const rule = createRule<Options, Messages>({
     const {
       allowAsync = true,
       allowConstructors = true,
-      allowFunctionDeclarations = true,
-      allowFunctionExpressions = true,
+      allowFunctionDeclarations = false,
+      allowFunctionExpressions = false,
       allowGenerators = true,
-      allowMethodDefinitions = true,
+      allowMethodDefinitions = false,
     } = options;
 
     const sourceCode = context.sourceCode;
@@ -28,14 +28,15 @@ export const rule = createRule<Options, Messages>({
       if (allowGenerators && node?.generator) {
         return true;
       }
-      if (!allowAsync && node?.async) {
-        return false;
+      if (allowAsync && node?.async) {
+        return true;
       }
       if (node.type === AST_NODE_TYPES.TSEmptyBodyFunctionExpression) {
         return true;
       }
       return false;
     };
+
     const generateArrowFunction = (node: TSESTree.FunctionLike) => {
       const asyncKeyword = node.async ? "async " : "";
       const params =
@@ -53,6 +54,7 @@ export const rule = createRule<Options, Messages>({
       const body = node.body ? sourceCode.getText(node.body) : "";
       return `${asyncKeyword}${params}${returnType} => ${body}`;
     };
+
     return {
       FunctionDeclaration: (node) => {
         if (allowFunctionDeclarations || shouldSkipFunction(node)) {
@@ -83,19 +85,21 @@ export const rule = createRule<Options, Messages>({
           node: node.id || node,
         });
       },
+
       FunctionExpression: (node) => {
+        if (
+          (node.parent?.type === AST_NODE_TYPES.MethodDefinition ||
+            (node.parent?.type === AST_NODE_TYPES.Property &&
+              !node.parent.method)) &&
+          allowMethodDefinitions
+        ) {
+          return;
+        }
+
         if (allowFunctionExpressions || shouldSkipFunction(node)) {
           return;
         }
-        if (
-          node.parent?.type === AST_NODE_TYPES.MethodDefinition ||
-          node.parent?.type === AST_NODE_TYPES.Property
-        ) {
-          if (!allowMethodDefinitions) {
-            return;
-          }
-          return;
-        }
+
         context.report({
           fix: (fixer) => {
             const arrowFunction = generateArrowFunction(node);
@@ -105,6 +109,7 @@ export const rule = createRule<Options, Messages>({
           node,
         });
       },
+
       MethodDefinition: (node) => {
         if (
           allowMethodDefinitions ||
@@ -124,31 +129,6 @@ export const rule = createRule<Options, Messages>({
               const arrowFunction = generateArrowFunction(node.value);
               const static_ = node.static ? "static " : "";
               const replacement = `${static_}${key} = ${arrowFunction}`;
-              return fixer.replaceText(node, replacement);
-            },
-            messageId: Messages.PREFER_ARROW_METHOD,
-            node: node.key,
-          });
-        }
-      },
-      Property: (node) => {
-        if (allowMethodDefinitions) {
-          return;
-        }
-        if (
-          node.method &&
-          node.value.type === AST_NODE_TYPES.FunctionExpression &&
-          !shouldSkipFunction(node.value)
-        ) {
-          const fn = node.value as
-            | TSESTree.FunctionExpression
-            | TSESTree.TSEmptyBodyFunctionExpression;
-
-          context.report({
-            fix: (fixer) => {
-              const key = sourceCode.getText(node.key);
-              const arrowFunction = generateArrowFunction(fn);
-              const replacement = `${key}: ${arrowFunction}`;
               return fixer.replaceText(node, replacement);
             },
             messageId: Messages.PREFER_ARROW_METHOD,
@@ -227,6 +207,5 @@ export const rule = createRule<Options, Messages>({
     ],
     type: "suggestion",
   },
-
   name,
 });

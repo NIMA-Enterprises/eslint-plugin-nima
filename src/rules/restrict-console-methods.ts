@@ -7,7 +7,7 @@ export const name = "restrict-console-methods";
 
 export const rule = createRule<Options, Messages>({
   create(context, [options]) {
-    const { allow = [] } = options;
+    const { allow = ["info"] } = options;
 
     return {
       CallExpression(node) {
@@ -40,7 +40,7 @@ export const rule = createRule<Options, Messages>({
   },
   defaultOptions: [
     {
-      allow: [],
+      allow: ["info"],
     },
   ],
 

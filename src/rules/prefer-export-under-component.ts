@@ -1,4 +1,4 @@
-import { Messages, Options } from "@models/prefer-export-under-component";
+import { Messages, Options } from "@models/prefer-export-under-component.model";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import { createRule } from "@utility/core";
 import {
@@ -37,7 +37,7 @@ export const rule = createRule<Options, Messages>({
                 fixer.insertTextAfter(node, `\n\nexport { ${fnName} };`),
               ];
             },
-            messageId: Messages.SEPARATE_COMPONENT_EXPORT,
+            messageId: Messages.EXPORT_BELOW_COMPONENT,
             node,
           });
         }
@@ -74,7 +74,7 @@ export const rule = createRule<Options, Messages>({
                   fixer.insertTextAfter(node, `\n\nexport { ${fnName} };`),
                 ];
               },
-              messageId: Messages.SEPARATE_COMPONENT_EXPORT,
+              messageId: Messages.EXPORT_BELOW_COMPONENT,
               node,
             });
           }
@@ -102,7 +102,7 @@ export const rule = createRule<Options, Messages>({
                 fixer.insertTextAfter(node.parent, `\n\nexport { ${fnName} };`),
               ];
             },
-            messageId: Messages.SEPARATE_COMPONENT_EXPORT,
+            messageId: Messages.EXPORT_BELOW_COMPONENT,
             node: node.parent,
           });
         }
@@ -120,7 +120,7 @@ export const rule = createRule<Options, Messages>({
     },
     fixable: "code",
     messages: {
-      [Messages.SEPARATE_COMPONENT_EXPORT]:
+      [Messages.EXPORT_BELOW_COMPONENT]:
         "NIMA: Declare React component '{{ fnName }}' separately from its export statement",
     },
     schema: [],
