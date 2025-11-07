@@ -16,7 +16,7 @@ Consistent prefixes improve readability and make boolean intent explicit.
   - [checkProperties](#checkproperties)
   - [checkVariables](#checkvariables)
 - [Examples (by option)](#examples-by-option)
-  - [Default behaviour](#default-behaviour)
+  - [Default behavior](#default-behavior)
   - [Custom prefixes](#custom-prefixes)
   - [Disabling specific checks](#disabling-specific-checks)
   - [Destructured params & typed object patterns](#destructured-params--typed-object-patterns)
@@ -116,7 +116,7 @@ type Options = [
 
 > All examples use TypeScript where type resolution is necessary. For accurate function-return and variable-type checks, the rule relies on parserServices (TypeScript program).
 
-### Default behaviour
+### Default behavior
 
 #### ❌ Incorrect
 

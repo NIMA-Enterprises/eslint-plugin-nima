@@ -11,7 +11,7 @@ This improves code readability, debugging experience, and component organization
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
 - [Examples (by option)](#examples-by-option)
-  - [Default behaviour](#default-behaviour)
+  - [Default behavior](#default-behavior)
   - [Default exports](#default-exports)
   - [Named exports](#named-exports)
   - [Function declarations](#function-declarations)
@@ -70,7 +70,7 @@ type Options = [
 
 ## Examples (by option)
 
-### Default behaviour
+### Default behavior
 
 #### ❌ Incorrect
 

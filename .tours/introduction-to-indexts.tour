@@ -1,0 +1,26 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Introduction to index.ts",
+  "steps": [
+    {
+      "file": "src/index.ts",
+      "description": "This is how we handle imports of rules, I decided to make them PascalCase for readability. Every rule needs to import the rule and their respective name.",
+      "line": 7
+    },
+    {
+      "file": "src/index.ts",
+      "description": "Here's where the magic happens! This is where we define the actual rules, connecting the names to the rules.",
+      "line": 18
+    },
+    {
+      "file": "src/index.ts",
+      "description": "This is where we make custom configurations for other developers to use, pretty much all eslint plugins have a recommended configuration at the very least.",
+      "line": 51
+    },
+    {
+      "file": "src/index.ts",
+      "description": "After we did all that, we simply assign the new configuration to our plugin and our custom eslint plugin is ready to ship!",
+      "line": 60
+    }
+  ]
+}

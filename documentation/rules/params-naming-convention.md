@@ -7,26 +7,44 @@ This improves function readability, maintainability, and makes parameter passing
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [allowedParameters](#allowedparameters)
-  - [ignore](#ignore)
-  - [ignoreFunctions](#ignorefunctions)
-  - [ignorePrefixes](#ignoreprefixes)
-- [Examples (by option)](#examples-by-option)
-  - [Default behaviour](#default-behaviour)
-  - [Custom allowed parameters](#custom-allowed-parameters)
-  - [Ignoring specific parameter names](#ignoring-specific-parameter-names)
-  - [Ignoring specific functions](#ignoring-specific-functions)
-  - [Using ignore prefixes](#using-ignore-prefixes)
-  - [Object destructuring parameters](#object-destructuring-parameters)
-  - [Index parameter exception](#index-parameter-exception)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`params-naming-convention`](#params-naming-convention)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allowedParameters](#allowedparameters)
+      - [ignore](#ignore)
+      - [ignoreFunctions](#ignorefunctions)
+      - [ignorePrefixes](#ignoreprefixes)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+      - [❌ Incorrect](#-incorrect)
+      - [✅ Correct](#-correct)
+    - [Custom allowed parameters](#custom-allowed-parameters)
+      - [❌ Incorrect](#-incorrect-1)
+      - [✅ Correct](#-correct-1)
+    - [Ignoring specific parameter names](#ignoring-specific-parameter-names)
+      - [❌ Incorrect](#-incorrect-2)
+      - [✅ Correct](#-correct-2)
+    - [Ignoring specific functions](#ignoring-specific-functions)
+      - [❌ Incorrect](#-incorrect-3)
+      - [✅ Correct](#-correct-3)
+    - [Using ignore prefixes](#using-ignore-prefixes)
+      - [❌ Incorrect](#-incorrect-4)
+      - [✅ Correct](#-correct-4)
+    - [Object destructuring parameters](#object-destructuring-parameters)
+      - [✅ Correct (automatically allowed)](#-correct-automatically-allowed)
+    - [Index parameter exception](#index-parameter-exception)
+      - [✅ Correct (automatically allowed)](#-correct-automatically-allowed-1)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
 
 ---
 
@@ -110,7 +128,7 @@ type Options = [
 
 ## Examples (by option)
 
-### Default behaviour
+### Default behavior
 
 #### ❌ Incorrect
 

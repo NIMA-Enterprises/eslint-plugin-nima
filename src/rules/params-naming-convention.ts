@@ -51,7 +51,9 @@ export const rule = createRule<Options, Messages>({
       );
 
       const suggestedParameters = ignorePrefixes.flatMap((ignoredPrefix) =>
-        parameterNames.map((parameter) => ignoredPrefix + parameter.name)
+        parameterNames
+          .slice(-(parameterNames.length - allowedParameters))
+          .map((parameter) => ignoredPrefix + parameter.name)
       );
 
       if (parameterNames.length > 0) {
@@ -87,7 +89,7 @@ export const rule = createRule<Options, Messages>({
     },
     messages: {
       [Messages.USE_OBJECT_PARAMETERS]:
-        "NIMA: Function has {{count}} parameter(s). Either prefix them: {{params}}, or put all parameters in one object.",
+        "NIMA: Function has {{count}} extra parameter(s). Either prefix them: {{params}}, or put all parameters in one object.",
     },
     schema: [
       {

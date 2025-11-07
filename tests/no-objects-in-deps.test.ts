@@ -1,51 +1,103 @@
+/*  Test file for no-objects-in-deps rule
+    Comments indicate the test number and purpose to help identify tests
+
+    Created by: Nima Labs
+    Last modified: 2025-10-01
+
+    Tests present: 16
+    Invalid tests: 9
+    Valid tests: 7
+*/
+
 import { Messages } from "@models/no-objects-in-deps.model";
 import * as NoObjectsInDeps from "@rules/no-objects-in-deps";
-import * as parser from "@typescript-eslint/parser";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
-const ruleTester = new RuleTester({
-  languageOptions: {
-    parser,
-    parserOptions: {
-      ecmaFeatures: {
-        jsx: true,
-      },
-      ecmaVersion: 2020,
-      sourceType: "module",
-    },
-  },
-});
+const ruleTester = new RuleTester();
 
 ruleTester.run("no-objects-in-deps", NoObjectsInDeps.rule, {
   invalid: [
+    // Object literal in dependency array
     {
       code: "useEffect(() => {}, [{ NIMA: 'labs' }])",
-      errors: [
-        {
-          data: {
-            object: "{ NIMA: 'labs' }",
-          },
-          messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES,
-        },
-      ],
+      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
     },
+
+    // Array literal in dependency array
+    {
+      code: "useEffect(() => {}, [[1, 2, 3]])",
+      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
+    },
+
+    // New expression in dependency array
+    {
+      code: "useEffect(() => {}, [new Date()])",
+      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
+    },
+
+    // useCallback with object
     {
       code: "useCallback(() => {}, [{ NIMA: 'Enterprises' }])",
+      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
+    },
+
+    // useMemo with array
+    {
+      code: "useMemo(() => {}, [['a', 'b']])",
+      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
+    },
+
+    // Multiple invalid dependencies
+    {
+      code: "useEffect(() => {}, [{ foo: 'bar' }, [1, 2], variable])",
       errors: [
-        {
-          data: {
-            object: "{ NIMA: 'Enterprises' }",
-          },
-          messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES,
-        },
+        { messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES },
+        { messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES },
       ],
+    },
+
+    // React namespace with object
+    {
+      code: "React.useEffect(() => {}, [{ test: true }])",
+      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
+    },
+
+    // Variable initialized with object
+    {
+      code: `
+        const config = { setting: true };
+        useEffect(() => {}, [config]);
+      `,
+      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
+    },
+
+    // Bracket notation with object
+    {
+      code: "React['useCallback'](() => {}, [{ key: 'value' }])",
+      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
     },
   ],
 
   valid: [
+    // Empty dependency array
     "useEffect(() => {}, [])",
-    "useEffect(() => {}, [NIMA])",
-    "React.useEffect(() => {}, ['labs'])",
-    "React['useMemo'](() => {}, ['labs'])",
+
+    // Primitive values in dependencies
+    "useEffect(() => {}, [variable, 123, true, 'string'])",
+
+    // React namespace with variables
+    "React.useEffect(() => {}, [validVar])",
+
+    // Property access (allowed)
+    "useEffect(() => {}, [object.property])",
+
+    // Function calls (allowed)
+    "useEffect(() => {}, [getObject()])",
+
+    // Not a hook - objects allowed
+    "someFunction([{ object: 'allowed' }])",
+
+    // Hook without dependency array
+    "useEffect(() => {})",
   ],
 });

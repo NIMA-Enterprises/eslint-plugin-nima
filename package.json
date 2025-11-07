@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@typescript-eslint/utils": "^8.40.0",
+    "eslint-plugin-nima": "link:",
     "minimatch": "^10.0.3"
   },
   "devDependencies": {
@@ -52,11 +53,11 @@
     "eslint": "^9.0.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=22.0.0"
   },
   "publishConfig": {
     "access": "public"
   },
   "license": "MIT",
-  "packageManager": "pnpm@8.9.0"
+  "packageManager": "pnpm@10.15.1"
 }

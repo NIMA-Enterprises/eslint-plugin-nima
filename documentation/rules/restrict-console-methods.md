@@ -14,7 +14,7 @@ Console statements are often left behind during development and should be remove
   - [allowConsoleLog](#allowconsolelog)
   - [allowConsoleWarn](#allowconsolewarn)
 - [Examples (by option)](#examples-by-option)
-  - [Default behaviour](#default-behaviour)
+  - [Default behavior](#default-behavior)
   - [Allowing specific console methods](#allowing-specific-console-methods)
   - [Mixed configuration](#mixed-configuration)
 - [Messages](#messages)
@@ -94,7 +94,7 @@ type Options = [
 
 ## Examples (by option)
 
-### Default behaviour
+### Default behavior
 
 #### ❌ Incorrect
 

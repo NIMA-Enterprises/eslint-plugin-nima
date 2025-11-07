@@ -15,7 +15,7 @@ This rule provides fine-grained control over function usage across your codebase
   - [files](#files)
   - [folders](#folders)
 - [Examples (by option)](#examples-by-option)
-  - [Default behaviour](#default-behaviour)
+  - [Default behavior](#default-behavior)
   - [Disabling functions globally](#disabling-functions-globally)
   - [Disabling functions in specific files](#disabling-functions-in-specific-files)
   - [Disabling functions in specific folders](#disabling-functions-in-specific-folders)
@@ -121,7 +121,7 @@ The rule is disabled by default and requires explicit configuration to activate.
 
 ## Examples (by option)
 
-### Default behaviour
+### Default behavior
 
 With no configuration, the rule does nothing:
 

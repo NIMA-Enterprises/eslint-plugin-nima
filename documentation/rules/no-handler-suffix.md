@@ -8,10 +8,10 @@ Consistent prefixes improve readability and make function intent more explicit.
 ## Table of contents
 
 - [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-checks)
+- [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
 - [Examples (by option)](#examples-by-option)
-  - [Default behaviour](#default-behaviour)
+  - [Default behavior](#default-behavior)
   - [Function declarations](#function-declarations)
   - [Arrow functions](#arrow-functions)
   - [Function expressions](#function-expressions)
@@ -65,7 +65,7 @@ type Options = [];
 
 ## Examples (by option)
 
-### Default behaviour
+### Default behavior
 
 #### ❌ Incorrect
 

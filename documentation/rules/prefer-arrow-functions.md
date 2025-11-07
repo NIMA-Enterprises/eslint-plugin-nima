@@ -17,7 +17,7 @@ Arrow functions provide lexical `this` binding, shorter syntax, and more consist
   - [allowGenerators](#allowgenerators)
   - [allowMethodDefinitions](#allowmethoddefinitions)
 - [Examples (by option)](#examples-by-option)
-  - [Default behaviour](#default-behaviour)
+  - [Default behavior](#default-behavior)
   - [Function declarations](#function-declarations)
   - [Function expressions](#function-expressions)
   - [Method definitions](#method-definitions)
@@ -127,7 +127,7 @@ type Options = [
 
 ## Examples (by option)
 
-### Default behaviour
+### Default behavior
 
 #### ❌ Incorrect
 
