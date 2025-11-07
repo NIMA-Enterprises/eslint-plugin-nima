@@ -1,7 +1,4 @@
-import {
-  AST_NODE_TYPES,
-  type TSESTree,
-} from "@typescript-eslint/typescript-estree";
+import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
 
 export const getFunctionName = (node: TSESTree.FunctionLike) => {
   if (node.id?.type === AST_NODE_TYPES.Identifier) {

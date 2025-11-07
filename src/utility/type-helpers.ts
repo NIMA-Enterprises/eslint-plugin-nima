@@ -1,5 +1,4 @@
-import type { TSESTree } from "@typescript-eslint/typescript-estree";
-import type { TSESLint } from "@typescript-eslint/utils";
+import type { TSESLint, TSESTree } from "@typescript-eslint/utils";
 
 export function getType(
   context: Readonly<TSESLint.RuleContext<string, unknown[]>>,
