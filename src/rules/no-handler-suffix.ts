@@ -1,6 +1,6 @@
 import type { Scope } from "@typescript-eslint/utils/ts-eslint";
 
-import { Messages, Options } from "@models/no-handle-suffix.model";
+import { Messages, Options } from "@models/no-handler-suffix.model";
 import { AST_NODE_TYPES, type TSESTree } from "@typescript-eslint/utils";
 import { createRule } from "@utility/core";
 

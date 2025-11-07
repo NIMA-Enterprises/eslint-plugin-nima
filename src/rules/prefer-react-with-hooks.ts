@@ -13,6 +13,7 @@ export const rule = createRule<Options, Messages>({
     let hasReactImport = false;
     let reactImportNode: null | TSESTree.ImportDeclaration = null;
     let isAnalysisComplete = false;
+    let hasHookImports = false;
 
     const analyzeImports = () => {
       if (isAnalysisComplete) return;
@@ -28,6 +29,12 @@ export const rule = createRule<Options, Messages>({
               spec.type === AST_NODE_TYPES.ImportDefaultSpecifier ||
               (spec.type === AST_NODE_TYPES.ImportNamespaceSpecifier &&
                 spec.local.name === "React")
+          );
+          hasHookImports = node.specifiers.some(
+            (spec) =>
+              spec.type === AST_NODE_TYPES.ImportSpecifier &&
+              spec.imported.type === AST_NODE_TYPES.Identifier &&
+              REACT_HOOKS.has(spec.imported.name)
           );
           break;
         }
@@ -49,31 +56,34 @@ export const rule = createRule<Options, Messages>({
             fix: (fixer) => {
               const fixes = [];
 
-              if (!hasReactImport) {
-                if (reactImportNode) {
-                  const importText = sourceCode.getText(reactImportNode);
+              if (!hasHookImports) {
+                if (!hasReactImport) {
+                  if (reactImportNode) {
+                    const importText = sourceCode.getText(reactImportNode);
 
-                  if (
-                    importText.includes("{") &&
-                    !importText.match(/^import\s+\w+\s*,/)
-                  ) {
+                    if (
+                      importText.includes("{") &&
+                      !importText.match(/^import\s+\w+\s*,/)
+                    ) {
+                      fixes.push(
+                        fixer.replaceText(
+                          reactImportNode,
+                          importText.replace(/^import\s*{/, "import React, {")
+                        )
+                      );
+                    }
+                  } else {
                     fixes.push(
-                      fixer.replaceText(
-                        reactImportNode,
-                        importText.replace(/^import\s*{/, "import React, {")
+                      fixer.insertTextBefore(
+                        program.body.length > 0 ? program.body[0] : node,
+                        'import React from "react";\n'
                       )
                     );
                   }
                 }
-                fixes.push(
-                  fixer.insertTextBefore(
-                    program.body.length > 0 ? program.body[0] : node,
-                    'import React from "react";\n'
-                  )
-                );
-              }
 
-              fixes.push(fixer.insertTextBefore(node.callee, "React."));
+                fixes.push(fixer.insertTextBefore(node.callee, "React."));
+              }
 
               return fixes;
             },
@@ -123,6 +133,45 @@ export const rule = createRule<Options, Messages>({
               fix: (fixer) => {
                 const sourceCode = context.sourceCode;
                 const fixes = [];
+
+                const allCallExpressions: TSESTree.CallExpression[] = [];
+
+                function traverse(
+                  node: null | TSESTree.Node | TSESTree.Node[] | undefined
+                ): void {
+                  if (!node) return;
+
+                  if (Array.isArray(node)) {
+                    node.forEach(traverse);
+                    return;
+                  }
+
+                  if (node.type === AST_NODE_TYPES.CallExpression) {
+                    allCallExpressions.push(node);
+                  }
+
+                  for (const key of Object.keys(node)) {
+                    if (key === "parent" || key === "range" || key === "loc")
+                      continue;
+                    const value = (node as any)[key];
+                    if (value && typeof value === "object") {
+                      traverse(value);
+                    }
+                  }
+                }
+
+                traverse(program);
+
+                for (const callExpr of allCallExpressions) {
+                  if (
+                    callExpr.callee.type === AST_NODE_TYPES.Identifier &&
+                    REACT_HOOKS.has(callExpr.callee.name)
+                  ) {
+                    fixes.push(
+                      fixer.insertTextBefore(callExpr.callee, "React.")
+                    );
+                  }
+                }
 
                 const remainingSpecifiers = node.specifiers.filter(
                   (spec) =>

@@ -9,7 +9,7 @@
     Valid tests: 8
 */
 
-import { Messages } from "@models/no-handle-suffix.model";
+import { Messages } from "@models/no-handler-suffix.model";
 import * as NoHandlerSuffix from "@rules/no-handler-suffix";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 

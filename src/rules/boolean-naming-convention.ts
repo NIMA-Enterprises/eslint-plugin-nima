@@ -41,13 +41,15 @@ export const rule = createRule<Options, Messages>({
     }
 
     const isParamBoolean = (node: TSESTree.FunctionLike) => {
+      const reported = new Set<string>();
+
       for (const param of node.params) {
         if (
           param.type === AST_NODE_TYPES.Identifier &&
           param.typeAnnotation?.typeAnnotation.type ===
             AST_NODE_TYPES.TSBooleanKeyword
         ) {
-          checkName(param.name, param);
+          checkNameOnce(param.name, param, reported);
         }
 
         if (
@@ -62,29 +64,91 @@ export const rule = createRule<Options, Messages>({
                 AST_NODE_TYPES.TSBooleanKeyword &&
               member.key.type === AST_NODE_TYPES.Identifier
             ) {
-              checkName(member.key.name, member);
+              checkNameOnce(member.key.name, member, reported);
             }
           }
         }
 
         if (param.type === AST_NODE_TYPES.ObjectPattern) {
-          for (const prop of param.properties) {
-            if (
-              prop.type === AST_NODE_TYPES.Property &&
-              prop.key.type === AST_NODE_TYPES.Identifier &&
-              prop.value.type === AST_NODE_TYPES.Identifier &&
-              prop.value.typeAnnotation?.typeAnnotation.type ===
-                AST_NODE_TYPES.TSBooleanKeyword
-            ) {
-              checkName(prop.key.name, prop.key);
-            }
-          }
+          checkObjectPattern(
+            param,
+            param.typeAnnotation?.typeAnnotation,
+            reported
+          );
         }
       }
     };
 
-    function checkName(name: string, node: TSESTree.Node) {
+    function checkObjectPattern(
+      pattern: TSESTree.ObjectPattern,
+      typeAnnotation?: TSESTree.TypeNode,
+      reported?: Set<string>
+    ) {
+      for (const prop of pattern.properties) {
+        if (prop.type === AST_NODE_TYPES.Property) {
+          const propKey = prop.key;
+          const propValue = prop.value;
+
+          if (
+            propKey.type === AST_NODE_TYPES.Identifier &&
+            propValue.type === AST_NODE_TYPES.Identifier
+          ) {
+            const hasDirectAnnotation =
+              propValue.typeAnnotation?.typeAnnotation.type ===
+              AST_NODE_TYPES.TSBooleanKeyword;
+
+            if (hasDirectAnnotation) {
+              checkNameOnce(propKey.name, propKey, reported);
+            } else if (typeAnnotation?.type === AST_NODE_TYPES.TSTypeLiteral) {
+              for (const member of typeAnnotation.members) {
+                if (
+                  member.type === AST_NODE_TYPES.TSPropertySignature &&
+                  member.key.type === AST_NODE_TYPES.Identifier &&
+                  member.key.name === propKey.name &&
+                  member.typeAnnotation?.typeAnnotation.type ===
+                    AST_NODE_TYPES.TSBooleanKeyword
+                ) {
+                  checkNameOnce(propKey.name, propKey, reported);
+                  break;
+                }
+              }
+            }
+          } else if (
+            propKey.type === AST_NODE_TYPES.Identifier &&
+            propValue.type === AST_NODE_TYPES.ObjectPattern
+          ) {
+            if (typeAnnotation?.type === AST_NODE_TYPES.TSTypeLiteral) {
+              for (const member of typeAnnotation.members) {
+                if (
+                  member.type === AST_NODE_TYPES.TSPropertySignature &&
+                  member.key.type === AST_NODE_TYPES.Identifier &&
+                  member.key.name === propKey.name
+                ) {
+                  checkObjectPattern(
+                    propValue,
+                    member.typeAnnotation?.typeAnnotation,
+                    reported
+                  );
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    function checkNameOnce(
+      name: string,
+      node: TSESTree.Node,
+      reported?: Set<string>
+    ) {
+      const key = `${name}-${node.loc.start.line}`;
+      if (reported && reported.has(key)) {
+        return;
+      }
       if (!hasValidBooleanPrefix(name)) {
+        reported?.add(key);
         context.report({
           data: { name, suggestion: generateSuggestion(name) },
           messageId: Messages.BAD_PARAMETER_BOOLEAN_PREFIX,
@@ -182,6 +246,20 @@ export const rule = createRule<Options, Messages>({
       },
 
       Property: (node) => {
+        if (node.parent?.type === AST_NODE_TYPES.ObjectPattern) {
+          let current: TSESTree.Node | undefined = node.parent;
+          while (current) {
+            if (
+              current.type === AST_NODE_TYPES.ArrowFunctionExpression ||
+              current.type === AST_NODE_TYPES.FunctionExpression ||
+              current.type === AST_NODE_TYPES.FunctionDeclaration
+            ) {
+              return;
+            }
+            current = current.parent;
+          }
+        }
+
         if (!checkParameters) return;
 
         if (

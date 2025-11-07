@@ -90,8 +90,15 @@ export const rule = createRule<Options, Messages>({
         if (
           (node.parent?.type === AST_NODE_TYPES.MethodDefinition ||
             (node.parent?.type === AST_NODE_TYPES.Property &&
-              !node.parent.method)) &&
+              (node.parent.method || !node.parent.method))) &&
           allowMethodDefinitions
+        ) {
+          return;
+        }
+
+        if (
+          node.parent?.type === AST_NODE_TYPES.Property &&
+          node.parent.method
         ) {
           return;
         }
@@ -129,6 +136,31 @@ export const rule = createRule<Options, Messages>({
               const arrowFunction = generateArrowFunction(node.value);
               const static_ = node.static ? "static " : "";
               const replacement = `${static_}${key} = ${arrowFunction}`;
+              return fixer.replaceText(node, replacement);
+            },
+            messageId: Messages.PREFER_ARROW_METHOD,
+            node: node.key,
+          });
+        }
+      },
+
+      Property: (node) => {
+        if (
+          allowMethodDefinitions ||
+          !node.method ||
+          node.kind === "get" ||
+          node.kind === "set" ||
+          node.value.type !== AST_NODE_TYPES.FunctionExpression
+        ) {
+          return;
+        }
+        const functionNode = node.value;
+        if (!shouldSkipFunction(functionNode)) {
+          context.report({
+            fix: (fixer) => {
+              const key = sourceCode.getText(node.key);
+              const arrowFunction = generateArrowFunction(functionNode);
+              const replacement = `${key}: ${arrowFunction}`;
               return fixer.replaceText(node, replacement);
             },
             messageId: Messages.PREFER_ARROW_METHOD,

@@ -193,6 +193,18 @@ export const rule = createRule<Options, Messages>({
           });
         }
       },
+      FunctionExpression(node) {
+        if (
+          isReactComponent(node) &&
+          !hasReactFCAnnotation(node) &&
+          !hasCustomComponentTypeAnnotation(node)
+        ) {
+          context.report({
+            messageId: Messages.REQUIRE_REACT_FC,
+            node,
+          });
+        }
+      },
     };
   },
   defaultOptions: [
