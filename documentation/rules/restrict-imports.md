@@ -7,28 +7,42 @@ This rule provides fine-grained control over import usage across your codebase, 
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [allowImports](#allowimports)
-  - [disableImports](#disableimports)
-  - [files](#files)
-  - [folders](#folders)
-  - [from](#from)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Disabling imports globally](#disabling-imports-globally)
-  - [Disabling imports in specific files](#disabling-imports-in-specific-files)
-  - [Disabling imports in specific folders](#disabling-imports-in-specific-folders)
-  - [Allow-list approach](#allow-list-approach)
-  - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
-  - [Multiple configuration blocks](#multiple-configuration-blocks)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Common use cases](#common-use-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`restrict-imports`](#restrict-imports)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allowImports](#allowimports)
+      - [disableImports](#disableimports)
+      - [files](#files)
+      - [folders](#folders)
+      - [from](#from)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Disabling imports globally](#disabling-imports-globally)
+    - [Disabling imports in specific files](#disabling-imports-in-specific-files)
+    - [Disabling imports in specific folders](#disabling-imports-in-specific-folders)
+    - [Allow-list approach](#allow-list-approach)
+    - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
+    - [Multiple configuration blocks](#multiple-configuration-blocks)
+    - [Restricting imports from specific modules](#restricting-imports-from-specific-modules)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Common use cases](#common-use-cases)
+    - [Restrict Route to Page components only](#restrict-route-to-page-components-only)
+    - [Restrict Route from react-router to Page components only (ignore lucide-react)](#restrict-route-from-react-router-to-page-components-only-ignore-lucide-react)
+    - [Prevent Node.js imports in frontend code](#prevent-nodejs-imports-in-frontend-code)
+    - [Enforce using date-fns over moment](#enforce-using-date-fns-over-moment)
+    - [Restrict test utilities to test files](#restrict-test-utilities-to-test-files)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Minimal (disable a single import)](#minimal-disable-a-single-import)
+    - [File-scoped restriction](#file-scoped-restriction)
+    - [Folder-scoped restriction](#folder-scoped-restriction)
+    - [Module-scoped restriction (using `from`)](#module-scoped-restriction-using-from)
+  - [Version](#version)
 
 ---
 
@@ -531,5 +545,6 @@ You can also use glob patterns in `from`:
 
 ## Version
 
-- **Added in:** 1.x.x
-- **Last updated:** 2025-12-04
+Introduced in `eslint-plugin-nima@1.2.2`.
+
+---
