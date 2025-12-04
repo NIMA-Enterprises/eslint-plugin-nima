@@ -14,6 +14,7 @@ This rule provides fine-grained control over import usage across your codebase, 
   - [disableImports](#disableimports)
   - [files](#files)
   - [folders](#folders)
+  - [from](#from)
 - [Examples (by option)](#examples-by-option)
   - [Default behavior](#default-behavior)
   - [Disabling imports globally](#disabling-imports-globally)
@@ -63,6 +64,7 @@ type Options = [
     disableImports: string[];
     files: string[];
     folders: string[];
+    from: string[];
   }>[]
 ];
 ```
@@ -106,6 +108,14 @@ The rule is disabled by default and requires explicit configuration to activate.
 - **Default:** `[]`
 - **Description:** Folder patterns (using minimatch) where the import restrictions apply.
 - **Pattern support:** Supports wildcards like `**/utils`, `src/components/**`, etc.
+
+#### from
+
+- **Type:** `string[]`
+- **Default:** `[]`
+- **Description:** Module source patterns (using minimatch) to match against the import source. When specified, the rule only applies to imports from matching modules.
+- **Pattern support:** Supports wildcards like `react-router*`, `@tanstack/*`, `lodash*`, etc.
+- **Use case:** Distinguish between imports with the same name from different packages (e.g., `Route` from `react-router` vs `Route` from `lucide-react`).
 
 ---
 
@@ -324,6 +334,66 @@ export default [
 ];
 ```
 
+### Restricting imports from specific modules
+
+Use the `from` option to restrict imports only from specific modules. This is useful when the same import name exists in multiple packages:
+
+```ts
+// eslint.config.js
+import nima from "eslint-plugin-nima";
+
+export default [
+  {
+    plugins: { nima },
+    rules: {
+      "nima/restrict-imports": [
+        "error",
+        [
+          {
+            allowImports: ["Route"],
+            files: ["*Page.tsx"],
+            from: ["react-router", "react-router-dom"],
+          },
+        ],
+      ],
+    },
+  },
+];
+```
+
+❌ Invalid (in `Button.tsx`):
+
+```ts
+import { Route } from "react-router"; // Blocked - Route from react-router not allowed here
+```
+
+✅ Valid (in `Button.tsx`):
+
+```ts
+import { Route } from "lucide-react"; // Allowed - different module, not affected by the rule
+```
+
+✅ Valid (in `HomePage.tsx`):
+
+```ts
+import { Route } from "react-router"; // Allowed - file matches *Page.tsx pattern
+```
+
+You can also use glob patterns in `from`:
+
+```ts
+"nima/restrict-imports": [
+  "error",
+  [
+    {
+      allowImports: ["Route"],
+      files: ["*Page.tsx"],
+      from: ["react-router*"], // Matches react-router, react-router-dom, etc.
+    },
+  ],
+]
+```
+
 ---
 
 ## Messages
@@ -361,6 +431,21 @@ export default [
   [
     { disableImports: ["Route"] },
     { allowImports: ["Route"], files: ["*Page.tsx"] },
+  ],
+]
+```
+
+### Restrict Route from react-router to Page components only (ignore lucide-react)
+
+```ts
+"nima/restrict-imports": [
+  "error",
+  [
+    {
+      allowImports: ["Route"],
+      files: ["*Page.tsx"],
+      from: ["react-router*"],
+    },
   ],
 ]
 ```
@@ -430,6 +515,15 @@ export default [
 "nima/restrict-imports": [
   "error",
   [{ disableImports: ["fs"], folders: ["**/client/**"] }],
+]
+```
+
+### Module-scoped restriction (using `from`)
+
+```ts
+"nima/restrict-imports": [
+  "error",
+  [{ allowImports: ["Route"], files: ["*Page.tsx"], from: ["react-router*"] }],
 ]
 ```
 
