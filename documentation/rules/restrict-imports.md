@@ -1,0 +1,441 @@
+# `restrict-imports`
+
+Disallows the use of specific imports in specified files or folders, with support for allow-lists and deny-lists.  
+This rule provides fine-grained control over import usage across your codebase, enabling architectural constraints and security policies.
+
+---
+
+## Table of contents
+
+- [Rule summary](#rule-summary)
+- [What the rule checks](#what-the-rule-checks)
+- [Options (all configurations)](#options-all-configurations)
+  - [allowImports](#allowimports)
+  - [disableImports](#disableimports)
+  - [files](#files)
+  - [folders](#folders)
+- [Examples (by option)](#examples-by-option)
+  - [Default behavior](#default-behavior)
+  - [Disabling imports globally](#disabling-imports-globally)
+  - [Disabling imports in specific files](#disabling-imports-in-specific-files)
+  - [Disabling imports in specific folders](#disabling-imports-in-specific-folders)
+  - [Allow-list approach](#allow-list-approach)
+  - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
+  - [Multiple configuration blocks](#multiple-configuration-blocks)
+- [Messages](#messages)
+- [Implementation notes & requirements](#implementation-notes--requirements)
+- [Limitations & edge cases](#limitations--edge-cases)
+- [Common use cases](#common-use-cases)
+- [Configuration](#quick-configuration-snippets)
+- [Version](#version)
+
+---
+
+## Rule summary
+
+- **Goal:** Control import usage across your codebase by restricting or allowing specific imports in targeted files/folders.
+- **Scope:** Supports named imports (`import { Route }`), default imports (`import Route`), and namespace imports (`import * as Router`).
+- **Flexibility:** Configure multiple rules with different scopes and import lists.
+- **Pattern Matching:** Uses minimatch for flexible file and folder pattern matching.
+
+---
+
+## What the rule checks
+
+1. **Named imports** - Imports like `import { Route, Link } from 'react-router'`.
+2. **Default imports** - Imports like `import Route from 'react-router'`.
+3. **Namespace imports** - Imports like `import * as Router from 'react-router'`.
+4. **File pattern matching** - Applies restrictions based on file path patterns using minimatch.
+5. **Folder pattern matching** - Applies restrictions based on directory patterns using minimatch.
+
+The rule supports both allow-list and deny-list approaches, giving you flexible control over import usage patterns.
+
+---
+
+## Options (all configurations)
+
+The rule accepts an array of configuration objects, each defining a scope and import restrictions. Type definition:
+
+```ts
+type Options = [
+  Partial<{
+    allowImports: string[];
+    disableImports: string[];
+    files: string[];
+    folders: string[];
+  }>[]
+];
+```
+
+### Default options
+
+```json
+[[]]
+```
+
+The rule is disabled by default and requires explicit configuration to activate.
+
+### Option details
+
+#### allowImports
+
+- **Type:** `string[]`
+- **Default:** `[]`
+- **Description:** List of imports that are explicitly allowed. When used with file/folder patterns, these imports are permitted in matching locations.
+- **Case sensitivity:** Case-insensitive matching.
+- **Behavior:** Creates an allow-list - only listed imports are permitted in the specified scope.
+
+#### disableImports
+
+- **Type:** `string[]`
+- **Default:** `[]`
+- **Description:** List of imports that are explicitly forbidden in the specified scope.
+- **Case sensitivity:** Case-insensitive matching.
+- **Behavior:** Creates a deny-list - listed imports are prohibited.
+
+#### files
+
+- **Type:** `string[]`
+- **Default:** `[]`
+- **Description:** File patterns (using minimatch) where the import restrictions apply.
+- **Pattern support:** Supports wildcards like `*.test.js`, `**/*.spec.ts`, `*Page.tsx`, etc.
+
+#### folders
+
+- **Type:** `string[]`
+- **Default:** `[]`
+- **Description:** Folder patterns (using minimatch) where the import restrictions apply.
+- **Pattern support:** Supports wildcards like `**/utils`, `src/components/**`, etc.
+
+---
+
+## Examples (by option)
+
+### Default behavior
+
+By default, the rule is disabled and does not restrict any imports.
+
+```ts
+// eslint.config.js
+import nima from "eslint-plugin-nima";
+
+export default [
+  {
+    plugins: { nima },
+    rules: {
+      "nima/restrict-imports": "error", // No effect without configuration
+    },
+  },
+];
+```
+
+### Disabling imports globally
+
+Restrict specific imports across the entire codebase:
+
+```ts
+// eslint.config.js
+import nima from "eslint-plugin-nima";
+
+export default [
+  {
+    plugins: { nima },
+    rules: {
+      "nima/restrict-imports": [
+        "error",
+        [
+          {
+            disableImports: ["lodash", "moment"],
+          },
+        ],
+      ],
+    },
+  },
+];
+```
+
+❌ Invalid:
+
+```ts
+import { merge } from "lodash";
+import moment from "moment";
+```
+
+✅ Valid:
+
+```ts
+import { merge } from "lodash-es";
+import { format } from "date-fns";
+```
+
+### Disabling imports in specific files
+
+Restrict imports only in files matching a pattern:
+
+```ts
+// eslint.config.js
+import nima from "eslint-plugin-nima";
+
+export default [
+  {
+    plugins: { nima },
+    rules: {
+      "nima/restrict-imports": [
+        "error",
+        [
+          {
+            disableImports: ["enzyme"],
+            files: ["*.test.tsx", "*.spec.tsx"],
+          },
+        ],
+      ],
+    },
+  },
+];
+```
+
+### Disabling imports in specific folders
+
+Restrict imports in specific directories:
+
+```ts
+// eslint.config.js
+import nima from "eslint-plugin-nima";
+
+export default [
+  {
+    plugins: { nima },
+    rules: {
+      "nima/restrict-imports": [
+        "error",
+        [
+          {
+            disableImports: ["fs", "path"],
+            folders: ["**/client/**", "**/frontend/**"],
+          },
+        ],
+      ],
+    },
+  },
+];
+```
+
+### Allow-list approach
+
+Allow specific imports only in certain files (your use case - Route only in Page files):
+
+```ts
+// eslint.config.js
+import nima from "eslint-plugin-nima";
+
+export default [
+  {
+    plugins: { nima },
+    rules: {
+      "nima/restrict-imports": [
+        "error",
+        [
+          {
+            disableImports: ["Route"],
+          },
+          {
+            allowImports: ["Route"],
+            files: ["*Page.tsx"],
+          },
+        ],
+      ],
+    },
+  },
+];
+```
+
+❌ Invalid (in `Button.tsx`):
+
+```ts
+import { Route } from "react-router";
+```
+
+✅ Valid (in `HomePage.tsx`):
+
+```ts
+import { Route } from "react-router";
+```
+
+### Mixed file and folder restrictions
+
+Combine file and folder patterns for precise control:
+
+```ts
+// eslint.config.js
+import nima from "eslint-plugin-nima";
+
+export default [
+  {
+    plugins: { nima },
+    rules: {
+      "nima/restrict-imports": [
+        "error",
+        [
+          {
+            disableImports: ["internalApi"],
+            files: ["*.public.ts"],
+            folders: ["**/api/**"],
+          },
+        ],
+      ],
+    },
+  },
+];
+```
+
+### Multiple configuration blocks
+
+Use multiple configuration blocks for complex scenarios:
+
+```ts
+// eslint.config.js
+import nima from "eslint-plugin-nima";
+
+export default [
+  {
+    plugins: { nima },
+    rules: {
+      "nima/restrict-imports": [
+        "error",
+        [
+          // Disable Route globally
+          {
+            disableImports: ["Route"],
+          },
+          // Allow Route in Page files
+          {
+            allowImports: ["Route"],
+            files: ["*Page.tsx"],
+          },
+          // Disable fs in frontend code
+          {
+            disableImports: ["fs"],
+            folders: ["**/frontend/**"],
+          },
+        ],
+      ],
+    },
+  },
+];
+```
+
+---
+
+## Messages
+
+| Message ID          | Template                                                |
+| ------------------- | ------------------------------------------------------- |
+| `IMPORT_DISALLOWED` | `Do not import {{ importName }} inside {{ filename }}.` |
+
+---
+
+## Implementation notes & requirements
+
+1. **Import matching is case-insensitive** - `Route` and `route` are treated as the same import.
+2. **Pattern matching uses minimatch** - All file and folder patterns support glob syntax.
+3. **Multiple configuration blocks are evaluated in order** - First matching rule wins.
+4. **Allow-lists override deny-lists** - If an import is in an allow-list for a matching scope, it's permitted.
+
+---
+
+## Limitations & edge cases
+
+1. **Dynamic imports** - The rule does not check dynamic imports like `import('module')`.
+2. **Re-exports** - The rule checks import statements, not re-exports.
+3. **Type imports** - Type-only imports (`import type { X }`) are checked the same as regular imports.
+
+---
+
+## Common use cases
+
+### Restrict Route to Page components only
+
+```ts
+"nima/restrict-imports": [
+  "error",
+  [
+    { disableImports: ["Route"] },
+    { allowImports: ["Route"], files: ["*Page.tsx"] },
+  ],
+]
+```
+
+### Prevent Node.js imports in frontend code
+
+```ts
+"nima/restrict-imports": [
+  "error",
+  [
+    {
+      disableImports: ["fs", "path", "child_process"],
+      folders: ["**/client/**", "**/frontend/**"],
+    },
+  ],
+]
+```
+
+### Enforce using date-fns over moment
+
+```ts
+"nima/restrict-imports": [
+  "error",
+  [
+    { disableImports: ["moment"] },
+  ],
+]
+```
+
+### Restrict test utilities to test files
+
+```ts
+"nima/restrict-imports": [
+  "error",
+  [
+    { disableImports: ["@testing-library/react"] },
+    {
+      allowImports: ["@testing-library/react"],
+      files: ["*.test.tsx", "*.spec.tsx"],
+    },
+  ],
+]
+```
+
+---
+
+## Quick configuration snippets
+
+### Minimal (disable a single import)
+
+```ts
+"nima/restrict-imports": ["error", [{ disableImports: ["lodash"] }]]
+```
+
+### File-scoped restriction
+
+```ts
+"nima/restrict-imports": [
+  "error",
+  [{ disableImports: ["Route"] }, { allowImports: ["Route"], files: ["*Page.tsx"] }],
+]
+```
+
+### Folder-scoped restriction
+
+```ts
+"nima/restrict-imports": [
+  "error",
+  [{ disableImports: ["fs"], folders: ["**/client/**"] }],
+]
+```
+
+---
+
+## Version
+
+- **Added in:** 1.x.x
+- **Last updated:** 2025-12-04

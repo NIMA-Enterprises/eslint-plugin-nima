@@ -14,6 +14,7 @@ import * as PreferReactFc from "@rules/prefer-react-fc";
 import * as PreferReactWithHooks from "@rules/prefer-react-with-hooks";
 import * as RestrictConsoleMethods from "@rules/restrict-console-methods";
 import * as ManageFunctions from "@rules/restrict-function-usage";
+import * as RestrictImports from "@rules/restrict-imports";
 
 const rules = {
   [BooleanNamingConvention.name]: BooleanNamingConvention.rule,
@@ -26,6 +27,7 @@ const rules = {
   [PreferReactFc.name]: PreferReactFc.rule,
   [PreferReactWithHooks.name]: PreferReactWithHooks.rule,
   [RestrictConsoleMethods.name]: RestrictConsoleMethods.rule,
+  [RestrictImports.name]: RestrictImports.rule,
 };
 
 interface Plugin extends Omit<ESLint.Plugin, "rules"> {
