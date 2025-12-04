@@ -40,14 +40,29 @@ export const rule = createRule<Options, Messages>({
       return false;
     }
 
-    function isImportDisabled(importName: string, filename: string) {
+    function isImportDisabled(
+      importName: string,
+      importSource: string,
+      filename: string
+    ) {
       return options.some((option) => {
         const {
           allowImports = [],
           disableImports = [],
           files = [],
           folders = [],
+          from = [],
         } = option;
+
+        const hasFromRestriction = from.length > 0;
+        if (hasFromRestriction) {
+          const sourceMatches = from.some((pattern) =>
+            minimatch(importSource, pattern)
+          );
+          if (!sourceMatches) {
+            return false;
+          }
+        }
 
         let appliesToFile = false;
         if (files.length === 0 && folders.length === 0) {
@@ -90,6 +105,8 @@ export const rule = createRule<Options, Messages>({
     return {
       ImportDeclaration(node: TSESTree.ImportDeclaration) {
         const filename = context.filename;
+        const importSource =
+          typeof node.source.value === "string" ? node.source.value : "";
 
         for (const specifier of node.specifiers) {
           let importName: string;
@@ -107,7 +124,9 @@ export const rule = createRule<Options, Messages>({
             continue;
           }
 
-          if (isImportDisabled(importName.toLowerCase(), filename)) {
+          if (
+            isImportDisabled(importName.toLowerCase(), importSource, filename)
+          ) {
             context.report({
               data: { filename, importName },
               messageId: Messages.IMPORT_DISALLOWED,
@@ -139,6 +158,7 @@ export const rule = createRule<Options, Messages>({
             disableImports: { items: { type: "string" }, type: "array" },
             files: { items: { type: "string" }, type: "array" },
             folders: { items: { type: "string" }, type: "array" },
+            from: { items: { type: "string" }, type: "array" },
           },
           type: "object",
         },

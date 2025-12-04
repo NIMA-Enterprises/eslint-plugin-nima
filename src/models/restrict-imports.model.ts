@@ -8,5 +8,6 @@ export type Options = [
     disableImports: string[];
     files: string[];
     folders: string[];
+    from: string[];
   }>[]
 ];

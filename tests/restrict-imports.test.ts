@@ -150,6 +150,38 @@ ruleTester.run("restrict-imports", RestrictImports.rule, {
         ],
       ],
     },
+
+    // 9. Disallow Route from react-router only (not from lucide-react)
+    {
+      code: "import { Route } from 'react-router';",
+      errors: [{ messageId: Messages.IMPORT_DISALLOWED }],
+      filename: "/src/components/Button.tsx",
+      options: [
+        [
+          {
+            allowImports: ["Route"],
+            files: ["*Page.tsx"],
+            from: ["react-router"],
+          },
+        ],
+      ],
+    },
+
+    // 10. Disallow Route from any react-router package (using glob)
+    {
+      code: "import { Route } from 'react-router-dom';",
+      errors: [{ messageId: Messages.IMPORT_DISALLOWED }],
+      filename: "/src/components/Button.tsx",
+      options: [
+        [
+          {
+            allowImports: ["Route"],
+            files: ["*Page.tsx"],
+            from: ["react-router*"],
+          },
+        ],
+      ],
+    },
   ],
 
   valid: [
@@ -272,6 +304,51 @@ ruleTester.run("restrict-imports", RestrictImports.rule, {
           {
             allowImports: ["Route"],
             files: ["*Page.tsx"],
+          },
+        ],
+      ],
+    },
+
+    // 16. Route from lucide-react is not affected when restricting react-router
+    {
+      code: "import { Route } from 'lucide-react';",
+      filename: "/src/components/Button.tsx",
+      options: [
+        [
+          {
+            allowImports: ["Route"],
+            files: ["*Page.tsx"],
+            from: ["react-router"],
+          },
+        ],
+      ],
+    },
+
+    // 17. Route from react-router is allowed in *Page.tsx files
+    {
+      code: "import { Route } from 'react-router';",
+      filename: "/src/pages/HomePage.tsx",
+      options: [
+        [
+          {
+            allowImports: ["Route"],
+            files: ["*Page.tsx"],
+            from: ["react-router"],
+          },
+        ],
+      ],
+    },
+
+    // 18. Route from react-router-dom is allowed in *Page.tsx files (glob pattern)
+    {
+      code: "import { Route } from 'react-router-dom';",
+      filename: "/src/pages/HomePage.tsx",
+      options: [
+        [
+          {
+            allowImports: ["Route"],
+            files: ["*Page.tsx"],
+            from: ["react-router*"],
           },
         ],
       ],
