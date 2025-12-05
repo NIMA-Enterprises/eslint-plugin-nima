@@ -10,11 +10,8 @@ Consistent prefixes improve readability and make boolean intent explicit.
 - [Rule summary](#rule-summary)
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
-  - [allowedPrefixes](#allowedprefixes)
-  - [checkFunctions](#checkfunctions)
-  - [checkParameters](#checkparameters)
-  - [checkProperties](#checkproperties)
-  - [checkVariables](#checkvariables)
+  - [Default options](#default-options)
+  - [Option details](#option-details)
 - [Examples (by option)](#examples-by-option)
   - [Default behavior](#default-behavior)
   - [Custom prefixes](#custom-prefixes)
@@ -25,8 +22,8 @@ Consistent prefixes improve readability and make boolean intent explicit.
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
-- [Confguration](#quick-configuration-snippets)
-- [Versioning](#version)
+- [Configuration](#quick-configuration-snippets)
+- [Version](#version)
 
 ---
 
@@ -65,7 +62,7 @@ type Options = [
 ];
 ```
 
-### Default options (recommended)
+### Default options
 
 ```json
 {
@@ -118,7 +115,7 @@ type Options = [
 
 ### Default behavior
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function active(): boolean {
@@ -130,7 +127,7 @@ const visible = () => true;
 const config = { visible: true };
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 function isActive(): boolean {
@@ -157,13 +154,13 @@ If you want `will` and `is` only:
 }
 ```
 
-#### ❌ Incorrect (with above config)
+Incorrect (with above config):
 
 ```ts
 const hasAccess = true; // flagged (has not allowed)
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 const isAccess = true; // or const willAccess = true;
@@ -191,15 +188,15 @@ Effect: a function that returns boolean can be named `active` without a flag, bu
 // With checkFunctions: false
 function active(): boolean {
   return true;
-} // ✅ not reported
-const enabled = false; // ❌ still reported unless prefixed
+} // not reported
+const enabled = false; // still reported unless prefixed
 ```
 
 ### Destructured params & typed object patterns
 
 The rule detects boolean members in typed parameter object shapes and some destructured patterns.
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function init(config: { enabled: boolean }) {
@@ -213,7 +210,7 @@ function handle({ active }: { active: boolean }) {
 } // flagged: active
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 function init(config: { isEnabled: boolean }) {
@@ -236,7 +233,7 @@ function handle({ isActive }: { isActive: boolean }) {
 
 The rule checks properties whose values are functions returning boolean, and variables initialized to functions returning boolean.
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 const obj = {
@@ -248,7 +245,7 @@ const obj = {
 const enabled = () => true; // flagged as a function-valued variable
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 const obj = {
@@ -264,14 +261,14 @@ const isEnabled = () => true;
 
 If you destructure from an expression and TypeScript type information shows a property is boolean, the rule will check the destructured identifier.
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 // given `options: { active: boolean }`
 const { active } = options; // flagged if type info is present and active is boolean
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 const { isActive } = options;
@@ -297,7 +294,7 @@ When triggered, this rule emits one of the following messages (message templates
 
 **Example reported text:**
 
-```
+```text
 NIMA: Function 'active' returns a boolean, use a prefix like isActive
 ```
 

@@ -52,7 +52,7 @@ Each rule has three levels of explanation:
 
 ## Medium explanation
 
-### Conventions
+### Convention rules
 
 #### boolean-naming-convention
 
@@ -123,7 +123,7 @@ const NIMAEnterprises = (NIMA: number, { Labs }: { Labs: number }) => {};
 
 ---
 
-### Restrictions
+### Restriction rules
 
 #### restrict-console-methods
 
@@ -205,7 +205,7 @@ const clickHandler = () => {};
 
 ---
 
-### Preferences
+### Preference rules
 
 #### prefer-arrow-functions
 

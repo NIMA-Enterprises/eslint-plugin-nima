@@ -64,7 +64,7 @@ type Options = [];
 
 ### Default behavior
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 import { useState, useEffect } from "react";
@@ -80,7 +80,7 @@ function MyComponent() {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 import React from "react";
@@ -98,7 +98,7 @@ function MyComponent() {
 
 ### Direct hook imports
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 import { useState, useCallback, useMemo } from "react";
@@ -122,7 +122,7 @@ const Calculator = () => {
 };
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 import React from "react";
@@ -148,7 +148,7 @@ const Calculator = () => {
 
 ### Mixed import patterns
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 import React, { useState, useEffect, Component } from "react";
@@ -170,7 +170,7 @@ function NewComponent() {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 import React, { Component } from "react";
@@ -194,7 +194,7 @@ function NewComponent() {
 
 ### Hook usage without imports
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 // No React import, but hooks are used
@@ -209,7 +209,7 @@ function MyComponent() {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 import React from "react";
@@ -227,7 +227,7 @@ function MyComponent() {
 
 ### Complex import scenarios
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 // Only hook imports, no default React
@@ -251,7 +251,7 @@ function App() {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 import React, { createContext } from "react";
@@ -276,7 +276,7 @@ function App() {
 
 #### Multiple hooks with existing React import
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 import React, { useState, useEffect, useRef, forwardRef } from "react";
@@ -302,7 +302,7 @@ const Input = forwardRef((props, ref) => {
 });
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 import React, { forwardRef } from "react";
@@ -342,7 +342,7 @@ When triggered, this rule emits one of the following messages:
 
 **Example reported text:**
 
-```
+```text
 NIMA: Use React.useState instead of importing useState directly.
 NIMA: Prefix useEffect with React.
 ```

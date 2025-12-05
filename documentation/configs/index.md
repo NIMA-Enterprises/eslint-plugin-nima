@@ -21,7 +21,7 @@ The recommended configuration includes a curated set of rules that provide immed
 
 #### Usage
 
-**Flat ESLint Config (eslint.config.js)**
+##### Flat ESLint Config (eslint.config.js)
 
 ```js
 import pluginNima from "eslint-plugin-nima";
@@ -33,7 +33,7 @@ export default [
 ];
 ```
 
-**Legacy ESLint Config (.eslintrc.json)**
+##### Legacy ESLint Config (.eslintrc.json)
 
 ```json
 {

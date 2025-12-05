@@ -10,11 +10,8 @@ This rule provides fine-grained control over import usage across your codebase, 
 - [Rule summary](#rule-summary)
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
-  - [allowImports](#allowimports)
-  - [disableImports](#disableimports)
-  - [files](#files)
-  - [folders](#folders)
-  - [from](#from)
+  - [Default options](#default-options)
+  - [Option details](#option-details)
 - [Examples (by option)](#examples-by-option)
   - [Default behavior](#default-behavior)
   - [Disabling imports globally](#disabling-imports-globally)
@@ -23,10 +20,10 @@ This rule provides fine-grained control over import usage across your codebase, 
   - [Allow-list approach](#allow-list-approach)
   - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
   - [Multiple configuration blocks](#multiple-configuration-blocks)
+  - [Restricting imports from specific modules](#restricting-imports-from-specific-modules)
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
-- [Common use cases](#common-use-cases)
 - [Configuration](#quick-configuration-snippets)
 - [Version](#version)
 
@@ -164,14 +161,14 @@ export default [
 ];
 ```
 
-❌ Invalid:
+Invalid:
 
 ```ts
 import { merge } from "lodash";
 import moment from "moment";
 ```
 
-✅ Valid:
+Valid:
 
 ```ts
 import { merge } from "lodash-es";
@@ -259,13 +256,13 @@ export default [
 ];
 ```
 
-❌ Invalid (in `Button.tsx`):
+Invalid (in `Button.tsx`):
 
 ```ts
 import { Route } from "react-router";
 ```
 
-✅ Valid (in `HomePage.tsx`):
+Valid (in `HomePage.tsx`):
 
 ```ts
 import { Route } from "react-router";
@@ -361,19 +358,19 @@ export default [
 ];
 ```
 
-❌ Invalid (in `Button.tsx`):
+Invalid (in `Button.tsx`):
 
 ```ts
 import { Route } from "react-router"; // Blocked - Route from react-router not allowed here
 ```
 
-✅ Valid (in `Button.tsx`):
+Valid (in `Button.tsx`):
 
 ```ts
 import { Route } from "lucide-react"; // Allowed - different module, not affected by the rule
 ```
 
-✅ Valid (in `HomePage.tsx`):
+Valid (in `HomePage.tsx`):
 
 ```ts
 import { Route } from "react-router"; // Allowed - file matches *Page.tsx pattern
@@ -398,97 +395,33 @@ You can also use glob patterns in `from`:
 
 ## Messages
 
-| Message ID          | Template                                                |
-| ------------------- | ------------------------------------------------------- |
-| `IMPORT_DISALLOWED` | `Do not import {{ importName }} inside {{ filename }}.` |
+When triggered, this rule emits the following message:
+
+- `IMPORT_DISALLOWED`  
+  Message: `Do not import {{ importName }} inside {{ filename }}.`
+
+**Example reported text:**
+
+```text
+Do not import Route inside src/components/Button.tsx.
+```
 
 ---
 
 ## Implementation notes & requirements
 
-1. **Import matching is case-insensitive** - `Route` and `route` are treated as the same import.
-2. **Pattern matching uses minimatch** - All file and folder patterns support glob syntax.
-3. **Multiple configuration blocks are evaluated in order** - First matching rule wins.
-4. **Allow-lists override deny-lists** - If an import is in an allow-list for a matching scope, it's permitted.
+- **Import matching is case-insensitive:** `Route` and `route` are treated as the same import.
+- **Pattern matching uses minimatch:** All file and folder patterns support glob syntax.
+- **Multiple configuration blocks are evaluated in order:** First matching rule wins.
+- **Allow-lists override deny-lists:** If an import is in an allow-list for a matching scope, it's permitted.
 
 ---
 
 ## Limitations & edge cases
 
-1. **Dynamic imports** - The rule does not check dynamic imports like `import('module')`.
-2. **Re-exports** - The rule checks import statements, not re-exports.
-3. **Type imports** - Type-only imports (`import type { X }`) are checked the same as regular imports.
-
----
-
-## Common use cases
-
-### Restrict Route to Page components only
-
-```ts
-"nima/restrict-imports": [
-  "error",
-  [
-    { disableImports: ["Route"] },
-    { allowImports: ["Route"], files: ["*Page.tsx"] },
-  ],
-]
-```
-
-### Restrict Route from react-router to Page components only (ignore lucide-react)
-
-```ts
-"nima/restrict-imports": [
-  "error",
-  [
-    {
-      allowImports: ["Route"],
-      files: ["*Page.tsx"],
-      from: ["react-router*"],
-    },
-  ],
-]
-```
-
-### Prevent Node.js imports in frontend code
-
-```ts
-"nima/restrict-imports": [
-  "error",
-  [
-    {
-      disableImports: ["fs", "path", "child_process"],
-      folders: ["**/client/**", "**/frontend/**"],
-    },
-  ],
-]
-```
-
-### Enforce using date-fns over moment
-
-```ts
-"nima/restrict-imports": [
-  "error",
-  [
-    { disableImports: ["moment"] },
-  ],
-]
-```
-
-### Restrict test utilities to test files
-
-```ts
-"nima/restrict-imports": [
-  "error",
-  [
-    { disableImports: ["@testing-library/react"] },
-    {
-      allowImports: ["@testing-library/react"],
-      files: ["*.test.tsx", "*.spec.tsx"],
-    },
-  ],
-]
-```
+- **Dynamic imports:** The rule does not check dynamic imports like `import('module')`.
+- **Re-exports:** The rule checks import statements, not re-exports.
+- **Type imports:** Type-only imports (`import type { X }`) are checked the same as regular imports.
 
 ---
 
@@ -531,5 +464,6 @@ You can also use glob patterns in `from`:
 
 ## Version
 
-- **Added in:** 1.x.x
-- **Last updated:** 2025-12-04
+Introduced in `eslint-plugin-nima@1.2.2`.
+
+---

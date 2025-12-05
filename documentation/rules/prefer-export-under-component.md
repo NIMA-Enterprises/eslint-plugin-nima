@@ -72,7 +72,7 @@ type Options = [
 
 ### Default behavior
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 export default function MyComponent() {
@@ -88,7 +88,7 @@ export function ThirdComponent() {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 function MyComponent() {
@@ -112,7 +112,7 @@ export { ThirdComponent };
 
 ### Default exports
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 export default function UserProfile({ user }) {
@@ -135,7 +135,7 @@ export default function HomePage() {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 function UserProfile({ user }) {
@@ -164,7 +164,7 @@ export { HomePage };
 
 ### Named exports
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 export const Button = ({ children, onClick }) => {
@@ -185,7 +185,7 @@ export const Modal = function ({ isOpen, onClose, children }) {
 };
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 const Button = ({ children, onClick }) => {
@@ -212,7 +212,7 @@ export { Modal };
 
 ### Function declarations
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 export function Card({ title, content }) {
@@ -235,7 +235,7 @@ export function Layout({ children }) {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 function Card({ title, content }) {
@@ -264,7 +264,7 @@ export { Layout };
 
 ### Arrow function variables
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 export const LoadingSpinner = () => {
@@ -283,7 +283,7 @@ export const ErrorMessage = ({ error }) => (
 );
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 const LoadingSpinner = () => {
@@ -308,7 +308,7 @@ export { ErrorMessage };
 
 ### Function expressions
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 export const Header = function HeaderComponent({ title }) {
@@ -329,7 +329,7 @@ export const Footer = function () {
 };
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```tsx
 const Header = function HeaderComponent({ title }) {
@@ -365,7 +365,7 @@ When triggered, this rule emits the following message:
 
 **Example reported text:**
 
-```
+```text
 NIMA: Declare React component 'MyComponent' separately from its export statement
 ```
 

@@ -10,9 +10,8 @@ Console statements are often left behind during development and should be remove
 - [Rule summary](#rule-summary)
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
-  - [allowConsoleError](#allowconsoleerror)
-  - [allowConsoleLog](#allowconsolelog)
-  - [allowConsoleWarn](#allowconsolewarn)
+  - [Default options](#default-options)
+  - [Option details](#option-details)
 - [Examples (by option)](#examples-by-option)
   - [Default behavior](#default-behavior)
   - [Allowing specific console methods](#allowing-specific-console-methods)
@@ -57,7 +56,7 @@ type Options = [
 ];
 ```
 
-### Default options (recommended)
+### Default options
 
 ```json
 {
@@ -96,7 +95,7 @@ type Options = [
 
 ### Default behavior
 
-#### ❌ Incorrect
+Incorrect:
 
 ```js
 console.log("Debug message");
@@ -107,7 +106,7 @@ console.debug("Debug information");
 console.trace("Stack trace");
 ```
 
-#### ✅ Correct
+Correct:
 
 ```js
 // Use proper logging library instead
@@ -121,7 +120,7 @@ logger.warn("Deprecated feature used");
 
 ### Allowing specific console methods
 
-#### Configuration allowing only error logging
+Configuration allowing only error logging:
 
 ```jsonc
 {
@@ -131,7 +130,7 @@ logger.warn("Deprecated feature used");
 }
 ```
 
-#### ❌ Incorrect (with above config)
+Incorrect (with above config):
 
 ```js
 console.log("This will be flagged");
@@ -139,7 +138,7 @@ console.warn("This will be flagged");
 console.info("This will be flagged");
 ```
 
-#### ✅ Correct (with above config)
+Correct (with above config):
 
 ```js
 console.error("This is allowed");
@@ -148,7 +147,7 @@ console.error("This is allowed");
 
 ### Mixed configuration
 
-#### Configuration allowing errors and warnings
+Configuration allowing errors and warnings:
 
 ```jsonc
 {
@@ -165,7 +164,7 @@ console.error("This is allowed");
 }
 ```
 
-#### ❌ Incorrect (with above config)
+Incorrect (with above config):
 
 ```js
 console.log("Not allowed");
@@ -173,7 +172,7 @@ console.info("Not allowed");
 console.debug("Not allowed");
 ```
 
-#### ✅ Correct (with above config)
+Correct (with above config):
 
 ```js
 console.error("Allowed for error reporting");
@@ -191,7 +190,7 @@ When triggered, this rule emits the following message:
 
 **Example reported text:**
 
-```
+```text
 NIMA: The usage of console.log is restricted.
 NIMA: The usage of console.error is restricted.
 NIMA: The usage of console.warn is restricted.
@@ -216,37 +215,6 @@ NIMA: The usage of console.warn is restricted.
 - **Custom Console Objects:** The rule won't flag custom objects that happen to have console-like method names (e.g., `myLogger.log()` is safe).
 - **Method Existence:** Only flags methods that exist in the predefined `CONSOLES` set, so unknown methods are ignored.
 - **No Automatic Removal:** This rule identifies violations but doesn't provide automatic fixes - developers must manually remove or replace console statements.
-
----
-
-## Common Use Cases
-
-### Development vs Production
-
-```js
-// Instead of leaving console statements
-console.log("User logged in:", user.id);
-
-// Use environment-aware logging
-if (process.env.NODE_ENV === "development") {
-  logger.debug("User logged in:", user.id);
-}
-```
-
-### Proper Logging Replacement
-
-```js
-// Replace console usage
-console.error("API call failed:", error);
-console.warn("Feature deprecated");
-
-// With structured logging
-logger.error("API call failed", { error: error.message, stack: error.stack });
-logger.warn("Feature deprecated", {
-  feature: "oldFeature",
-  deprecationDate: "2024-01-01",
-});
-```
 
 ---
 

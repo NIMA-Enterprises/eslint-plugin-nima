@@ -10,10 +10,8 @@ This rule provides fine-grained control over function usage across your codebase
 - [Rule summary](#rule-summary)
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
-  - [allowFunctions](#allowfunctions)
-  - [disableFunctions](#disablefunctions)
-  - [files](#files)
-  - [folders](#folders)
+  - [Default options](#default-options)
+  - [Option details](#option-details)
 - [Examples (by option)](#examples-by-option)
   - [Default behavior](#default-behavior)
   - [Disabling functions globally](#disabling-functions-globally)
@@ -25,7 +23,6 @@ This rule provides fine-grained control over function usage across your codebase
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
-- [Common use cases](#common-use-cases)
 - [Configuration](#quick-configuration-snippets)
 - [Version](#version)
 
@@ -134,7 +131,7 @@ fs.unlinkSync("file.txt");
 
 ### Disabling functions globally
 
-#### Configuration
+Configuration:
 
 ```jsonc
 {
@@ -151,7 +148,7 @@ fs.unlinkSync("file.txt");
 }
 ```
 
-#### ❌ Incorrect
+Incorrect:
 
 ```js
 // In any file
@@ -160,7 +157,7 @@ setTimeout(() => {}, 1000);
 setInterval(() => {}, 1000);
 ```
 
-#### ✅ Correct
+Correct:
 
 ```js
 // Use alternatives
@@ -170,7 +167,7 @@ requestAnimationFrame(() => {});
 
 ### Disabling functions in specific files
 
-#### Configuration
+Configuration:
 
 ```jsonc
 {
@@ -188,7 +185,7 @@ requestAnimationFrame(() => {});
 }
 ```
 
-#### ❌ Incorrect (in files matching `*.prod.js` or `*.min.js`)
+Incorrect (in files matching `*.prod.js` or `*.min.js`):
 
 ```js
 // In app.prod.js
@@ -196,7 +193,7 @@ console.log("Debug message");
 debugger;
 ```
 
-#### ✅ Correct
+Correct:
 
 ```js
 // In app.prod.js - use proper logging
@@ -208,7 +205,7 @@ console.log("Development debug");
 
 ### Disabling functions in specific folders
 
-#### Configuration
+Configuration:
 
 ```jsonc
 {
@@ -226,7 +223,7 @@ console.log("Development debug");
 }
 ```
 
-#### ❌ Incorrect (in components/ or utils/ folders)
+Incorrect (in components/ or utils/ folders):
 
 ```js
 // In src/components/UserCard.js
@@ -234,7 +231,7 @@ fetch("/api/users");
 new XMLHttpRequest();
 ```
 
-#### ✅ Correct
+Correct:
 
 ```js
 // In src/components/UserCard.js - use dependency injection
@@ -249,7 +246,7 @@ fetch("/api/users");
 
 ### Allow-list approach
 
-#### Configuration
+Configuration:
 
 ```jsonc
 {
@@ -267,7 +264,7 @@ fetch("/api/users");
 }
 ```
 
-#### ❌ Incorrect (in production/ folders)
+Incorrect (in production/ folders):
 
 ```js
 // In src/production/app.js
@@ -276,7 +273,7 @@ console.info("This is not allowed");
 alert("This is not allowed");
 ```
 
-#### ✅ Correct (in production/ folders)
+Correct (in production/ folders):
 
 ```js
 // In src/production/app.js
@@ -286,7 +283,7 @@ console.error("This is allowed");
 
 ### Mixed file and folder restrictions
 
-#### Configuration
+Configuration:
 
 ```jsonc
 {
@@ -307,14 +304,14 @@ console.error("This is allowed");
 
 Files must match BOTH patterns - be named `*.component.js` AND be in a `components/` folder.
 
-#### ❌ Incorrect (in `src/components/User.component.js`)
+Incorrect (in `src/components/User.component.js`):
 
 ```js
 localStorage.setItem("user", data);
 sessionStorage.getItem("token");
 ```
 
-#### ✅ Correct
+Correct:
 
 ```js
 // In src/components/User.component.js - use props/state
@@ -331,7 +328,7 @@ localStorage.setItem("user", data); // Allowed
 
 ### Multiple configuration blocks
 
-#### Configuration
+Configuration:
 
 ```jsonc
 {
@@ -375,7 +372,7 @@ When triggered, this rule emits the following message:
 
 **Example reported text:**
 
-```
+```text
 Do not use eval inside src/utils/helper.js.
 Do not use setTimeout inside components/App.component.js.
 Do not use fetch inside src/components/UserList.js.
@@ -410,51 +407,6 @@ Do not use fetch inside src/components/UserList.js.
 - **Aliasing:** Function aliases won't be detected: `const log = console.log; log("test");`
 - **Pattern Matching Complexity:** Very complex glob patterns might have performance implications on large codebases.
 - **No Cross-File Analysis:** The rule only analyzes individual files and doesn't track function definitions across modules.
-
----
-
-## Common use cases
-
-### Security Restrictions
-
-```js
-// Prevent dangerous functions in production code
-{
-  "disableFunctions": ["eval", "Function", "setTimeout", "setInterval"],
-  "folders": ["**/src/**"],
-  "files": ["*.js", "*.ts"]
-}
-```
-
-### Architecture Enforcement
-
-```js
-// Components shouldn't make direct API calls
-{
-  "disableFunctions": ["fetch", "axios", "XMLHttpRequest"],
-  "folders": ["**/components/**"]
-}
-```
-
-### Environment-Specific Rules
-
-```js
-// Only allow specific console methods in production builds
-{
-  "allowFunctions": ["console.error"],
-  "files": ["*.prod.js", "*.min.js"]
-}
-```
-
-### Testing Restrictions
-
-```js
-// Prevent production functions in test files
-{
-  "disableFunctions": ["process.exit", "fs.unlinkSync"],
-  "files": ["*.test.js", "*.spec.js"]
-}
-```
 
 ---
 

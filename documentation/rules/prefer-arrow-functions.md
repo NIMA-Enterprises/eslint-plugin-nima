@@ -10,12 +10,8 @@ Arrow functions provide lexical `this` binding, shorter syntax, and more consist
 - [Rule summary](#rule-summary)
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
-  - [allowAsync](#allowasync)
-  - [allowConstructors](#allowconstructors)
-  - [allowFunctionDeclarations](#allowfunctiondeclarations)
-  - [allowFunctionExpressions](#allowfunctionexpressions)
-  - [allowGenerators](#allowgenerators)
-  - [allowMethodDefinitions](#allowmethoddefinitions)
+  - [Default options](#default-options)
+  - [Option details](#option-details)
 - [Examples (by option)](#examples-by-option)
   - [Default behavior](#default-behavior)
   - [Function declarations](#function-declarations)
@@ -129,7 +125,7 @@ type Options = [
 
 ### Default behavior
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function greet(name) {
@@ -153,7 +149,7 @@ const obj = {
 };
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 const greet = (name) => {
@@ -179,7 +175,7 @@ const obj = {
 
 ### Function declarations
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function add(a, b) {
@@ -196,7 +192,7 @@ function multiply(a: number, b: number): number {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 const add = (a, b) => {
@@ -215,7 +211,7 @@ const multiply = (a: number, b: number): number => {
 
 ### Function expressions
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 const handler = function (event) {
@@ -232,7 +228,7 @@ const transform = function (value) {
 };
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 const handler = (event) => {
@@ -251,7 +247,7 @@ const transform = (value) => {
 
 ### Method definitions
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 class Calculator {
@@ -275,7 +271,7 @@ const utils = {
 };
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 class Calculator {
@@ -301,7 +297,7 @@ const utils = {
 
 ### Export handling
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 export function helper(data) {
@@ -317,7 +313,7 @@ function internal() {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 export const helper = (data) => {
@@ -338,7 +334,7 @@ const internal = () => {
 
 With `allowAsync: false`:
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 async function fetchData(url) {
@@ -351,7 +347,7 @@ const processAsync = async function (data) {
 };
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 const fetchData = async (url) => {
@@ -366,9 +362,7 @@ const processAsync = async (data) => {
 
 ### Generator functions
 
-With `allowGenerators: true` (default):
-
-#### ✅ Correct (not flagged)
+With `allowGenerators: true` (default), generator functions are not flagged:
 
 ```ts
 function* generateNumbers() {
@@ -385,9 +379,7 @@ const generator = function* () {
 
 ### Constructor functions
 
-With `allowConstructors: true` (default):
-
-#### ✅ Correct (not flagged)
+With `allowConstructors: true` (default), constructor functions are not flagged:
 
 ```ts
 class MyClass {
@@ -419,7 +411,7 @@ When triggered, this rule emits one of the following messages:
 
 **Example reported text:**
 
-```
+```text
 NIMA: Prefer arrow functions over function declarations.
 ```
 
