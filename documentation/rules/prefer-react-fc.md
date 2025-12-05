@@ -10,8 +10,8 @@ This ensures consistent typing, better IntelliSense support, and explicit compon
 - [Rule summary](#rule-summary)
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
-  - [allowArrowFunctions](#allowarrowfunctions)
-  - [allowFunctionDeclarations](#allowfunctiondeclarations)
+  - [Default options](#default-options)
+  - [Option details](#option-details)
 - [Examples (by option)](#examples-by-option)
   - [Default behavior](#default-behavior)
   - [Arrow function components](#arrow-function-components)
@@ -91,7 +91,7 @@ type Options = [
 
 ### Default behavior
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 // Arrow function component without React.FC
@@ -115,7 +115,7 @@ const UserCard = (props) => {
 };
 ```
 
-#### ✅ Correct
+Correct:
 
 ```tsx
 import React from "react";
@@ -143,7 +143,7 @@ const UserCard: FC<{ name: string; email: string }> = (props) => {
 
 ### Arrow function components
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 const Button = ({ onClick, children }) => {
@@ -162,7 +162,7 @@ const LoadingSpinner = () => {
 };
 ```
 
-#### ✅ Correct
+Correct:
 
 ```tsx
 interface ButtonProps {
@@ -191,7 +191,7 @@ const LoadingSpinner: React.FC = () => {
 
 ### Function declaration components
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 function Header({ title, subtitle }) {
@@ -214,7 +214,7 @@ function ProductList({ products }) {
 }
 ```
 
-#### ✅ Correct
+Correct:
 
 ```tsx
 interface HeaderProps {
@@ -253,7 +253,7 @@ function ProductList({
 
 ### Custom component types
 
-#### ✅ Correct (not flagged)
+Correct (not flagged):
 
 ```tsx
 // Custom component type (allowed)
@@ -278,7 +278,7 @@ const ExtendedComponent: MyComponentType = ({ title }) => {
 
 The rule detects JSX in various return patterns:
 
-#### ❌ Incorrect
+Incorrect:
 
 ```tsx
 const ConditionalComponent = ({ condition, data }) => {
@@ -301,7 +301,7 @@ const TernaryComponent = ({ type }) => {
 };
 ```
 
-#### ✅ Correct
+Correct:
 
 ```tsx
 const ConditionalComponent: React.FC<{ condition: boolean; data: any }> = ({
@@ -334,7 +334,7 @@ const TernaryComponent: React.FC<{ type: "success" | "error" }> = ({
 
 ### Non-component functions
 
-#### ✅ Correct (not flagged)
+Correct (not flagged):
 
 ```tsx
 // Utility functions (not PascalCase, not flagged)
@@ -368,7 +368,7 @@ When triggered, this rule emits the following message:
 
 **Example reported text:**
 
-```
+```text
 NIMA: Component functions must use React.FC type annotation.
 ```
 

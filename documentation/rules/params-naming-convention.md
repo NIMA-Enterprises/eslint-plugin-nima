@@ -7,44 +7,24 @@ This improves function readability, maintainability, and makes parameter passing
 
 ## Table of contents
 
-- [`params-naming-convention`](#params-naming-convention)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-    - [Option details](#option-details)
-      - [allowedParameters](#allowedparameters)
-      - [ignore](#ignore)
-      - [ignoreFunctions](#ignorefunctions)
-      - [ignorePrefixes](#ignoreprefixes)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-      - [❌ Incorrect](#-incorrect)
-      - [✅ Correct](#-correct)
-    - [Custom allowed parameters](#custom-allowed-parameters)
-      - [❌ Incorrect](#-incorrect-1)
-      - [✅ Correct](#-correct-1)
-    - [Ignoring specific parameter names](#ignoring-specific-parameter-names)
-      - [❌ Incorrect](#-incorrect-2)
-      - [✅ Correct](#-correct-2)
-    - [Ignoring specific functions](#ignoring-specific-functions)
-      - [❌ Incorrect](#-incorrect-3)
-      - [✅ Correct](#-correct-3)
-    - [Using ignore prefixes](#using-ignore-prefixes)
-      - [❌ Incorrect](#-incorrect-4)
-      - [✅ Correct](#-correct-4)
-    - [Object destructuring parameters](#object-destructuring-parameters)
-      - [✅ Correct (automatically allowed)](#-correct-automatically-allowed)
-    - [Index parameter exception](#index-parameter-exception)
-      - [✅ Correct (automatically allowed)](#-correct-automatically-allowed-1)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-  - [Version](#version)
+- [Rule summary](#rule-summary)
+- [What the rule checks](#what-the-rule-checks)
+- [Options (all configurations)](#options-all-configurations)
+  - [Default options](#default-options)
+  - [Option details](#option-details)
+- [Examples (by option)](#examples-by-option)
+  - [Default behavior](#default-behavior)
+  - [Custom allowed parameters](#custom-allowed-parameters)
+  - [Ignoring specific parameter names](#ignoring-specific-parameter-names)
+  - [Ignoring specific functions](#ignoring-specific-functions)
+  - [Using ignore prefixes](#using-ignore-prefixes)
+  - [Object destructuring parameters](#object-destructuring-parameters)
+  - [Index parameter exception](#index-parameter-exception)
+- [Messages](#messages)
+- [Implementation notes & requirements](#implementation-notes--requirements)
+- [Limitations & edge cases](#limitations--edge-cases)
+- [Configuration](#quick-configuration-snippets)
+- [Version](#version)
 
 ---
 
@@ -130,7 +110,7 @@ type Options = [
 
 ### Default behavior
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function createUser(name, email, age, address) {
@@ -142,7 +122,7 @@ const calculateTotal = (price, tax, discount, shipping) => {
 };
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 // Option 1: Use object parameter
@@ -171,7 +151,7 @@ Configuration:
 }
 ```
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function processData(input, options, callback, context) {
@@ -180,7 +160,7 @@ function processData(input, options, callback, context) {
 }
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 function processData(input, options, callback) {
@@ -204,7 +184,7 @@ Configuration:
 }
 ```
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function handleClick(e, data, options, callback) {
@@ -213,7 +193,7 @@ function handleClick(e, data, options, callback) {
 }
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 function handleClick(e, { data, options, callback }) {
@@ -237,7 +217,7 @@ Configuration:
 }
 ```
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function processItems(items, processor, filter, sorter) {
@@ -246,7 +226,7 @@ function processItems(items, processor, filter, sorter) {
 }
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 // Ignored function - can have any number of parameters
@@ -270,7 +250,7 @@ Configuration:
 }
 ```
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function calculate(value, multiplier, offset, precision) {
@@ -279,7 +259,7 @@ function calculate(value, multiplier, offset, precision) {
 }
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 // Option 1: Use prefixes
@@ -300,7 +280,7 @@ function calculate({ value, multiplier, offset, precision }) {
 
 ### Object destructuring parameters
 
-#### ✅ Correct (automatically allowed)
+Correct (automatically allowed):
 
 ```ts
 // Single object parameter with destructuring - always allowed
@@ -316,7 +296,7 @@ function updateUser({ name, email }, userId, options) {
 
 ### Index parameter exception
 
-#### ✅ Correct (automatically allowed)
+Correct (automatically allowed):
 
 ```ts
 // Second parameter named 'index' is automatically allowed
@@ -341,7 +321,7 @@ When triggered, this rule emits the following message:
 
 **Example reported text:**
 
-```
+```text
 NIMA: Function has 3 parameter(s). Either prefix them: $name, $email, $age, or put all parameters in one object.
 ```
 

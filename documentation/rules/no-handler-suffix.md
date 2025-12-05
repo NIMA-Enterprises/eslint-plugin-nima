@@ -67,7 +67,7 @@ type Options = [];
 
 ### Default behavior
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function clickHandler() {
@@ -83,7 +83,7 @@ const deleteHandler = function () {
 };
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 function handleClick() {
@@ -101,7 +101,7 @@ const handleDelete = function () {
 
 ### Function declarations
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function mouseOverHandler(event) {
@@ -117,7 +117,7 @@ document.addEventListener("mouseover", mouseOverHandler);
 document.addEventListener("keypress", keyPressHandler);
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 function handleMouseOver(event) {
@@ -135,7 +135,7 @@ document.addEventListener("keypress", handleKeyPress);
 
 ### Arrow functions
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 const changeHandler = (value) => {
@@ -147,7 +147,7 @@ const errorHandler = (error) => {
 };
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 const handleChange = (value) => {
@@ -161,7 +161,7 @@ const handleError = (error) => {
 
 ### Function expressions
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 const clickHandler = function clickHandler() {
@@ -173,7 +173,7 @@ const submitHandler = function () {
 };
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 const handleClick = function handleClick() {
@@ -189,7 +189,7 @@ const handleSubmit = function () {
 
 The rule automatically handles name conflicts by generating unique names:
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function handleClick() {
@@ -201,7 +201,7 @@ function clickHandler() {
 }
 ```
 
-#### ✅ Correct (after auto-fix)
+Correct (after auto-fix):
 
 ```ts
 function handleClick() {
@@ -224,7 +224,7 @@ When triggered, this rule emits the following message:
 
 **Example reported text:**
 
-```
+```text
 NIMA: You shouldn't use the handler suffix, use the handle prefix instead (handleClick)
 ```
 

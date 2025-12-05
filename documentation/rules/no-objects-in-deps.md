@@ -7,36 +7,22 @@ Direct object references in dependency arrays cause unnecessary re-renders becau
 
 ## Table of contents
 
-- [`no-objects-in-deps`](#no-objects-in-deps)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-      - [❌ Incorrect](#-incorrect)
-      - [✅ Correct](#-correct)
-    - [Object expressions](#object-expressions)
-      - [❌ Incorrect](#-incorrect-1)
-      - [✅ Correct](#-correct-1)
-    - [Array expressions](#array-expressions)
-      - [❌ Incorrect](#-incorrect-2)
-      - [✅ Correct](#-correct-2)
-    - [New expressions](#new-expressions)
-      - [❌ Incorrect](#-incorrect-3)
-      - [✅ Correct](#-correct-3)
-    - [Variable references](#variable-references)
-      - [❌ Incorrect](#-incorrect-4)
-      - [✅ Correct](#-correct-4)
-    - [Recommended solutions](#recommended-solutions)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-  - [Version](#version)
+- [Rule summary](#rule-summary)
+- [What the rule checks](#what-the-rule-checks)
+- [Options (all configurations)](#options-all-configurations)
+  - [Default options](#default-options)
+- [Examples (by option)](#examples-by-option)
+  - [Default behavior](#default-behavior)
+  - [Object expressions](#object-expressions)
+  - [Array expressions](#array-expressions)
+  - [New expressions](#new-expressions)
+  - [Variable references](#variable-references)
+  - [Recommended solutions](#recommended-solutions)
+- [Messages](#messages)
+- [Implementation notes & requirements](#implementation-notes--requirements)
+- [Limitations & edge cases](#limitations--edge-cases)
+- [Configuration](#quick-configuration-snippets)
+- [Version](#version)
 
 ---
 
@@ -80,7 +66,7 @@ type Options = [];
 
 ### Default behavior
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 import { useEffect, useMemo } from "react";
@@ -98,7 +84,7 @@ function MyComponent({ data }) {
 }
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 import { useEffect, useMemo } from "react";
@@ -118,7 +104,7 @@ function MyComponent({ data }) {
 
 ### Object expressions
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 useEffect(() => {
@@ -130,7 +116,7 @@ useMemo(() => {
 }, [{ precision: 2, round: true }]); // Direct object
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 // Option 1: Use JSON.stringify
@@ -152,7 +138,7 @@ useEffect(() => {
 
 ### Array expressions
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 useCallback(() => {
@@ -164,7 +150,7 @@ useEffect(() => {
 }, [[1, 2, 3, 4]]); // Direct array
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 // Option 1: Use JSON.stringify
@@ -186,7 +172,7 @@ useEffect(() => {
 
 ### New expressions
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 useEffect(() => {
@@ -199,7 +185,7 @@ useMemo(() => {
 }, [new RegExp(pattern, "gi")]); // New expression in deps
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 // Option 1: Use JSON.stringify with constructor arguments
@@ -223,7 +209,7 @@ useMemo(() => {
 
 ### Variable references
 
-#### ❌ Incorrect
+Incorrect:
 
 ```ts
 function MyComponent() {
@@ -240,7 +226,7 @@ function MyComponent() {
 }
 ```
 
-#### ✅ Correct
+Correct:
 
 ```ts
 // Option 1: Move outside component (if static)
@@ -292,7 +278,7 @@ When triggered, this rule emits the following message:
 
 **Example reported text:**
 
-```
+```text
 NIMA: Objects inside of dependency arrays aren't allowed. Try doing JSON.stringify({ key: 'value' }).
 ```
 
