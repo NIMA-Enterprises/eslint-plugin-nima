@@ -7,25 +7,36 @@ Arrow functions provide lexical `this` binding, shorter syntax, and more consist
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [Default options](#default-options)
-  - [Option details](#option-details)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Function declarations](#function-declarations)
-  - [Function expressions](#function-expressions)
-  - [Method definitions](#method-definitions)
-  - [Export handling](#export-handling)
-  - [Async functions](#async-functions)
-  - [Generator functions](#generator-functions)
-  - [Constructor functions](#constructor-functions)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`prefer-arrow-functions`](#prefer-arrow-functions)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allowAsync](#allowasync)
+      - [allowConstructors](#allowconstructors)
+      - [allowFunctionDeclarations](#allowfunctiondeclarations)
+      - [allowFunctionExpressions](#allowfunctionexpressions)
+      - [allowGenerators](#allowgenerators)
+      - [allowMethodDefinitions](#allowmethoddefinitions)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Function declarations](#function-declarations)
+    - [Function expressions](#function-expressions)
+    - [Method definitions](#method-definitions)
+    - [Export handling](#export-handling)
+    - [Async functions](#async-functions)
+    - [Generator functions](#generator-functions)
+    - [Constructor functions](#constructor-functions)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -495,3 +506,9 @@ export default [
 Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---
+
+## Further Reading
+
+- [Arrow Function Expressions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+- [This in Arrow Functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions#this)
+- [ES6 Arrow Functions](https://www.ecma-international.org/ecma-262/6.0/#sec-arrow-function-definitions)

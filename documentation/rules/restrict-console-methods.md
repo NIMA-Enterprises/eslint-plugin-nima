@@ -7,20 +7,27 @@ Console statements are often left behind during development and should be remove
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [Default options](#default-options)
-  - [Option details](#option-details)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Allowing specific console methods](#allowing-specific-console-methods)
-  - [Mixed configuration](#mixed-configuration)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`restrict-console-methods`](#restrict-console-methods)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allow](#allow)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Allowing specific console methods](#allowing-specific-console-methods)
+    - [Allowing multiple console methods](#allowing-multiple-console-methods)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+    - [Development-friendly configuration](#development-friendly-configuration)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -44,14 +51,12 @@ The rule reports violations for any console method usage unless explicitly allow
 
 ## Options (all configurations)
 
-The rule accepts a single options object with boolean flags for specific console methods. Type definition:
+The rule accepts a single options object with an array of allowed console methods. Type definition:
 
 ```ts
 type Options = [
   Partial<{
-    allowConsoleError: boolean;
-    allowConsoleLog: boolean;
-    allowConsoleWarn: boolean;
+    allow: string[];
   }>
 ];
 ```
@@ -60,34 +65,19 @@ type Options = [
 
 ```json
 {
-  "allowConsoleError": false,
-  "allowConsoleLog": false,
-  "allowConsoleWarn": false
+  "allow": ["info"]
 }
 ```
 
 ### Option details
 
-#### allowConsoleError
+#### allow
 
-- **Type:** `boolean`
-- **Default:** `false`
-- **Description:** When `true`, allows `console.error()` calls to pass without triggering the rule.
-- **Use case:** Error logging might be acceptable in production environments.
-
-#### allowConsoleLog
-
-- **Type:** `boolean`
-- **Default:** `false`
-- **Description:** When `true`, allows `console.log()` calls to pass without triggering the rule.
-- **Use case:** Rarely recommended for production, but useful during development phases.
-
-#### allowConsoleWarn
-
-- **Type:** `boolean`
-- **Default:** `false`
-- **Description:** When `true`, allows `console.warn()` calls to pass without triggering the rule.
-- **Use case:** Warning messages might be acceptable for user notifications or deprecation warnings.
+- **Type:** `string[]`
+- **Default:** `["info"]`
+- **Description:** Array of console method names that are allowed. Any console method not in this array will trigger the rule.
+- **Example values:** `["error", "warn", "info", "log", "debug", "trace"]`
+- **Use case:** Allow specific console methods for logging while restricting others.
 
 ---
 
@@ -125,7 +115,7 @@ Configuration allowing only error logging:
 ```jsonc
 {
   "rules": {
-    "nima/restrict-console-methods": ["error", { "allowConsoleError": true }]
+    "nima/restrict-console-methods": ["error", { "allow": ["error"] }]
   }
 }
 ```
@@ -145,9 +135,9 @@ console.error("This is allowed");
 // Other console methods are still restricted
 ```
 
-### Mixed configuration
+### Allowing multiple console methods
 
-Configuration allowing errors and warnings:
+Configuration allowing errors, warnings, and info:
 
 ```jsonc
 {
@@ -155,9 +145,7 @@ Configuration allowing errors and warnings:
     "nima/restrict-console-methods": [
       "error",
       {
-        "allowConsoleError": true,
-        "allowConsoleWarn": true,
-        "allowConsoleLog": false
+        "allow": ["error", "warn", "info"]
       }
     ]
   }
@@ -168,8 +156,8 @@ Incorrect (with above config):
 
 ```js
 console.log("Not allowed");
-console.info("Not allowed");
 console.debug("Not allowed");
+console.trace("Not allowed");
 ```
 
 Correct (with above config):
@@ -177,6 +165,7 @@ Correct (with above config):
 ```js
 console.error("Allowed for error reporting");
 console.warn("Allowed for warnings");
+console.info("Allowed for info messages");
 ```
 
 ---
@@ -232,9 +221,7 @@ export default [
       "nima/restrict-console-methods": [
         "error",
         {
-          allowConsoleError: false,
-          allowConsoleLog: false,
-          allowConsoleWarn: false,
+          allow: ["info"],
         },
       ],
     },
@@ -251,9 +238,7 @@ export default [
     "nima/restrict-console-methods": [
       "error",
       {
-        "allowConsoleError": false,
-        "allowConsoleLog": false,
-        "allowConsoleWarn": false
+        "allow": ["info"]
       }
     ]
   }
@@ -271,9 +256,7 @@ For development environments where some console usage might be acceptable:
     "nima/restrict-console-methods": [
       "warn",
       {
-        "allowConsoleError": true,
-        "allowConsoleLog": true,
-        "allowConsoleWarn": true
+        "allow": ["error", "warn", "info", "log"]
       }
     ]
   }
@@ -287,3 +270,9 @@ For development environments where some console usage might be acceptable:
 Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---
+
+## Further Reading
+
+- [Console API](https://developer.mozilla.org/en-US/docs/Web/API/Console)
+- [ESLint no-console Rule](https://eslint.org/docs/latest/rules/no-console)
+- [Logging Best Practices](https://betterstack.com/community/guides/logging/javascript-logging-best-practices/)

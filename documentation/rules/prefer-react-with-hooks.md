@@ -7,20 +7,27 @@ This provides consistent namespacing, clearer hook identification, and better co
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Direct hook imports](#direct-hook-imports)
-  - [Mixed import patterns](#mixed-import-patterns)
-  - [Hook usage without imports](#hook-usage-without-imports)
-  - [Complex import scenarios](#complex-import-scenarios)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`prefer-react-with-hooks`](#prefer-react-with-hooks)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Direct hook imports](#direct-hook-imports)
+    - [Mixed import patterns](#mixed-import-patterns)
+    - [Hook usage without imports](#hook-usage-without-imports)
+    - [Complex import scenarios](#complex-import-scenarios)
+      - [Multiple hooks with existing React import](#multiple-hooks-with-existing-react-import)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -407,3 +414,9 @@ export default [
 Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---
+
+## Further Reading
+
+- [React Hooks](https://react.dev/reference/react/hooks)
+- [Importing and Exporting Components](https://react.dev/learn/importing-and-exporting-components)
+- [ES6 Import/Export Syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)

@@ -7,20 +7,26 @@ Consistent prefixes improve readability and make function intent more explicit.
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Function declarations](#function-declarations)
-  - [Arrow functions](#arrow-functions)
-  - [Function expressions](#function-expressions)
-  - [Auto-fix behavior](#auto-fix-behavior)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`no-handler-suffix`](#no-handler-suffix)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Function declarations](#function-declarations)
+    - [Arrow functions](#arrow-functions)
+    - [Function expressions](#function-expressions)
+    - [Auto-fix behavior](#auto-fix-behavior)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -285,3 +291,9 @@ export default [
 Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---
+
+## Further Reading
+
+- [Event Handler Naming Conventions](https://react.dev/learn/responding-to-events#naming-event-handler-props)
+- [JavaScript Naming Conventions](https://developer.mozilla.org/en-US/docs/MDN/Writing_guidelines/Writing_style_guide/Code_style_guide/JavaScript#naming_conventions)
+- [Clean Code: Function Names](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)

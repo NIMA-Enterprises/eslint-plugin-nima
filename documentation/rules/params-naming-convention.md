@@ -7,24 +7,33 @@ This improves function readability, maintainability, and makes parameter passing
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [Default options](#default-options)
-  - [Option details](#option-details)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Custom allowed parameters](#custom-allowed-parameters)
-  - [Ignoring specific parameter names](#ignoring-specific-parameter-names)
-  - [Ignoring specific functions](#ignoring-specific-functions)
-  - [Using ignore prefixes](#using-ignore-prefixes)
-  - [Object destructuring parameters](#object-destructuring-parameters)
-  - [Index parameter exception](#index-parameter-exception)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`params-naming-convention`](#params-naming-convention)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allowedParameters](#allowedparameters)
+      - [ignore](#ignore)
+      - [ignoreFunctions](#ignorefunctions)
+      - [ignorePrefixes](#ignoreprefixes)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Custom allowed parameters](#custom-allowed-parameters)
+    - [Ignoring specific parameter names](#ignoring-specific-parameter-names)
+    - [Ignoring specific functions](#ignoring-specific-functions)
+    - [Using ignore prefixes](#using-ignore-prefixes)
+    - [Object destructuring parameters](#object-destructuring-parameters)
+    - [Index parameter exception](#index-parameter-exception)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -399,3 +408,9 @@ export default [
 Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---
+
+## Further Reading
+
+- [JavaScript Function Parameters](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions#parameters)
+- [Object Destructuring in JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#object_destructuring)
+- [Clean Code: Function Arguments](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)
