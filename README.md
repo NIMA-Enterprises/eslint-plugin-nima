@@ -12,12 +12,13 @@ It includes opinionated rules for naming, React, parameters, and restrictions on
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Recommended setup](#recommended-setup)
   - [Custom setup](#custom-setup)
 - [Rules](#rules)
-- [Contributing](#contributing)
+- [Configurations](#configurations)
 - [License](#license)
 
 ---
@@ -108,16 +109,18 @@ Before diving deep into what each rule does, I recommend reading the [Rule Overv
 
 The plugin currently provides these rules:
 
+- [boolean-naming-convention](documentation/rules/boolean-naming-convention.md)
 - [no-handler-suffix](documentation/rules/no-handler-suffix.md)
-- [restrict-console-methods](documentation/rules/restrict-console-methods.md)
-- [prefer-export-under-component](documentation/rules/prefer-export-under-component.md)
-- [prefer-react-fc](documentation/rules/prefer-react-fc.md)
-- [prefer-arrow-functions](documentation/rules/prefer-arrow-functions.md)
-- [prefer-react-with-hooks](documentation/rules/prefer-react-with-hooks.md)
-- [restrict-function-usage](documentation/rules/restrict-function-usage.md)
 - [no-objects-in-deps](documentation/rules/no-objects-in-deps.md)
 - [params-naming-convention](documentation/rules/params-naming-convention.md)
-- [boolean-naming-convention](documentation/rules/boolean-naming-convention.md)
+- [prefer-arrow-functions](documentation/rules/prefer-arrow-functions.md)
+- [prefer-body-destructuring](documentation/rules/prefer-body-destructuring.md)
+- [prefer-export-under-component](documentation/rules/prefer-export-under-component.md)
+- [prefer-react-fc](documentation/rules/prefer-react-fc.md)
+- [prefer-react-with-hooks](documentation/rules/prefer-react-with-hooks.md)
+- [restrict-console-methods](documentation/rules/restrict-console-methods.md)
+- [restrict-function-usage](documentation/rules/restrict-function-usage.md)
+- [restrict-imports](documentation/rules/restrict-imports.md)
 
 See the full [Rules overview](documentation/rules/index.md).
 

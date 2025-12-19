@@ -24,7 +24,7 @@
     "lint:fix": "eslint . --fix",
     "prepare": "husky",
     "test": "jest",
-    "validate": "eslint . --fix && tsc --noEmit"
+    "validate": "eslint . --fix && tsc --noEmit && echo 'You are a great developer!'"
   },
   "dependencies": {
     "@typescript-eslint/utils": "^8.40.0",
