@@ -20,8 +20,9 @@ This improves code readability, debugging experience, and component organization
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
+- [Quick configuration snippets](#quick-configuration-snippets)
 - [Version](#version)
+- [Further Reading](#further-reading)
 
 ---
 
@@ -47,15 +48,10 @@ When a React component is exported inline, the rule reports an error and provide
 
 ## Options (all configurations)
 
-This rule currently has no configurable options, though the type signature suggests future extensibility.
+This rule has no configurable options.
 
 ```ts
-type Options = [
-  Partial<{
-    allowGenerators: boolean;
-    allowMethodDefinitions: boolean;
-  }>
-];
+type Options = [Partial<{}>];
 ```
 
 ### Default options
@@ -63,8 +59,6 @@ type Options = [
 ```json
 {}
 ```
-
-**Note:** The `allowGenerators` and `allowMethodDefinitions` options are defined in the type but not currently implemented in the rule logic.
 
 ---
 
@@ -429,3 +423,9 @@ export default [
 Introduced in `eslint-plugin-nima@1.0.0`.
 
 ---
+
+## Further Reading
+
+- [React Component Exports](https://react.dev/learn/importing-and-exporting-components)
+- [JavaScript Export Declarations](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export)
+- [ES6 Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)

@@ -7,23 +7,34 @@ Consistent prefixes improve readability and make boolean intent explicit.
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [Default options](#default-options)
-  - [Option details](#option-details)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Custom prefixes](#custom-prefixes)
-  - [Disabling specific checks](#disabling-specific-checks)
-  - [Destructured params & typed object patterns](#destructured-params--typed-object-patterns)
-  - [Function-valued properties and variable initializers](#function-valued-properties-and-variable-initializers)
-  - [Destructured variable declarators (typed)](#destructured-variable-declarators-typed)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`boolean-naming-convention`](#boolean-naming-convention)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allowedPrefixes](#allowedprefixes)
+      - [checkFunctions](#checkfunctions)
+      - [checkParameters](#checkparameters)
+      - [checkProperties](#checkproperties)
+      - [checkVariables](#checkvariables)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Custom prefixes](#custom-prefixes)
+    - [Disabling specific checks](#disabling-specific-checks)
+      - [Example](#example)
+    - [Destructured params \& typed object patterns](#destructured-params--typed-object-patterns)
+    - [Function-valued properties and variable initializers](#function-valued-properties-and-variable-initializers)
+    - [Destructured variable declarators (typed)](#destructured-variable-declarators-typed)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -373,3 +384,9 @@ export default [
 Introduced in `eslint-plugin-nima@1.0.0`.
 
 ---
+
+## Further Reading
+
+- [TypeScript Type Annotations](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html)
+- [Naming Conventions in JavaScript](https://google.github.io/styleguide/jsguide.html#naming)
+- [Clean Code: Meaningful Names](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)

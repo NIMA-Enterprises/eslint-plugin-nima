@@ -28,6 +28,9 @@ Each rule has three levels of explanation:
 - **restrict-function-usage**  
   Lets you configure which functions can be used in specific files or folders.
 
+- **restrict-imports**  
+  Disallows specific imports in specified files or folders with allow-list and deny-list support.
+
 - **no-objects-in-deps**  
   Prevents objects in dependency arrays.
 
@@ -38,6 +41,9 @@ Each rule has three levels of explanation:
 
 - **prefer-arrow-functions**  
   Enforces the use of arrow functions instead of other function forms.
+
+- **prefer-body-destructuring**  
+  Enforces destructuring function parameters inside the function body with `| void` union type.
 
 - **prefer-export-under-components**  
   Requires components to be exported below their declaration.
@@ -171,6 +177,29 @@ By default, this rule does nothing. See the dedicated [restrict-function-usage d
 
 ---
 
+#### restrict-imports
+
+This rule disallows specific imports in specified files or folders, with support for allow-lists and deny-lists.
+
+**Configuration options (per entry):**
+
+1. **allowImports** - imports allowed in specified files or folders.
+1. **disableImports** - imports disabled in specified files or folders.
+1. **files** - target files for the configuration.
+1. **folders** - target folders for the configuration.
+
+By default, this rule does nothing. See the dedicated [restrict-imports documentation](./rules/restrict-imports.md) for full details.
+
+**Examples:**
+
+```js
+// With config: disableImports: ['Route'], folders: ['**/components/**']
+import { Route } from "react-router";
+// NIMA: Import 'Route' is not allowed in this file.
+```
+
+---
+
 #### no-objects-in-deps
 
 This rule prevents placing objects in dependency arrays to avoid unpredictable side effects.
@@ -243,6 +272,30 @@ const NIMA = {
 
 ---
 
+#### prefer-body-destructuring
+
+This rule enforces destructuring function parameters inside the function body instead of in the parameter list, with `| void` union type.
+
+**Configuration options:**
+
+1. **functionTypes** - default: "all". Can be "all", "arrow-only", or "function-only".
+
+See the dedicated [prefer-body-destructuring documentation](./rules/prefer-body-destructuring.md) for full details.
+
+**Examples:**
+
+```js
+const fn = ({ a, b }: { a?: number, b?: string }) => {};
+// NIMA: Destructure parameters in the function body with '| void' union type
+
+// Correct:
+const fn = (props: { a?: number, b?: string } | void) => {
+  const { a, b } = props ?? {};
+};
+```
+
+---
+
 #### prefer-export-under-components
 
 This rule enforces exporting components under their declaration, disallowing inline `export`.
@@ -310,13 +363,15 @@ All rules have their own dedicated page with detailed configuration, usage, and 
 
 ### Rule documentation pages
 
-- [boolean-naming-convention](./rules/boolean-naming-convention.md)
-- [params-naming-convention](./rules/params-naming-convention.md)
-- [restrict-console-methods](./rules/restrict-console-methods.md)
-- [restrict-function-usage](./rules/restrict-function-usage.md)
-- [no-objects-in-deps](./rules/no-objects-in-deps.md)
-- [no-handler-suffix](./rules/no-handler-suffix.md)
-- [prefer-export-under-components](./rules/prefer-export-under-components.md)
-- [prefer-arrow-functions](./rules/prefer-arrow-functions.md)
-- [prefer-react-fc](./rules/prefer-react-fc.md)
-- [prefer-react-with-hooks](./rules/prefer-react-with-hooks.md)
+- [boolean-naming-convention](./boolean-naming-convention.md)
+- [no-handler-suffix](./no-handler-suffix.md)
+- [no-objects-in-deps](./no-objects-in-deps.md)
+- [params-naming-convention](./params-naming-convention.md)
+- [prefer-arrow-functions](./prefer-arrow-functions.md)
+- [prefer-body-destructuring](./prefer-body-destructuring.md)
+- [prefer-export-under-component](./prefer-export-under-component.md)
+- [prefer-react-fc](./prefer-react-fc.md)
+- [prefer-react-with-hooks](./prefer-react-with-hooks.md)
+- [restrict-console-methods](./restrict-console-methods.md)
+- [restrict-function-usage](./restrict-function-usage.md)
+- [restrict-imports](./restrict-imports.md)

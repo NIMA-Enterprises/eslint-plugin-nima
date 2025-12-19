@@ -7,23 +7,30 @@ This ensures consistent typing, better IntelliSense support, and explicit compon
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [Default options](#default-options)
-  - [Option details](#option-details)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Arrow function components](#arrow-function-components)
-  - [Function declaration components](#function-declaration-components)
-  - [Custom component types](#custom-component-types)
-  - [Complex JSX returns](#complex-jsx-returns)
-  - [Non-component functions](#non-component-functions)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`prefer-react-fc`](#prefer-react-fc)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allowArrowFunctions](#allowarrowfunctions)
+      - [allowFunctionDeclarations](#allowfunctiondeclarations)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Arrow function components](#arrow-function-components)
+    - [Function declaration components](#function-declaration-components)
+    - [Custom component types](#custom-component-types)
+    - [Complex JSX returns](#complex-jsx-returns)
+    - [Non-component functions](#non-component-functions)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -445,3 +452,9 @@ export default [
 Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---
+
+## Further Reading
+
+- [React Function Components](https://react.dev/learn/your-first-component#defining-a-component)
+- [TypeScript React.FC](https://react-typescript-cheatsheet.netlify.app/docs/basic/getting-started/function_components/)
+- [TypeScript with React](https://www.typescriptlang.org/docs/handbook/react.html)

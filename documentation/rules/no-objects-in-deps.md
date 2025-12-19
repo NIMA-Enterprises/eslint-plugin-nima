@@ -7,22 +7,27 @@ Direct object references in dependency arrays cause unnecessary re-renders becau
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [Default options](#default-options)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Object expressions](#object-expressions)
-  - [Array expressions](#array-expressions)
-  - [New expressions](#new-expressions)
-  - [Variable references](#variable-references)
-  - [Recommended solutions](#recommended-solutions)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`no-objects-in-deps`](#no-objects-in-deps)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Object expressions](#object-expressions)
+    - [Array expressions](#array-expressions)
+    - [New expressions](#new-expressions)
+    - [Variable references](#variable-references)
+    - [Recommended solutions](#recommended-solutions)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -340,3 +345,9 @@ export default [
 Introduced in `eslint-plugin-nima@0.0.1`.
 
 ---
+
+## Further Reading
+
+- [React Hooks Rules](https://react.dev/reference/react/hooks#rules-of-hooks)
+- [useEffect Dependencies](https://react.dev/reference/react/useEffect#specifying-reactive-dependencies)
+- [JavaScript Object Reference Comparison](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality)

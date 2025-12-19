@@ -7,25 +7,37 @@ This rule provides fine-grained control over import usage across your codebase, 
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [Default options](#default-options)
-  - [Option details](#option-details)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Disabling imports globally](#disabling-imports-globally)
-  - [Disabling imports in specific files](#disabling-imports-in-specific-files)
-  - [Disabling imports in specific folders](#disabling-imports-in-specific-folders)
-  - [Allow-list approach](#allow-list-approach)
-  - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
-  - [Multiple configuration blocks](#multiple-configuration-blocks)
-  - [Restricting imports from specific modules](#restricting-imports-from-specific-modules)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`restrict-imports`](#restrict-imports)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allowImports](#allowimports)
+      - [disableImports](#disableimports)
+      - [files](#files)
+      - [folders](#folders)
+      - [from](#from)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Disabling imports globally](#disabling-imports-globally)
+    - [Disabling imports in specific files](#disabling-imports-in-specific-files)
+    - [Disabling imports in specific folders](#disabling-imports-in-specific-folders)
+    - [Allow-list approach](#allow-list-approach)
+    - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
+    - [Multiple configuration blocks](#multiple-configuration-blocks)
+    - [Restricting imports from specific modules](#restricting-imports-from-specific-modules)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Minimal (disable a single import)](#minimal-disable-a-single-import)
+    - [File-scoped restriction](#file-scoped-restriction)
+    - [Folder-scoped restriction](#folder-scoped-restriction)
+    - [Module-scoped restriction (using `from`)](#module-scoped-restriction-using-from)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -467,3 +479,9 @@ Do not import Route inside src/components/Button.tsx.
 Introduced in `eslint-plugin-nima@1.2.2`.
 
 ---
+
+## Further Reading
+
+- [ESLint no-restricted-imports](https://eslint.org/docs/latest/rules/no-restricted-imports)
+- [JavaScript Import Statements](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import)
+- [Minimatch Pattern Matching](https://github.com/isaacs/minimatch)

@@ -7,24 +7,36 @@ This rule provides fine-grained control over function usage across your codebase
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-  - [Default options](#default-options)
-  - [Option details](#option-details)
-- [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Disabling functions globally](#disabling-functions-globally)
-  - [Disabling functions in specific files](#disabling-functions-in-specific-files)
-  - [Disabling functions in specific folders](#disabling-functions-in-specific-folders)
-  - [Allow-list approach](#allow-list-approach)
-  - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
-  - [Multiple configuration blocks](#multiple-configuration-blocks)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Configuration](#quick-configuration-snippets)
-- [Version](#version)
+- [`restrict-function-usage`](#restrict-function-usage)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allowFunctions](#allowfunctions)
+      - [disableFunctions](#disablefunctions)
+      - [files](#files)
+      - [folders](#folders)
+    - [Configuration Logic](#configuration-logic)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Disabling functions globally](#disabling-functions-globally)
+    - [Disabling functions in specific files](#disabling-functions-in-specific-files)
+    - [Disabling functions in specific folders](#disabling-functions-in-specific-folders)
+    - [Allow-list approach](#allow-list-approach)
+    - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
+    - [Multiple configuration blocks](#multiple-configuration-blocks)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+    - [Configuration Processing Logic](#configuration-processing-logic)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+    - [Security-focused configuration](#security-focused-configuration)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -493,3 +505,9 @@ export default [
 Introduced in `eslint-plugin-nima@1.0.0`.
 
 ---
+
+## Further Reading
+
+- [ESLint Custom Rules](https://eslint.org/docs/latest/extend/custom-rules)
+- [Minimatch Pattern Matching](https://github.com/isaacs/minimatch)
+- [Architectural Decision Records](https://adr.github.io/)
