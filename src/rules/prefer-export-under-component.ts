@@ -109,7 +109,7 @@ export const rule = createRule<Options, Messages>({
       },
     };
   },
-  defaultOptions: [{}],
+  defaultOptions: [],
 
   meta: {
     docs: {
