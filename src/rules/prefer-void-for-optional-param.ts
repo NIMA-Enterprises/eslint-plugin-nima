@@ -11,7 +11,9 @@ import { createRule } from "@utility/core";
 
 export const name = "prefer-void-for-optional-param";
 
-function areAllPropertiesOptional(typeAnnotation: TSESTree.TypeNode): boolean {
+const areAllPropertiesOptional = (
+  typeAnnotation: TSESTree.TypeNode
+): boolean => {
   if (typeAnnotation.type !== AST_NODE_TYPES.TSTypeLiteral) {
     return false;
   }
@@ -28,35 +30,38 @@ function areAllPropertiesOptional(typeAnnotation: TSESTree.TypeNode): boolean {
     (member) =>
       member.type === AST_NODE_TYPES.TSPropertySignature && member.optional
   );
-}
+};
 
-function buildTypeWithVoid(
-  hasVoid: boolean,
-  typeAnnotation: TSESTree.TypeNode,
-  typeText: string
-): string {
+const buildTypeWithVoid = ({
+  hasVoid,
+  typeAnnotation,
+  typeText,
+}: {
+  hasVoid: boolean;
+  typeAnnotation: TSESTree.TypeNode;
+  typeText: string;
+}) => {
   let cleanTypeText = typeText.replace(/^:\s*/, "");
 
   if (!hasVoid) {
-    const needsParentheses =
+    const isNeedsParentheses =
       typeAnnotation.type !== AST_NODE_TYPES.TSTypeLiteral &&
       typeAnnotation.type !== AST_NODE_TYPES.TSTypeReference &&
       typeAnnotation.type !== AST_NODE_TYPES.TSUnionType;
 
-    if (needsParentheses) {
-      cleanTypeText = `(${cleanTypeText}) | void`;
-    } else {
-      cleanTypeText = `${cleanTypeText} | void`;
-    }
+    cleanTypeText = isNeedsParentheses ? `(${cleanTypeText}) | void` : `${cleanTypeText} | void`;
   }
 
   return cleanTypeText;
-}
+};
 
-function extractProperties(
-  param: TSESTree.ObjectPattern,
-  sourceCode: TSESLint.SourceCode
-): string[] {
+const extractProperties = ({
+  param,
+  sourceCode,
+}: {
+  param: TSESTree.ObjectPattern;
+  sourceCode: TSESLint.SourceCode;
+}) => {
   const properties: string[] = [];
 
   for (const prop of param.properties) {
@@ -81,13 +86,13 @@ function extractProperties(
   }
 
   return properties;
-}
+};
 
-function hasVoidOrUndefinedInUnion(typeAnnotation: TSESTree.TypeNode): {
-  baseType: TSESTree.TypeNode;
-  hasUndefined: boolean;
-  hasVoid: boolean;
-} {
+const hasVoidOrUndefinedInUnion = ({
+  typeAnnotation,
+}: {
+  typeAnnotation: TSESTree.TypeNode;
+}) => {
   let hasVoid = false;
   let hasUndefined = false;
   let baseType = typeAnnotation;
@@ -111,10 +116,10 @@ function hasVoidOrUndefinedInUnion(typeAnnotation: TSESTree.TypeNode): {
   }
 
   return { baseType, hasUndefined, hasVoid };
-}
+};
 
 export const rule = createRule<Options, Messages>({
-  create(context) {
+  create: (context) => {
     const sourceCode = context.sourceCode;
 
     const checkFunction = (
@@ -124,7 +129,7 @@ export const rule = createRule<Options, Messages>({
         | TSESTree.FunctionExpression
     ) => {
       const paramsToFix: Array<{
-        allPropsOptional: boolean;
+        areAllPropsOptional: boolean;
         hasParamDefault: boolean;
         hasVoidOrUndefined: boolean;
         originalParam: TSESTree.Parameter;
@@ -157,25 +162,26 @@ export const rule = createRule<Options, Messages>({
         }
 
         const typeAnnotation = param.typeAnnotation.typeAnnotation;
-        const { baseType, hasUndefined, hasVoid } =
-          hasVoidOrUndefinedInUnion(typeAnnotation);
+        const { baseType, hasUndefined, hasVoid } = hasVoidOrUndefinedInUnion({
+          typeAnnotation,
+        });
 
         const hasVoidOrUndefined = hasVoid || hasUndefined;
-        const allPropsOptional = areAllPropertiesOptional(baseType);
+        const areAllPropsOptional = areAllPropertiesOptional(baseType);
 
-        if (!hasVoidOrUndefined && !allPropsOptional && !hasParamDefault) {
+        if (!hasVoidOrUndefined && !areAllPropsOptional && !hasParamDefault) {
           continue;
         }
 
         const originalParam = node.params[paramIndex];
         const typeText = sourceCode.getText(param.typeAnnotation);
-        const properties = extractProperties(param, sourceCode);
+        const properties = extractProperties({ param, sourceCode });
 
         const paramName =
           paramsToFix.length === 0 ? "props" : `props${paramsToFix.length + 1}`;
 
         paramsToFix.push({
-          allPropsOptional,
+          areAllPropsOptional,
           hasParamDefault,
           hasVoidOrUndefined,
           originalParam,
@@ -193,7 +199,7 @@ export const rule = createRule<Options, Messages>({
         const { hasVoidOrUndefined, param } = paramData;
 
         context.report({
-          fix(fixer) {
+          fix: (fixer) => {
             const allDestructuringStatements = paramsToFix
               .map((p) => {
                 const props = p.properties.join(", ");
@@ -204,14 +210,16 @@ export const rule = createRule<Options, Messages>({
             const fixes: ReturnType<typeof fixer.replaceText>[] = [];
 
             for (const fixData of paramsToFix) {
-              const { hasVoid: pHasVoid } = hasVoidOrUndefinedInUnion(
-                fixData.typeAnnotation
-              );
-              const pCleanTypeText = buildTypeWithVoid(
-                pHasVoid,
-                fixData.typeAnnotation,
-                fixData.typeText
-              );
+              const { hasVoid: isPHasVoid } = hasVoidOrUndefinedInUnion({
+                typeAnnotation: fixData.typeAnnotation,
+              });
+
+              const pCleanTypeText = buildTypeWithVoid({
+                hasVoid: isPHasVoid,
+                typeAnnotation: fixData.typeAnnotation,
+                typeText: fixData.typeText,
+              });
+
               let pNewParam = `${fixData.paramName}: ${pCleanTypeText}`;
               if (
                 fixData.hasParamDefault &&

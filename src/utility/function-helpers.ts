@@ -15,11 +15,9 @@ export const getFunctionName = (node: TSESTree.FunctionLike) => {
       if (node.parent.left.type === AST_NODE_TYPES.Identifier) {
         return node.parent.left.name;
       }
-      if (node.parent.left.type === AST_NODE_TYPES.MemberExpression) {
-        if (node.parent.left.property.type === AST_NODE_TYPES.Identifier) {
+      if (node.parent.left.type === AST_NODE_TYPES.MemberExpression && node.parent.left.property.type === AST_NODE_TYPES.Identifier) {
           return node.parent.left.property.name;
         }
-      }
       break;
 
     case AST_NODE_TYPES.CallExpression:
@@ -44,7 +42,7 @@ export const getFunctionName = (node: TSESTree.FunctionLike) => {
       ) {
         const prefix = node.parent.static ? "static " : "";
         const kind =
-          node.parent.kind !== "method" ? `${node.parent.kind} ` : "";
+          node.parent.kind === "method" ? "" : `${node.parent.kind} `;
         return `${prefix}${kind}${node.parent.key.name}`;
       }
       break;
@@ -111,9 +109,9 @@ export const isComponentFunction = (fnName: string) => {
   return !!/^[A-Z]/.test(fnName);
 };
 
-export function hasReactTypeAnnotation(
+export const hasReactTypeAnnotation = (
   declarator: TSESTree.VariableDeclarator
-): boolean {
+): boolean => {
   if (
     declarator.id.type === AST_NODE_TYPES.Identifier &&
     declarator.id.typeAnnotation
@@ -142,9 +140,9 @@ export function hasReactTypeAnnotation(
   }
 
   return false;
-}
+};
 
-export function isReactReturn(node: TSESTree.FunctionLike): boolean {
+export const isReactReturn = (node: TSESTree.FunctionLike): boolean => {
   if (node.returnType?.typeAnnotation.type === AST_NODE_TYPES.TSTypeReference) {
     const typeName = node.returnType.typeAnnotation.typeName;
     if (
@@ -173,4 +171,4 @@ export function isReactReturn(node: TSESTree.FunctionLike): boolean {
   }
 
   return false;
-}
+};

@@ -12,5 +12,8 @@ export type Options = [
     checkParameters: boolean;
     checkProperties: boolean;
     checkVariables: boolean;
+    // ignore: a regex string to match identifier names that should be ignored
+    // Example: "filter" will match any identifier containing 'filter' (case-insensitive if used that way in rule)
+    ignore: string;
   }>
 ];

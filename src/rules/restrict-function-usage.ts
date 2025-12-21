@@ -1,46 +1,21 @@
 import { Messages, Options } from "@models/restrict-function-usage.model";
-import { TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
 import { createRule } from "@utility/core";
-import { minimatch } from "minimatch";
-import path from "path";
+import { isFileMatched } from "@utility/file-helpers";
 
 export const name = "restrict-function-usage";
 
 export const rule = createRule<Options, Messages>({
-  create(context, [options = []]) {
-    function isFileMatched(
-      filename: string,
-      folders: string[],
-      files: string[]
-    ) {
-      const dir = path.dirname(filename);
-      const base = path.basename(filename);
+  create: (context, [options = []]) => {
+    // use shared isFileMatched helper from utilities
 
-      const hasFolders = folders.length > 0;
-      const hasFiles = files.length > 0;
-
-      if (!hasFolders && !hasFiles) {
-        return false;
-      }
-
-      if (hasFolders && hasFiles) {
-        const folderMatch = folders.some((f) => minimatch(dir, f));
-        const fileMatch = files.some((f) => minimatch(base, f));
-        return folderMatch && fileMatch;
-      }
-
-      if (hasFolders && !hasFiles) {
-        return folders.some((f) => minimatch(dir, f));
-      }
-
-      if (!hasFolders && hasFiles) {
-        return files.some((f) => minimatch(base, f));
-      }
-
-      return false;
-    }
-
-    function isFunctionDisabled(fnName: string, filename: string) {
+    const isFunctionDisabled = ({
+      filename,
+      fnName,
+    }: {
+      filename: string;
+      fnName: string;
+    }) => {
       return options.some((option) => {
         const {
           allowFunctions = [],
@@ -49,29 +24,26 @@ export const rule = createRule<Options, Messages>({
           folders = [],
         } = option;
 
-        let appliesToFile = false;
-        if (files.length === 0 && folders.length === 0) {
-          appliesToFile = true;
-        } else {
-          appliesToFile = isFileMatched(filename, folders, files);
-        }
+        let isAppliesToFile = false;
+        isAppliesToFile =
+          files.length === 0 && folders.length === 0
+            ? true
+            : isFileMatched({ filename, files, folders });
 
         if (allowFunctions.length > 0) {
-          const functionIsInAllowList = allowFunctions.some(
+          const isFunctionInAllowList = allowFunctions.some(
             (fn) => fn.toLowerCase() === fnName.toLowerCase()
           );
 
-          if (functionIsInAllowList) {
-            if (files.length === 0 && folders.length === 0) {
-              return false;
-            } else {
-              return !appliesToFile;
-            }
+          if (isFunctionInAllowList) {
+            return files.length === 0 && folders.length === 0
+              ? false
+              : !isAppliesToFile;
           }
           return false;
         }
 
-        if (!appliesToFile) {
+        if (!isAppliesToFile) {
           return false;
         }
 
@@ -85,15 +57,17 @@ export const rule = createRule<Options, Messages>({
 
         return false;
       });
-    }
+    };
 
     return {
-      CallExpression(node: TSESTree.CallExpression) {
+      CallExpression: (node: TSESTree.CallExpression) => {
         const callee = node.callee;
         const filename = context.filename;
 
-        if (callee.type === "Identifier") {
-          if (isFunctionDisabled(callee.name.toLowerCase(), filename)) {
+        if (callee.type === AST_NODE_TYPES.Identifier) {
+          if (
+            isFunctionDisabled({ filename, fnName: callee.name.toLowerCase() })
+          ) {
             context.report({
               data: { filename, fnName: callee.name },
               messageId: Messages.FUNCTION_DISALLOWED,
@@ -101,24 +75,25 @@ export const rule = createRule<Options, Messages>({
             });
           }
         } else if (
-          callee.type === "MemberExpression" &&
-          callee.property.type === "Identifier"
+          callee.type === AST_NODE_TYPES.MemberExpression &&
+          callee.property.type === AST_NODE_TYPES.Identifier &&
+          isFunctionDisabled({
+            filename,
+            fnName: callee.property.name.toLowerCase(),
+          })
         ) {
-          if (
-            isFunctionDisabled(callee.property.name.toLowerCase(), filename)
-          ) {
-            context.report({
-              data: { filename, fnName: callee.property.name },
-              messageId: Messages.FUNCTION_DISALLOWED,
-              node: callee.property,
-            });
-          }
+          context.report({
+            data: { filename, fnName: callee.property.name },
+            messageId: Messages.FUNCTION_DISALLOWED,
+            node: callee.property,
+          });
         }
       },
     };
   },
   defaultOptions: [[]],
   meta: {
+    defaultOptions: [[]],
     docs: {
       description:
         "Disallow use of any functions in any files or folders unless explicitly allowed.",
@@ -131,13 +106,33 @@ export const rule = createRule<Options, Messages>({
     },
     schema: [
       {
+        description:
+          "List of rule option objects for restricting function usage",
         items: {
           additionalProperties: false,
+          description:
+            "Rule option that configures allow/disable lists and file matching",
           properties: {
-            allowFunctions: { items: { type: "string" }, type: "array" },
-            disableFunctions: { items: { type: "string" }, type: "array" },
-            files: { items: { type: "string" }, type: "array" },
-            folders: { items: { type: "string" }, type: "array" },
+            allowFunctions: {
+              description: "Functions to explicitly allow",
+              items: { type: "string" },
+              type: "array",
+            },
+            disableFunctions: {
+              description: "Functions to disable",
+              items: { type: "string" },
+              type: "array",
+            },
+            files: {
+              description: "Files glob list to apply rule",
+              items: { type: "string" },
+              type: "array",
+            },
+            folders: {
+              description: "Folders glob list to apply rule",
+              items: { type: "string" },
+              type: "array",
+            },
           },
           type: "object",
         },

@@ -15,6 +15,7 @@ Consistent prefixes improve readability and make boolean intent explicit.
     - [Default options](#default-options)
     - [Option details](#option-details)
       - [allowedPrefixes](#allowedprefixes)
+      - [ignore](#ignore)
       - [checkFunctions](#checkfunctions)
       - [checkParameters](#checkparameters)
       - [checkProperties](#checkproperties)
@@ -69,6 +70,9 @@ type Options = [
     checkParameters: boolean;
     checkProperties: boolean;
     checkVariables: boolean;
+    // ignore: regex string to skip identifiers matching the pattern
+    // Example: "filter" will ignore any identifier containing 'filter'
+    ignore: string;
   }>
 ];
 ```
@@ -77,11 +81,21 @@ type Options = [
 
 ```json
 {
-  "allowedPrefixes": ["is", "has", "can", "should"],
+  "allowedPrefixes": [
+    "is",
+    "has",
+    "can",
+    "should",
+    "will",
+    "are",
+    "were",
+    "was"
+  ],
   "checkFunctions": true,
   "checkParameters": true,
   "checkProperties": true,
-  "checkVariables": true
+  "checkVariables": true,
+  "ignore": "filter"
 }
 ```
 
@@ -90,9 +104,15 @@ type Options = [
 #### allowedPrefixes
 
 - **Type:** `string[]`
-- **Default:** `["is", "has", "can", "should"]`
+- **Default:** `["is", "has", "can", "should", "will", "are", "were", "was"]`
 - **Description:** List of prefixes that are considered valid for boolean identifiers. Matching is case-insensitive.
 - **Example:** `["is","has","should","can","will"]`
+
+#### ignore
+
+- **Type:** `string`
+- **Default:** `"filter"`
+- **Description:** A regex string used to skip reporting identifiers whose names match this pattern (case-insensitive). Useful to avoid flagging known patterns like `somethingFilter` or `useFilter`.
 
 #### checkFunctions
 
@@ -345,7 +365,16 @@ export default [
       "nima/boolean-naming-convention": [
         "error",
         {
-          allowedPrefixes: ["is", "has", "can", "should"],
+          allowedPrefixes: [
+            "is",
+            "has",
+            "can",
+            "should",
+            "will",
+            "are",
+            "were",
+            "was",
+          ],
           checkFunctions: true,
           checkParameters: true,
           checkProperties: true,
@@ -366,7 +395,16 @@ export default [
     "nima/boolean-naming-convention": [
       "error",
       {
-        "allowedPrefixes": ["is", "has", "can", "should"],
+        "allowedPrefixes": [
+          "is",
+          "has",
+          "can",
+          "should",
+          "will",
+          "are",
+          "were",
+          "was"
+        ],
         "checkFunctions": true,
         "checkParameters": true,
         "checkProperties": true,

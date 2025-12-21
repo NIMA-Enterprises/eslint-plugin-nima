@@ -63,7 +63,7 @@ export const rule = createRule<Options, Messages>({
 
                     if (
                       importText.includes("{") &&
-                      !importText.match(/^import\s+\w+\s*,/)
+                      !/^import\s+\w+\s*,/.test(importText)
                     ) {
                       fixes.push(
                         fixer.replaceText(
@@ -126,9 +126,9 @@ export const rule = createRule<Options, Messages>({
                 hook:
                   hookNames.length === 1
                     ? hookNames[0]
-                    : `${hookNames
-                        .slice(0, -1)
-                        .join(", ")} and ${hookNames.slice(-1)}`,
+                    : `${hookNames.slice(0, -1).join(", ")} and ${
+                        hookNames.at(-1) ?? ""
+                      }`,
               },
               fix: (fixer) => {
                 const sourceCode = context.sourceCode;
@@ -136,13 +136,15 @@ export const rule = createRule<Options, Messages>({
 
                 const allCallExpressions: TSESTree.CallExpression[] = [];
 
-                function traverse(
+                const traverse = (
                   node: null | TSESTree.Node | TSESTree.Node[] | undefined
-                ): void {
+                ): void => {
                   if (!node) return;
 
                   if (Array.isArray(node)) {
-                    node.forEach(traverse);
+                    for (const item of node) {
+                      traverse(item);
+                    }
                     return;
                   }
 
@@ -153,12 +155,12 @@ export const rule = createRule<Options, Messages>({
                   for (const key of Object.keys(node)) {
                     if (key === "parent" || key === "range" || key === "loc")
                       continue;
-                    const value = (node as any)[key];
+                    const value = node[key as keyof TSESTree.Node];
                     if (value && typeof value === "object") {
-                      traverse(value);
+                      traverse(value as TSESTree.Node | TSESTree.Node[]);
                     }
                   }
-                }
+                };
 
                 traverse(program);
 

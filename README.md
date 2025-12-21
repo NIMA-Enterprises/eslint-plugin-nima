@@ -114,7 +114,7 @@ The plugin currently provides these rules:
 - [no-objects-in-deps](documentation/rules/no-objects-in-deps.md)
 - [params-naming-convention](documentation/rules/params-naming-convention.md)
 - [prefer-arrow-functions](documentation/rules/prefer-arrow-functions.md)
-- [prefer-body-destructuring](documentation/rules/prefer-body-destructuring.md)
+- [prefer-void-for-optional-param](documentation/rules/prefer-void-for-optional-param.md)
 - [prefer-export-under-component](documentation/rules/prefer-export-under-component.md)
 - [prefer-react-fc](documentation/rules/prefer-react-fc.md)
 - [prefer-react-with-hooks](documentation/rules/prefer-react-with-hooks.md)

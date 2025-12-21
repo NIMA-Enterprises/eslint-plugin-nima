@@ -180,8 +180,17 @@ export const rule = createRule<Options, Messages>({
       allowMethodDefinitions: false,
     },
   ],
-
   meta: {
+    defaultOptions: [
+      {
+        allowAsync: true,
+        allowConstructors: true,
+        allowFunctionDeclarations: false,
+        allowFunctionExpressions: false,
+        allowGenerators: true,
+        allowMethodDefinitions: false,
+      },
+    ],
     docs: {
       description:
         "Prefer arrow functions over function declarations and expressions",
@@ -202,34 +211,28 @@ export const rule = createRule<Options, Messages>({
         additionalProperties: false,
         properties: {
           allowAsync: {
-            default: true,
             description:
               "Allow async functions (they can still be arrow functions)",
             type: "boolean",
           },
           allowConstructors: {
-            default: true,
             description: "Allow constructor functions",
             type: "boolean",
           },
           allowFunctionDeclarations: {
-            default: false,
             description: "Allow function declarations (function name() {})",
             type: "boolean",
           },
           allowFunctionExpressions: {
-            default: false,
             description:
               "Allow function expressions (const name = function() {})",
             type: "boolean",
           },
           allowGenerators: {
-            default: true,
             description: "Allow generator functions",
             type: "boolean",
           },
           allowMethodDefinitions: {
-            default: false,
             description: "Allow method definitions in classes and objects",
             type: "boolean",
           },

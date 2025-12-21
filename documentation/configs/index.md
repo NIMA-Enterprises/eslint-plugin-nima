@@ -51,7 +51,7 @@ The following rules are available in the plugin but not included in the recommen
 - `nima/no-objects-in-deps` - Prevents objects in dependency arrays
 - `nima/params-naming-convention` - Enforces parameter naming conventions
 - `nima/prefer-arrow-functions` - Prefers arrow function syntax over traditional functions
-- `nima/prefer-body-destructuring` - Enforces destructuring parameters inside function body with `| void` union type
+- `nima/prefer-void-for-optional-param` - Enforces destructuring parameters inside function body with `| void` union type
 - `nima/prefer-react-with-hooks` - Encourages using React hooks patterns
 - `nima/restrict-function-usage` - Allows restricting specific functions in targeted files/folders
 - `nima/restrict-imports` - Allows restricting specific imports in targeted files/folders
