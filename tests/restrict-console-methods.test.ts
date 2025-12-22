@@ -10,13 +10,12 @@
     Valid tests: 8
 */
 
-import { Messages } from "@models/restrict-console-methods.model";
-import * as RestrictConsoleMethods from "@rules/restrict-console-methods";
+import { Messages, rule } from "@rules/restrict-console-methods";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("restrict-console-methods", RestrictConsoleMethods.rule, {
+ruleTester.run("restrict-console-methods", rule, {
   invalid: [
     {
       code: "console.log('hello'); console.warn('warning');",

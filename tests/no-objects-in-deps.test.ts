@@ -9,13 +9,12 @@
     Valid tests: 7
 */
 
-import { Messages } from "@models/no-objects-in-deps.model";
-import * as NoObjectsInDeps from "@rules/no-objects-in-deps";
+import { Messages, rule } from "@rules/no-objects-in-deps";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("no-objects-in-deps", NoObjectsInDeps.rule, {
+ruleTester.run("no-objects-in-deps", rule, {
   invalid: [
     // Object literal in dependency array
     {

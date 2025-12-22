@@ -9,8 +9,7 @@
     Valid tests: 6
 */
 
-import { Messages } from "@models/prefer-react-fc.model";
-import * as PreferReactFc from "@rules/prefer-react-fc";
+import { Messages, rule } from "@rules/prefer-react-fc";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester({
@@ -27,7 +26,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-ruleTester.run("prefer-react-fc", PreferReactFc.rule, {
+ruleTester.run("prefer-react-fc", rule, {
   invalid: [
     // Arrow function component without React.FC
     {

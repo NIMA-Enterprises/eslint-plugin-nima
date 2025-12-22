@@ -9,13 +9,12 @@
     Valid tests: 14
 */
 
-import { Messages } from "@models/params-naming-convention.model";
-import * as ParamsNamingConventions from "@rules/params-naming-convention";
+import { Messages, rule } from "@rules/params-naming-convention";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("params-naming-convention", ParamsNamingConventions.rule, {
+ruleTester.run("params-naming-convention", rule, {
   invalid: [
     // Arrow function with two parameters
     {
@@ -70,50 +69,46 @@ ruleTester.run("params-naming-convention", ParamsNamingConventions.rule, {
 });
 
 // Test custom options
-ruleTester.run(
-  "params-naming-convention with custom options",
-  ParamsNamingConventions.rule,
-  {
-    invalid: [
-      // Custom allowedParameters
-      {
-        code: "const func = (a: string, b: number, c: boolean) => {}",
-        errors: [{ messageId: Messages.USE_OBJECT_PARAMETERS }],
-        options: [{ allowedParameters: 2 }],
-      },
+ruleTester.run("params-naming-convention with custom options", rule, {
+  invalid: [
+    // Custom allowedParameters
+    {
+      code: "const func = (a: string, b: number, c: boolean) => {}",
+      errors: [{ messageId: Messages.USE_OBJECT_PARAMETERS }],
+      options: [{ allowedParameters: 2 }],
+    },
 
-      // Custom ignorePrefixes
-      {
-        code: "const func = (custom: string, another: number) => {}",
-        errors: [{ messageId: Messages.USE_OBJECT_PARAMETERS }],
-        options: [{ allowedParameters: 0, ignorePrefixes: ["_"] }],
-      },
-    ],
+    // Custom ignorePrefixes
+    {
+      code: "const func = (custom: string, another: number) => {}",
+      errors: [{ messageId: Messages.USE_OBJECT_PARAMETERS }],
+      options: [{ allowedParameters: 0, ignorePrefixes: ["_"] }],
+    },
+  ],
 
-    valid: [
-      // Custom allowedParameters
-      {
-        code: "const func = (a: string, b: number, c: boolean) => {}",
-        options: [{ allowedParameters: 3 }],
-      },
+  valid: [
+    // Custom allowedParameters
+    {
+      code: "const func = (a: string, b: number, c: boolean) => {}",
+      options: [{ allowedParameters: 3 }],
+    },
 
-      // Custom ignorePrefixes
-      {
-        code: "const func = (_param1: string, _param2: number) => {}",
-        options: [{ ignorePrefixes: ["_"] }],
-      },
+    // Custom ignorePrefixes
+    {
+      code: "const func = (_param1: string, _param2: number) => {}",
+      options: [{ ignorePrefixes: ["_"] }],
+    },
 
-      // Custom ignore list
-      {
-        code: "const func = (customIgnored: string, another: number) => {}",
-        options: [{ ignore: ["customIgnored", "another"] }],
-      },
+    // Custom ignore list
+    {
+      code: "const func = (customIgnored: string, another: number) => {}",
+      options: [{ ignore: ["customIgnored", "another"] }],
+    },
 
-      // Custom ignoreFunctions - your failing test case
-      {
-        code: "const customReduce = (acc: any, curr: any, idx: number) => {}",
-        options: [{ ignoreFunctions: ["customReduce"] }],
-      },
-    ],
-  }
-);
+    // Custom ignoreFunctions - your failing test case
+    {
+      code: "const customReduce = (acc: any, curr: any, idx: number) => {}",
+      options: [{ ignoreFunctions: ["customReduce"] }],
+    },
+  ],
+});

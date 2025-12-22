@@ -10,13 +10,12 @@
     Valid tests: 4
 */
 
-import { Messages } from "@models/prefer-react-with-hooks.model";
-import * as PreferReactWithHooks from "@rules/prefer-react-with-hooks";
+import { Messages, rule } from "@rules/prefer-react-with-hooks";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("prefer-react-with-hooks", PreferReactWithHooks.rule, {
+ruleTester.run("prefer-react-with-hooks", rule, {
   invalid: [
     // === DIRECT HOOK CALLS WITHOUT REACT IMPORT ===
 

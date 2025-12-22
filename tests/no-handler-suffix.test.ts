@@ -9,13 +9,12 @@
     Valid tests: 8
 */
 
-import { Messages } from "@models/no-handler-suffix.model";
-import * as NoHandlerSuffix from "@rules/no-handler-suffix";
+import { Messages, rule } from "@rules/no-handler-suffix";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
+ruleTester.run("no-handler-suffix", rule, {
   invalid: [
     // Arrow function with 'Handler' suffix
     {
@@ -107,29 +106,25 @@ ruleTester.run("no-handler-suffix", NoHandlerSuffix.rule, {
 });
 
 // Test naming conflicts
-ruleTester.run(
-  "no-handler-suffix with naming conflicts",
-  NoHandlerSuffix.rule,
-  {
-    invalid: [
-      {
-        code: `
+ruleTester.run("no-handler-suffix with naming conflicts", rule, {
+  invalid: [
+    {
+      code: `
         const handleClick = 'existing variable';
         const clickHandler = () => {};
       `,
-        errors: [{ messageId: Messages.BAD_HANDLER_NAME }],
-        output: `
+      errors: [{ messageId: Messages.BAD_HANDLER_NAME }],
+      output: `
         const handleClick = 'existing variable';
         const handleClick2 = () => {};
       `,
-      },
-    ],
+    },
+  ],
 
-    valid: [
-      `
+  valid: [
+    `
       const handleClick = () => {};
       const handleSubmit = () => {};
     `,
-    ],
-  }
-);
+  ],
+});
