@@ -1,23 +1,23 @@
 {
-  "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "target": "esnext",
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "strict": true,
-    "strictNullChecks": false,
-    "declaration": true,
-    "outDir": "dist",
-    "isolatedModules": true,
-    "baseUrl": ".",
-    "resolveJsonModule": true,
-    "paths": {
-      "@/src/*": ["src/*"],
-      "@utility/*": ["src/utility/*"],
-      "@constants/*": ["src/constants/*"],
-      "@rules/*": ["src/rules/*"]
-    }
-  },
-  "exclude": ["node_modules", "dist"]
+    "compilerOptions": {
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "target": "esnext",
+        "esModuleInterop": true,
+        "sourceMap": true,
+        "strict": true,
+        "declaration": true,
+        "outDir": "dist",
+        "isolatedModules": true,
+        "baseUrl": ".",
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "paths": {
+            "@/src/*": ["src/*"],
+            "@utility/*": ["src/utility/*"],
+            "@constants/*": ["src/constants/*"],
+            "@rules/*": ["src/rules/*"]
+        }
+    },
+    "exclude": ["node_modules", "dist"]
 }

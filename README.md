@@ -15,8 +15,8 @@ It includes opinionated rules for naming, React, parameters, and restrictions on
 - [Table of Contents](#table-of-contents)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Recommended setup](#recommended-setup)
-  - [Custom setup](#custom-setup)
+    - [Recommended setup](#recommended-setup)
+    - [Custom setup](#custom-setup)
 - [Rules](#rules)
 - [Configurations](#configurations)
 - [License](#license)
@@ -53,8 +53,8 @@ Add the following to your `eslint.config.js`:
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  pluginNIMA.configs["flat/recommended"],
-  // Any other config...
+    pluginNIMA.configs["flat/recommended"],
+    // Any other config...
 ];
 ```
 
@@ -68,14 +68,14 @@ If you prefer to configure rules manually, load the plugin and specify only the 
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: {
-      nima: pluginNIMA,
+    {
+        plugins: {
+            nima: pluginNIMA,
+        },
+        rules: {
+            "nima/restrict-console-methods": "error",
+        },
     },
-    rules: {
-      "nima/restrict-console-methods": "error",
-    },
-  },
 ];
 ```
 
@@ -85,13 +85,13 @@ You can also extend the recommended config and override specific rules:
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    ...pluginNIMA.configs["flat/recommended"],
-    rules: {
-      ...pluginNIMA.configs["flat/recommended"].rules,
-      "nima/restrict-console-methods": "off",
+    {
+        ...pluginNIMA.configs["flat/recommended"],
+        rules: {
+            ...pluginNIMA.configs["flat/recommended"].rules,
+            "nima/restrict-console-methods": "off",
+        },
     },
-  },
 ];
 ```
 

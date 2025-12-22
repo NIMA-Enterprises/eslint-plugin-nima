@@ -8,25 +8,25 @@ Consistent prefixes improve readability and make function intent more explicit.
 ## Table of contents
 
 - [`no-handler-suffix`](#no-handler-suffix)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-    - [Function declarations](#function-declarations)
-    - [Arrow functions](#arrow-functions)
-    - [Function expressions](#function-expressions)
-    - [Auto-fix behavior](#auto-fix-behavior)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-  - [Version](#version)
-  - [Further Reading](#further-reading)
+    - [Table of contents](#table-of-contents)
+    - [Rule summary](#rule-summary)
+    - [What the rule checks](#what-the-rule-checks)
+    - [Options (all configurations)](#options-all-configurations)
+        - [Default options](#default-options)
+    - [Examples (by option)](#examples-by-option)
+        - [Default behavior](#default-behavior)
+        - [Function declarations](#function-declarations)
+        - [Arrow functions](#arrow-functions)
+        - [Function expressions](#function-expressions)
+        - [Auto-fix behavior](#auto-fix-behavior)
+    - [Messages](#messages)
+    - [Implementation notes \& requirements](#implementation-notes--requirements)
+    - [Limitations \& edge cases](#limitations--edge-cases)
+    - [Quick configuration snippets](#quick-configuration-snippets)
+        - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+        - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+    - [Version](#version)
+    - [Further Reading](#further-reading)
 
 ---
 
@@ -77,15 +77,15 @@ Incorrect:
 
 ```ts
 function clickHandler() {
-  console.log("clicked");
+    console.log("clicked");
 }
 
 const submitHandler = () => {
-  console.log("submitted");
+    console.log("submitted");
 };
 
 const deleteHandler = function () {
-  console.log("deleted");
+    console.log("deleted");
 };
 ```
 
@@ -93,15 +93,15 @@ Correct:
 
 ```ts
 function handleClick() {
-  console.log("clicked");
+    console.log("clicked");
 }
 
 const handleSubmit = () => {
-  console.log("submitted");
+    console.log("submitted");
 };
 
 const handleDelete = function () {
-  console.log("deleted");
+    console.log("deleted");
 };
 ```
 
@@ -111,11 +111,11 @@ Incorrect:
 
 ```ts
 function mouseOverHandler(event) {
-  event.preventDefault();
+    event.preventDefault();
 }
 
 function keyPressHandler() {
-  // handle key press
+    // handle key press
 }
 
 // Usage
@@ -127,11 +127,11 @@ Correct (after auto-fix):
 
 ```ts
 function handleMouseOver(event) {
-  event.preventDefault();
+    event.preventDefault();
 }
 
 function handleKeyPress() {
-  // handle key press
+    // handle key press
 }
 
 // Usage (automatically updated)
@@ -145,11 +145,11 @@ Incorrect:
 
 ```ts
 const changeHandler = (value) => {
-  setState(value);
+    setState(value);
 };
 
 const errorHandler = (error) => {
-  console.error(error);
+    console.error(error);
 };
 ```
 
@@ -157,11 +157,11 @@ Correct (after auto-fix):
 
 ```ts
 const handleChange = (value) => {
-  setState(value);
+    setState(value);
 };
 
 const handleError = (error) => {
-  console.error(error);
+    console.error(error);
 };
 ```
 
@@ -171,11 +171,11 @@ Incorrect:
 
 ```ts
 const clickHandler = function clickHandler() {
-  // handle click
+    // handle click
 };
 
 const submitHandler = function () {
-  // anonymous function expression
+    // anonymous function expression
 };
 ```
 
@@ -183,11 +183,11 @@ Correct (after auto-fix):
 
 ```ts
 const handleClick = function handleClick() {
-  // handle click
+    // handle click
 };
 
 const handleSubmit = function () {
-  // anonymous function expression
+    // anonymous function expression
 };
 ```
 
@@ -199,11 +199,11 @@ Incorrect:
 
 ```ts
 function handleClick() {
-  // existing function
+    // existing function
 }
 
 function clickHandler() {
-  // conflicting name after transformation
+    // conflicting name after transformation
 }
 ```
 
@@ -211,11 +211,11 @@ Correct (after auto-fix):
 
 ```ts
 function handleClick() {
-  // existing function
+    // existing function
 }
 
 function handleClick2() {
-  // automatically renamed to avoid conflict
+    // automatically renamed to avoid conflict
 }
 ```
 
@@ -264,12 +264,12 @@ NIMA: You shouldn't use the handler suffix, use the handle prefix instead (handl
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima: pluginNIMA },
-    rules: {
-      "nima/no-handler-suffix": "error",
+    {
+        plugins: { nima: pluginNIMA },
+        rules: {
+            "nima/no-handler-suffix": "error",
+        },
     },
-  },
 ];
 ```
 
@@ -277,10 +277,10 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/no-handler-suffix": "error"
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/no-handler-suffix": "error"
+    }
 }
 ```
 

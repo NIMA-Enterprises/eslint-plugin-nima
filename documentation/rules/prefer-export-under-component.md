@@ -11,12 +11,12 @@ This improves code readability, debugging experience, and component organization
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
 - [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Default exports](#default-exports)
-  - [Named exports](#named-exports)
-  - [Function declarations](#function-declarations)
-  - [Arrow function variables](#arrow-function-variables)
-  - [Function expressions](#function-expressions)
+    - [Default behavior](#default-behavior)
+    - [Default exports](#default-exports)
+    - [Named exports](#named-exports)
+    - [Function declarations](#function-declarations)
+    - [Arrow function variables](#arrow-function-variables)
+    - [Function expressions](#function-expressions)
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
@@ -70,15 +70,15 @@ Incorrect:
 
 ```tsx
 export default function MyComponent() {
-  return <div>Hello World</div>;
+    return <div>Hello World</div>;
 }
 
 export const AnotherComponent = () => {
-  return <span>Another component</span>;
+    return <span>Another component</span>;
 };
 
 export function ThirdComponent() {
-  return <p>Third component</p>;
+    return <p>Third component</p>;
 }
 ```
 
@@ -86,19 +86,19 @@ Correct (after auto-fix):
 
 ```tsx
 function MyComponent() {
-  return <div>Hello World</div>;
+    return <div>Hello World</div>;
 }
 
 export { MyComponent };
 
 const AnotherComponent = () => {
-  return <span>Another component</span>;
+    return <span>Another component</span>;
 };
 
 export { AnotherComponent };
 
 function ThirdComponent() {
-  return <p>Third component</p>;
+    return <p>Third component</p>;
 }
 
 export { ThirdComponent };
@@ -110,22 +110,22 @@ Incorrect:
 
 ```tsx
 export default function UserProfile({ user }) {
-  return (
-    <div className="profile">
-      <h1>{user.name}</h1>
-      <p>{user.email}</p>
-    </div>
-  );
+    return (
+        <div className="profile">
+            <h1>{user.name}</h1>
+            <p>{user.email}</p>
+        </div>
+    );
 }
 
 export default function HomePage() {
-  const [data, setData] = useState(null);
+    const [data, setData] = useState(null);
 
-  return (
-    <main>
-      <h1>Welcome</h1>
-    </main>
-  );
+    return (
+        <main>
+            <h1>Welcome</h1>
+        </main>
+    );
 }
 ```
 
@@ -133,24 +133,24 @@ Correct (after auto-fix):
 
 ```tsx
 function UserProfile({ user }) {
-  return (
-    <div className="profile">
-      <h1>{user.name}</h1>
-      <p>{user.email}</p>
-    </div>
-  );
+    return (
+        <div className="profile">
+            <h1>{user.name}</h1>
+            <p>{user.email}</p>
+        </div>
+    );
 }
 
 export { UserProfile };
 
 function HomePage() {
-  const [data, setData] = useState(null);
+    const [data, setData] = useState(null);
 
-  return (
-    <main>
-      <h1>Welcome</h1>
-    </main>
-  );
+    return (
+        <main>
+            <h1>Welcome</h1>
+        </main>
+    );
 }
 
 export { HomePage };
@@ -162,20 +162,20 @@ Incorrect:
 
 ```tsx
 export const Button = ({ children, onClick }) => {
-  return <button onClick={onClick}>{children}</button>;
+    return <button onClick={onClick}>{children}</button>;
 };
 
 export const Modal = function ({ isOpen, onClose, children }) {
-  if (!isOpen) return null;
+    if (!isOpen) return null;
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        {children}
-        <button onClick={onClose}>Close</button>
-      </div>
-    </div>
-  );
+    return (
+        <div className="modal-overlay">
+            <div className="modal-content">
+                {children}
+                <button onClick={onClose}>Close</button>
+            </div>
+        </div>
+    );
 };
 ```
 
@@ -183,22 +183,22 @@ Correct (after auto-fix):
 
 ```tsx
 const Button = ({ children, onClick }) => {
-  return <button onClick={onClick}>{children}</button>;
+    return <button onClick={onClick}>{children}</button>;
 };
 
 export { Button };
 
 const Modal = function ({ isOpen, onClose, children }) {
-  if (!isOpen) return null;
+    if (!isOpen) return null;
 
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        {children}
-        <button onClick={onClose}>Close</button>
-      </div>
-    </div>
-  );
+    return (
+        <div className="modal-overlay">
+            <div className="modal-content">
+                {children}
+                <button onClick={onClose}>Close</button>
+            </div>
+        </div>
+    );
 };
 
 export { Modal };
@@ -210,22 +210,22 @@ Incorrect:
 
 ```tsx
 export function Card({ title, content }) {
-  return (
-    <div className="card">
-      <h2>{title}</h2>
-      <div>{content}</div>
-    </div>
-  );
+    return (
+        <div className="card">
+            <h2>{title}</h2>
+            <div>{content}</div>
+        </div>
+    );
 }
 
 export function Layout({ children }) {
-  return (
-    <div className="layout">
-      <header>My App</header>
-      <main>{children}</main>
-      <footer>© 2024</footer>
-    </div>
-  );
+    return (
+        <div className="layout">
+            <header>My App</header>
+            <main>{children}</main>
+            <footer>© 2024</footer>
+        </div>
+    );
 }
 ```
 
@@ -233,24 +233,24 @@ Correct (after auto-fix):
 
 ```tsx
 function Card({ title, content }) {
-  return (
-    <div className="card">
-      <h2>{title}</h2>
-      <div>{content}</div>
-    </div>
-  );
+    return (
+        <div className="card">
+            <h2>{title}</h2>
+            <div>{content}</div>
+        </div>
+    );
 }
 
 export { Card };
 
 function Layout({ children }) {
-  return (
-    <div className="layout">
-      <header>My App</header>
-      <main>{children}</main>
-      <footer>© 2024</footer>
-    </div>
-  );
+    return (
+        <div className="layout">
+            <header>My App</header>
+            <main>{children}</main>
+            <footer>© 2024</footer>
+        </div>
+    );
 }
 
 export { Layout };
@@ -262,18 +262,18 @@ Incorrect:
 
 ```tsx
 export const LoadingSpinner = () => {
-  return (
-    <div className="spinner">
-      <div className="spinner-inner"></div>
-    </div>
-  );
+    return (
+        <div className="spinner">
+            <div className="spinner-inner"></div>
+        </div>
+    );
 };
 
 export const ErrorMessage = ({ error }) => (
-  <div className="error">
-    <h3>Something went wrong</h3>
-    <p>{error.message}</p>
-  </div>
+    <div className="error">
+        <h3>Something went wrong</h3>
+        <p>{error.message}</p>
+    </div>
 );
 ```
 
@@ -281,20 +281,20 @@ Correct (after auto-fix):
 
 ```tsx
 const LoadingSpinner = () => {
-  return (
-    <div className="spinner">
-      <div className="spinner-inner"></div>
-    </div>
-  );
+    return (
+        <div className="spinner">
+            <div className="spinner-inner"></div>
+        </div>
+    );
 };
 
 export { LoadingSpinner };
 
 const ErrorMessage = ({ error }) => (
-  <div className="error">
-    <h3>Something went wrong</h3>
-    <p>{error.message}</p>
-  </div>
+    <div className="error">
+        <h3>Something went wrong</h3>
+        <p>{error.message}</p>
+    </div>
 );
 
 export { ErrorMessage };
@@ -306,20 +306,20 @@ Incorrect:
 
 ```tsx
 export const Header = function HeaderComponent({ title }) {
-  return (
-    <header>
-      <h1>{title}</h1>
-      <nav>Navigation</nav>
-    </header>
-  );
+    return (
+        <header>
+            <h1>{title}</h1>
+            <nav>Navigation</nav>
+        </header>
+    );
 };
 
 export const Footer = function () {
-  return (
-    <footer>
-      <p>&copy; 2024 My Company</p>
-    </footer>
-  );
+    return (
+        <footer>
+            <p>&copy; 2024 My Company</p>
+        </footer>
+    );
 };
 ```
 
@@ -327,22 +327,22 @@ Correct (after auto-fix):
 
 ```tsx
 const Header = function HeaderComponent({ title }) {
-  return (
-    <header>
-      <h1>{title}</h1>
-      <nav>Navigation</nav>
-    </header>
-  );
+    return (
+        <header>
+            <h1>{title}</h1>
+            <nav>Navigation</nav>
+        </header>
+    );
 };
 
 export { Header };
 
 const Footer = function () {
-  return (
-    <footer>
-      <p>&copy; 2024 My Company</p>
-    </footer>
-  );
+    return (
+        <footer>
+            <p>&copy; 2024 My Company</p>
+        </footer>
+    );
 };
 
 export { Footer };
@@ -396,12 +396,12 @@ NIMA: Declare React component 'MyComponent' separately from its export statement
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima: pluginNIMA },
-    rules: {
-      "nima/prefer-export-under-component": "error",
+    {
+        plugins: { nima: pluginNIMA },
+        rules: {
+            "nima/prefer-export-under-component": "error",
+        },
     },
-  },
 ];
 ```
 
@@ -409,10 +409,10 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/prefer-export-under-component": "error"
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/prefer-export-under-component": "error"
+    }
 }
 ```
 

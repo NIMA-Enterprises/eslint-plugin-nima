@@ -27,9 +27,9 @@ The recommended configuration includes a curated set of rules that provide immed
 import pluginNima from "eslint-plugin-nima";
 
 export default [
-  {
-    ...pluginNima.configs["flat/recommended"],
-  },
+    {
+        ...pluginNima.configs["flat/recommended"],
+    },
 ];
 ```
 
@@ -37,7 +37,7 @@ export default [
 
 ```json
 {
-  "extends": ["plugin:nima/recommended"]
+    "extends": ["plugin:nima/recommended"]
 }
 ```
 
@@ -63,31 +63,41 @@ To use rules not included in the recommended config:
 ```js
 // Flat config
 export default [
-  {
-    ...pluginNima.configs["flat/recommended"],
-    rules: {
-      ...pluginNima.configs["flat/recommended"].rules,
-      "nima/boolean-naming-convention": "error",
-      "nima/restrict-function-usage": [
-        "error",
-        [{ disableFunctions: ["eval"], folders: ["**/src/**"] }],
-      ],
+    {
+        ...pluginNima.configs["flat/recommended"],
+        rules: {
+            ...pluginNima.configs["flat/recommended"].rules,
+            "nima/boolean-naming-convention": "error",
+            "nima/restrict-function-usage": [
+                "error",
+                [
+                    {
+                        disableFunctions: ["eval"],
+                        folders: ["**/src/**"],
+                    },
+                ],
+            ],
+        },
     },
-  },
 ];
 ```
 
 ```json
 // Legacy config
 {
-  "extends": ["plugin:nima/recommended"],
-  "rules": {
-    "nima/boolean-naming-convention": "error",
-    "nima/restrict-function-usage": [
-      "error",
-      [{ "disableFunctions": ["eval"], "folders": ["**/src/**"] }]
-    ]
-  }
+    "extends": ["plugin:nima/recommended"],
+    "rules": {
+        "nima/boolean-naming-convention": "error",
+        "nima/restrict-function-usage": [
+            "error",
+            [
+                {
+                    "disableFunctions": ["eval"],
+                    "folders": ["**/src/**"]
+                }
+            ]
+        ]
+    }
 }
 ```
 

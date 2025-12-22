@@ -4,66 +4,74 @@ import { RuleTester } from "@typescript-eslint/rule-tester";
 const ruleTester = new RuleTester();
 
 ruleTester.run(name, rule, {
-  invalid: [
-    {
-      code: `
+    invalid: [
+        {
+            code: `
         const fn = ({ a, b }: { a?: number; b?: string }) => {
           console.log(a, b);
         };
       `,
-      errors: [{ messageId: Messages.ADD_VOID_UNION }],
-      output: `
+            errors: [{ messageId: Messages.ADD_VOID_UNION }],
+            output: `
         const fn = (props: { a?: number; b?: string } | void) => {
 
   const { a, b } = props ?? {};
   console.log(a, b);
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const fn = ({ a, b }: { a?: number; b?: string } | void) => {
           console.log(a, b);
         };
       `,
-      errors: [{ messageId: Messages.PREFER_VOID_FOR_OPTIONAL_PARAM }],
-      output: `
+            errors: [
+                {
+                    messageId: Messages.PREFER_VOID_FOR_OPTIONAL_PARAM,
+                },
+            ],
+            output: `
         const fn = (props: { a?: number; b?: string } | void) => {
 
   const { a, b } = props ?? {};
   console.log(a, b);
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         function fn({ a, b, c }: { a?: number; b?: string; c?: boolean } | void) {
           return a;
         }
       `,
-      errors: [{ messageId: Messages.PREFER_VOID_FOR_OPTIONAL_PARAM }],
-      output: `
+            errors: [
+                {
+                    messageId: Messages.PREFER_VOID_FOR_OPTIONAL_PARAM,
+                },
+            ],
+            output: `
         function fn(props: { a?: number; b?: string; c?: boolean } | void) {
 
   const { a, b, c } = props ?? {};
   return a;
         }
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const fn = ({ a, b }: { a?: number; b?: string }) => a + (b?.length ?? 0);
       `,
-      errors: [{ messageId: Messages.ADD_VOID_UNION }],
-      output: `
+            errors: [{ messageId: Messages.ADD_VOID_UNION }],
+            output: `
         const fn = (props: { a?: number; b?: string } | void) => {
   const { a, b } = props ?? {};
   return a + (b?.length ?? 0);
 };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         export const truncateSeiAddress = ({
           address,
           numOfChars = 4,
@@ -74,8 +82,8 @@ ruleTester.run(name, rule, {
           return address?.slice(0, numOfChars);
         };
       `,
-      errors: [{ messageId: Messages.ADD_VOID_UNION }],
-      output: `
+            errors: [{ messageId: Messages.ADD_VOID_UNION }],
+            output: `
         export const truncateSeiAddress = (props: {
           address?: string;
           numOfChars?: number;
@@ -85,17 +93,21 @@ ruleTester.run(name, rule, {
   return address?.slice(0, numOfChars);
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const transformData = (
           { tokenAddress }: { tokenAddress?: Address } | undefined = {},
         ) => {
           return data.filter(item => item.address === tokenAddress);
         };
       `,
-      errors: [{ messageId: Messages.PREFER_VOID_FOR_OPTIONAL_PARAM }],
-      output: `
+            errors: [
+                {
+                    messageId: Messages.PREFER_VOID_FOR_OPTIONAL_PARAM,
+                },
+            ],
+            output: `
         const transformData = (
           props: { tokenAddress?: Address } | undefined | void = {},
         ) => {
@@ -104,9 +116,9 @@ ruleTester.run(name, rule, {
   return data.filter(item => item.address === tokenAddress);
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const transformData = (
           data,
           { tokenAddress }: { tokenAddress?: Address } | undefined = {},
@@ -114,8 +126,12 @@ ruleTester.run(name, rule, {
           return data.filter(item => item.address === tokenAddress);
         };
       `,
-      errors: [{ messageId: Messages.PREFER_VOID_FOR_OPTIONAL_PARAM }],
-      output: `
+            errors: [
+                {
+                    messageId: Messages.PREFER_VOID_FOR_OPTIONAL_PARAM,
+                },
+            ],
+            output: `
         const transformData = (
           data,
           props: { tokenAddress?: Address } | undefined | void = {},
@@ -125,17 +141,17 @@ ruleTester.run(name, rule, {
   return data.filter(item => item.address === tokenAddress);
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         class MyClass {
           method({ a }: { a?: number }) {
             return a;
           }
         }
       `,
-      errors: [{ messageId: Messages.ADD_VOID_UNION }],
-      output: `
+            errors: [{ messageId: Messages.ADD_VOID_UNION }],
+            output: `
         class MyClass {
           method(props: { a?: number } | void) {
 
@@ -144,17 +160,17 @@ ruleTester.run(name, rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const obj = {
           method({ a }: { a?: number }) {
             return a;
           }
         };
       `,
-      errors: [{ messageId: Messages.ADD_VOID_UNION }],
-      output: `
+            errors: [{ messageId: Messages.ADD_VOID_UNION }],
+            output: `
         const obj = {
           method(props: { a?: number } | void) {
 
@@ -163,31 +179,31 @@ ruleTester.run(name, rule, {
           }
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const handleData = ({ id, value }: { id?: string; value?: number } = {}) => {
           console.log(id, value);
         };
       `,
-      errors: [{ messageId: Messages.ADD_VOID_UNION }],
-      output: `
+            errors: [{ messageId: Messages.ADD_VOID_UNION }],
+            output: `
         const handleData = (props: { id?: string; value?: number } | void = {}) => {
 
   const { id, value } = props ?? {};
   console.log(id, value);
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const getAxiosRequestConfig = ({ type }: { type?: string } = {}) => ({
           url: 'https://api.example.com/transactions',
           params: { type },
         });
       `,
-      errors: [{ messageId: Messages.ADD_VOID_UNION }],
-      output: `
+            errors: [{ messageId: Messages.ADD_VOID_UNION }],
+            output: `
         const getAxiosRequestConfig = (props: { type?: string } | void) => {
   const { type } = props ?? {};
   return {
@@ -196,46 +212,46 @@ ruleTester.run(name, rule, {
         };
 };
       `,
-    },
-  ],
-  valid: [
-    {
-      code: `
+        },
+    ],
+    valid: [
+        {
+            code: `
         const fn = (props: { a?: number; b?: string } | void) => {
           const { a, b } = props ?? {};
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         function fn(props: { a?: number; b?: string } | void) {
           const { a, b } = props ?? {};
         }
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const fn = (a: number, b: string) => {
           return a + b;
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const fn = (a: number) => {
           return a * 2;
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const fn = () => {
           return 42;
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const signUserWalletAndTwitter = async ({
           userAddress,
           signerAddress,
@@ -246,16 +262,16 @@ ruleTester.run(name, rule, {
           return userAddress + signerAddress;
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const processData = ({ id, name }: { id: number; name: string }) => {
           return { id, name };
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const multicall = async ({
           contractAddress,
           callData,
@@ -268,16 +284,16 @@ ruleTester.run(name, rule, {
           return { contractAddress, callData, value };
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const mixedProps = ({ required, optional }: { required: string; optional?: number }) => {
           return required;
         };
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         class MyClass {
           method(props: { a?: number } | void) {
             const { a } = props ?? {};
@@ -285,9 +301,9 @@ ruleTester.run(name, rule, {
           }
         }
       `,
-    },
-    {
-      code: `
+        },
+        {
+            code: `
         const obj = {
           method(props: { a?: number } | void) {
             const { a } = props ?? {};
@@ -295,6 +311,6 @@ ruleTester.run(name, rule, {
           }
         };
       `,
-    },
-  ],
+        },
+    ],
 });

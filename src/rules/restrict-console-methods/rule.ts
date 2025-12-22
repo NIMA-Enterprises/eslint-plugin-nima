@@ -6,8 +6,8 @@ import { create } from "./create";
 export { name };
 
 export const rule = createRule<Options, Messages>({
-  create,
-  defaultOptions,
-  meta: config,
-  name,
+    create,
+    defaultOptions,
+    meta: config,
+    name,
 });

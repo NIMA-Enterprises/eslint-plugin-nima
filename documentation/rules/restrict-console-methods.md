@@ -8,26 +8,26 @@ Console statements are often left behind during development and should be remove
 ## Table of contents
 
 - [`restrict-console-methods`](#restrict-console-methods)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-    - [Option details](#option-details)
-      - [allow](#allow)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-    - [Allowing specific console methods](#allowing-specific-console-methods)
-    - [Allowing multiple console methods](#allowing-multiple-console-methods)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-    - [Development-friendly configuration](#development-friendly-configuration)
-  - [Version](#version)
-  - [Further Reading](#further-reading)
+    - [Table of contents](#table-of-contents)
+    - [Rule summary](#rule-summary)
+    - [What the rule checks](#what-the-rule-checks)
+    - [Options (all configurations)](#options-all-configurations)
+        - [Default options](#default-options)
+        - [Option details](#option-details)
+            - [allow](#allow)
+    - [Examples (by option)](#examples-by-option)
+        - [Default behavior](#default-behavior)
+        - [Allowing specific console methods](#allowing-specific-console-methods)
+        - [Allowing multiple console methods](#allowing-multiple-console-methods)
+    - [Messages](#messages)
+    - [Implementation notes \& requirements](#implementation-notes--requirements)
+    - [Limitations \& edge cases](#limitations--edge-cases)
+    - [Quick configuration snippets](#quick-configuration-snippets)
+        - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+        - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+        - [Development-friendly configuration](#development-friendly-configuration)
+    - [Version](#version)
+    - [Further Reading](#further-reading)
 
 ---
 
@@ -55,9 +55,9 @@ The rule accepts a single options object with an array of allowed console method
 
 ```ts
 type Options = [
-  Partial<{
-    allow: string[];
-  }>
+    Partial<{
+        allow: string[];
+    }>,
 ];
 ```
 
@@ -65,7 +65,7 @@ type Options = [
 
 ```json
 {
-  "allow": ["info"]
+    "allow": ["info"]
 }
 ```
 
@@ -114,9 +114,9 @@ Configuration allowing only error logging:
 
 ```jsonc
 {
-  "rules": {
-    "nima/restrict-console-methods": ["error", { "allow": ["error"] }]
-  }
+    "rules": {
+        "nima/restrict-console-methods": ["error", { "allow": ["error"] }],
+    },
 }
 ```
 
@@ -141,14 +141,14 @@ Configuration allowing errors, warnings, and info:
 
 ```jsonc
 {
-  "rules": {
-    "nima/restrict-console-methods": [
-      "error",
-      {
-        "allow": ["error", "warn", "info"]
-      }
-    ]
-  }
+    "rules": {
+        "nima/restrict-console-methods": [
+            "error",
+            {
+                "allow": ["error", "warn", "info"],
+            },
+        ],
+    },
 }
 ```
 
@@ -215,17 +215,17 @@ NIMA: The usage of console.warn is restricted.
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima: pluginNIMA },
-    rules: {
-      "nima/restrict-console-methods": [
-        "error",
-        {
-          allow: ["info"],
+    {
+        plugins: { nima: pluginNIMA },
+        rules: {
+            "nima/restrict-console-methods": [
+                "error",
+                {
+                    allow: ["info"],
+                },
+            ],
         },
-      ],
     },
-  },
 ];
 ```
 
@@ -233,15 +233,15 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/restrict-console-methods": [
-      "error",
-      {
-        "allow": ["info"]
-      }
-    ]
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/restrict-console-methods": [
+            "error",
+            {
+                "allow": ["info"]
+            }
+        ]
+    }
 }
 ```
 
@@ -251,15 +251,15 @@ For development environments where some console usage might be acceptable:
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/restrict-console-methods": [
-      "warn",
-      {
-        "allow": ["error", "warn", "info", "log"]
-      }
-    ]
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/restrict-console-methods": [
+            "warn",
+            {
+                "allow": ["error", "warn", "info", "log"]
+            }
+        ]
+    }
 }
 ```
 

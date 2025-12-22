@@ -8,26 +8,26 @@ This provides consistent namespacing, clearer hook identification, and better co
 ## Table of contents
 
 - [`prefer-react-with-hooks`](#prefer-react-with-hooks)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-    - [Direct hook imports](#direct-hook-imports)
-    - [Mixed import patterns](#mixed-import-patterns)
-    - [Hook usage without imports](#hook-usage-without-imports)
-    - [Complex import scenarios](#complex-import-scenarios)
-      - [Multiple hooks with existing React import](#multiple-hooks-with-existing-react-import)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-  - [Version](#version)
-  - [Further Reading](#further-reading)
+    - [Table of contents](#table-of-contents)
+    - [Rule summary](#rule-summary)
+    - [What the rule checks](#what-the-rule-checks)
+    - [Options (all configurations)](#options-all-configurations)
+        - [Default options](#default-options)
+    - [Examples (by option)](#examples-by-option)
+        - [Default behavior](#default-behavior)
+        - [Direct hook imports](#direct-hook-imports)
+        - [Mixed import patterns](#mixed-import-patterns)
+        - [Hook usage without imports](#hook-usage-without-imports)
+        - [Complex import scenarios](#complex-import-scenarios)
+            - [Multiple hooks with existing React import](#multiple-hooks-with-existing-react-import)
+    - [Messages](#messages)
+    - [Implementation notes \& requirements](#implementation-notes--requirements)
+    - [Limitations \& edge cases](#limitations--edge-cases)
+    - [Quick configuration snippets](#quick-configuration-snippets)
+        - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+        - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+    - [Version](#version)
+    - [Further Reading](#further-reading)
 
 ---
 
@@ -77,13 +77,13 @@ Incorrect:
 import { useState, useEffect } from "react";
 
 function MyComponent() {
-  const [count, setCount] = useState(0);
+    const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    document.title = `Count: ${count}`;
-  }, [count]);
+    useEffect(() => {
+        document.title = `Count: ${count}`;
+    }, [count]);
 
-  return <div>{count}</div>;
+    return <div>{count}</div>;
 }
 ```
 
@@ -93,13 +93,13 @@ Correct (after auto-fix):
 import React from "react";
 
 function MyComponent() {
-  const [count, setCount] = React.useState(0);
+    const [count, setCount] = React.useState(0);
 
-  React.useEffect(() => {
-    document.title = `Count: ${count}`;
-  }, [count]);
+    React.useEffect(() => {
+        document.title = `Count: ${count}`;
+    }, [count]);
 
-  return <div>{count}</div>;
+    return <div>{count}</div>;
 }
 ```
 
@@ -111,21 +111,21 @@ Incorrect:
 import { useState, useCallback, useMemo } from "react";
 
 const Calculator = () => {
-  const [value, setValue] = useState(0);
+    const [value, setValue] = useState(0);
 
-  const handleIncrement = useCallback(() => {
-    setValue((prev) => prev + 1);
-  }, []);
+    const handleIncrement = useCallback(() => {
+        setValue((prev) => prev + 1);
+    }, []);
 
-  const doubledValue = useMemo(() => value * 2, [value]);
+    const doubledValue = useMemo(() => value * 2, [value]);
 
-  return (
-    <div>
-      <p>Value: {value}</p>
-      <p>Doubled: {doubledValue}</p>
-      <button onClick={handleIncrement}>Increment</button>
-    </div>
-  );
+    return (
+        <div>
+            <p>Value: {value}</p>
+            <p>Doubled: {doubledValue}</p>
+            <button onClick={handleIncrement}>Increment</button>
+        </div>
+    );
 };
 ```
 
@@ -135,21 +135,21 @@ Correct (after auto-fix):
 import React from "react";
 
 const Calculator = () => {
-  const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState(0);
 
-  const handleIncrement = React.useCallback(() => {
-    setValue((prev) => prev + 1);
-  }, []);
+    const handleIncrement = React.useCallback(() => {
+        setValue((prev) => prev + 1);
+    }, []);
 
-  const doubledValue = React.useMemo(() => value * 2, [value]);
+    const doubledValue = React.useMemo(() => value * 2, [value]);
 
-  return (
-    <div>
-      <p>Value: {value}</p>
-      <p>Doubled: {doubledValue}</p>
-      <button onClick={handleIncrement}>Increment</button>
-    </div>
-  );
+    return (
+        <div>
+            <p>Value: {value}</p>
+            <p>Doubled: {doubledValue}</p>
+            <button onClick={handleIncrement}>Increment</button>
+        </div>
+    );
 };
 ```
 
@@ -161,19 +161,19 @@ Incorrect:
 import React, { useState, useEffect, Component } from "react";
 
 class OldComponent extends Component {
-  render() {
-    return <div>Class component</div>;
-  }
+    render() {
+        return <div>Class component</div>;
+    }
 }
 
 function NewComponent() {
-  const [data, setData] = useState(null);
+    const [data, setData] = useState(null);
 
-  useEffect(() => {
-    fetchData().then(setData);
-  }, []);
+    useEffect(() => {
+        fetchData().then(setData);
+    }, []);
 
-  return <div>{data}</div>;
+    return <div>{data}</div>;
 }
 ```
 
@@ -183,19 +183,19 @@ Correct (after auto-fix):
 import React, { Component } from "react";
 
 class OldComponent extends Component {
-  render() {
-    return <div>Class component</div>;
-  }
+    render() {
+        return <div>Class component</div>;
+    }
 }
 
 function NewComponent() {
-  const [data, setData] = React.useState(null);
+    const [data, setData] = React.useState(null);
 
-  React.useEffect(() => {
-    fetchData().then(setData);
-  }, []);
+    React.useEffect(() => {
+        fetchData().then(setData);
+    }, []);
 
-  return <div>{data}</div>;
+    return <div>{data}</div>;
 }
 ```
 
@@ -206,13 +206,13 @@ Incorrect:
 ```tsx
 // No React import, but hooks are used
 function MyComponent() {
-  const [count, setCount] = useState(0); // Hook used without import
+    const [count, setCount] = useState(0); // Hook used without import
 
-  useEffect(() => {
-    console.log("Component mounted");
-  }, []);
+    useEffect(() => {
+        console.log("Component mounted");
+    }, []);
 
-  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+    return <button onClick={() => setCount(count + 1)}>{count}</button>;
 }
 ```
 
@@ -222,13 +222,13 @@ Correct (after auto-fix):
 import React from "react";
 
 function MyComponent() {
-  const [count, setCount] = React.useState(0);
+    const [count, setCount] = React.useState(0);
 
-  React.useEffect(() => {
-    console.log("Component mounted");
-  }, []);
+    React.useEffect(() => {
+        console.log("Component mounted");
+    }, []);
 
-  return <button onClick={() => setCount(count + 1)}>{count}</button>;
+    return <button onClick={() => setCount(count + 1)}>{count}</button>;
 }
 ```
 
@@ -243,18 +243,18 @@ import { useState, useEffect, useContext, createContext } from "react";
 const ThemeContext = createContext();
 
 function App() {
-  const [theme, setTheme] = useState("light");
-  const contextValue = { theme, setTheme };
+    const [theme, setTheme] = useState("light");
+    const contextValue = { theme, setTheme };
 
-  useEffect(() => {
-    document.body.className = theme;
-  }, [theme]);
+    useEffect(() => {
+        document.body.className = theme;
+    }, [theme]);
 
-  return (
-    <ThemeContext.Provider value={contextValue}>
-      <div>App content</div>
-    </ThemeContext.Provider>
-  );
+    return (
+        <ThemeContext.Provider value={contextValue}>
+            <div>App content</div>
+        </ThemeContext.Provider>
+    );
 }
 ```
 
@@ -266,18 +266,18 @@ import React, { createContext } from "react";
 const ThemeContext = createContext();
 
 function App() {
-  const [theme, setTheme] = React.useState("light");
-  const contextValue = { theme, setTheme };
+    const [theme, setTheme] = React.useState("light");
+    const contextValue = { theme, setTheme };
 
-  React.useEffect(() => {
-    document.body.className = theme;
-  }, [theme]);
+    React.useEffect(() => {
+        document.body.className = theme;
+    }, [theme]);
 
-  return (
-    <ThemeContext.Provider value={contextValue}>
-      <div>App content</div>
-    </ThemeContext.Provider>
-  );
+    return (
+        <ThemeContext.Provider value={contextValue}>
+            <div>App content</div>
+        </ThemeContext.Provider>
+    );
 }
 ```
 
@@ -289,23 +289,23 @@ Incorrect:
 import React, { useState, useEffect, useRef, forwardRef } from "react";
 
 const Input = forwardRef((props, ref) => {
-  const [value, setValue] = useState("");
-  const inputRef = useRef(null);
+    const [value, setValue] = useState("");
+    const inputRef = useRef(null);
 
-  useEffect(() => {
-    if (ref) {
-      ref.current = inputRef.current;
-    }
-  }, [ref]);
+    useEffect(() => {
+        if (ref) {
+            ref.current = inputRef.current;
+        }
+    }, [ref]);
 
-  return (
-    <input
-      ref={inputRef}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      {...props}
-    />
-  );
+    return (
+        <input
+            ref={inputRef}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            {...props}
+        />
+    );
 });
 ```
 
@@ -315,23 +315,23 @@ Correct (after auto-fix):
 import React, { forwardRef } from "react";
 
 const Input = forwardRef((props, ref) => {
-  const [value, setValue] = React.useState("");
-  const inputRef = React.useRef(null);
+    const [value, setValue] = React.useState("");
+    const inputRef = React.useRef(null);
 
-  React.useEffect(() => {
-    if (ref) {
-      ref.current = inputRef.current;
-    }
-  }, [ref]);
+    React.useEffect(() => {
+        if (ref) {
+            ref.current = inputRef.current;
+        }
+    }, [ref]);
 
-  return (
-    <input
-      ref={inputRef}
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      {...props}
-    />
-  );
+    return (
+        <input
+            ref={inputRef}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            {...props}
+        />
+    );
 });
 ```
 
@@ -387,12 +387,12 @@ NIMA: Prefix useEffect with React.
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima: pluginNIMA },
-    rules: {
-      "nima/prefer-react-with-hooks": "error",
+    {
+        plugins: { nima: pluginNIMA },
+        rules: {
+            "nima/prefer-react-with-hooks": "error",
+        },
     },
-  },
 ];
 ```
 
@@ -400,10 +400,10 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/prefer-react-with-hooks": "error"
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/prefer-react-with-hooks": "error"
+    }
 }
 ```
 

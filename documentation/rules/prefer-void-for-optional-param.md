@@ -10,13 +10,13 @@ This pattern prevents runtime errors by explicitly handling cases where no argum
 - [Rule summary](#rule-summary)
 - [What the rule checks](#what-the-rule-checks)
 - [Options (all configurations)](#options-all-configurations)
-  - [Default options](#default-options)
+    - [Default options](#default-options)
 - [Examples (by option)](#examples-by-option)
-  - [Default behavior](#default-behavior)
-  - [Arrow functions](#arrow-functions)
-  - [Function declarations](#function-declarations)
-  - [Function expressions](#function-expressions)
-  - [Parameters with default values](#parameters-with-default-values)
+    - [Default behavior](#default-behavior)
+    - [Arrow functions](#arrow-functions)
+    - [Function declarations](#function-declarations)
+    - [Function expressions](#function-expressions)
+    - [Parameters with default values](#parameters-with-default-values)
 - [Messages](#messages)
 - [Implementation notes & requirements](#implementation-notes--requirements)
 - [Limitations & edge cases](#limitations--edge-cases)
@@ -69,11 +69,11 @@ Incorrect:
 
 ```typescript
 const fn = ({ a, b, c }: { a?: number; b?: string; c?: boolean }) => {
-  console.log(a, b, c);
+    console.log(a, b, c);
 };
 
 function fn({ a, b }: { a?: number; b?: string }) {
-  return a + (b?.length ?? 0);
+    return a + (b?.length ?? 0);
 }
 ```
 
@@ -81,13 +81,13 @@ Correct:
 
 ```typescript
 const fn = (props: { a?: number; b?: string; c?: boolean } | void) => {
-  const { a, b, c } = props ?? {};
-  console.log(a, b, c);
+    const { a, b, c } = props ?? {};
+    console.log(a, b, c);
 };
 
 function fn(props: { a?: number; b?: string } | void) {
-  const { a, b } = props ?? {};
-  return a + (b?.length ?? 0);
+    const { a, b } = props ?? {};
+    return a + (b?.length ?? 0);
 }
 ```
 
@@ -97,7 +97,7 @@ Incorrect:
 
 ```typescript
 const processData = ({ id, name }: { id?: string; name?: string }) => {
-  return `${id}: ${name}`;
+    return `${id}: ${name}`;
 };
 ```
 
@@ -105,8 +105,8 @@ Correct:
 
 ```typescript
 const processData = (props: { id?: string; name?: string } | void) => {
-  const { id, name } = props ?? {};
-  return `${id}: ${name}`;
+    const { id, name } = props ?? {};
+    return `${id}: ${name}`;
 };
 ```
 
@@ -116,7 +116,7 @@ Incorrect:
 
 ```typescript
 function updateUser({ email, age }: { email?: string; age?: number }) {
-  console.log(email, age);
+    console.log(email, age);
 }
 ```
 
@@ -124,8 +124,8 @@ Correct:
 
 ```typescript
 function updateUser(props: { email?: string; age?: number } | void) {
-  const { email, age } = props ?? {};
-  console.log(email, age);
+    const { email, age } = props ?? {};
+    console.log(email, age);
 }
 ```
 
@@ -135,7 +135,7 @@ Incorrect:
 
 ```typescript
 const handler = function ({ value }: { value?: boolean }) {
-  return value ?? false;
+    return value ?? false;
 };
 ```
 
@@ -143,8 +143,8 @@ Correct:
 
 ```typescript
 const handler = function (props: { value?: boolean } | void) {
-  const { value } = props ?? {};
-  return value ?? false;
+    const { value } = props ?? {};
+    return value ?? false;
 };
 ```
 
@@ -154,7 +154,7 @@ Incorrect:
 
 ```typescript
 const fn = ({ a = 10, b = "test" }: { a?: number; b?: string }) => {
-  console.log(a, b);
+    console.log(a, b);
 };
 ```
 
@@ -162,8 +162,8 @@ Correct:
 
 ```typescript
 const fn = (props: { a?: number; b?: string } | void) => {
-  const { a = 10, b = "test" } = props ?? {};
-  console.log(a, b);
+    const { a = 10, b = "test" } = props ?? {};
+    console.log(a, b);
 };
 ```
 
@@ -205,12 +205,12 @@ When triggered, this rule emits the following message:
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima: pluginNIMA },
-    rules: {
-      "nima/prefer-void-for-optional-param": "error",
+    {
+        plugins: { nima: pluginNIMA },
+        rules: {
+            "nima/prefer-void-for-optional-param": "error",
+        },
     },
-  },
 ];
 ```
 
@@ -218,10 +218,10 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/prefer-void-for-optional-param": "error"
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/prefer-void-for-optional-param": "error"
+    }
 }
 ```
 
