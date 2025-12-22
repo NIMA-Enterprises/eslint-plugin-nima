@@ -7,22 +7,27 @@ This improves code readability, debugging experience, and component organization
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
-- [Examples (by option)](#examples-by-option)
+- [`prefer-export-under-component`](#prefer-export-under-component)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+  - [Examples (by option)](#examples-by-option)
     - [Default behavior](#default-behavior)
     - [Default exports](#default-exports)
     - [Named exports](#named-exports)
     - [Function declarations](#function-declarations)
     - [Arrow function variables](#arrow-function-variables)
     - [Function expressions](#function-expressions)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Quick configuration snippets](#quick-configuration-snippets)
-- [Version](#version)
-- [Further Reading](#further-reading)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 

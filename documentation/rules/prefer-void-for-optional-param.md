@@ -7,22 +7,26 @@ This pattern prevents runtime errors by explicitly handling cases where no argum
 
 ## Table of contents
 
-- [Rule summary](#rule-summary)
-- [What the rule checks](#what-the-rule-checks)
-- [Options (all configurations)](#options-all-configurations)
+- [`prefer-void-for-optional-param`](#prefer-void-for-optional-param)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
     - [Default options](#default-options)
-- [Examples (by option)](#examples-by-option)
+  - [Examples (by option)](#examples-by-option)
     - [Default behavior](#default-behavior)
     - [Arrow functions](#arrow-functions)
     - [Function declarations](#function-declarations)
     - [Function expressions](#function-expressions)
     - [Parameters with default values](#parameters-with-default-values)
-- [Messages](#messages)
-- [Implementation notes & requirements](#implementation-notes--requirements)
-- [Limitations & edge cases](#limitations--edge-cases)
-- [Quick configuration snippets](#quick-configuration-snippets)
-- [Version](#version)
-- [Further Reading](#further-reading)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 

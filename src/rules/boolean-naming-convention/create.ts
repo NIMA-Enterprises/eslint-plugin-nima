@@ -15,7 +15,6 @@ export const create = (
         checkParameters = true,
         checkProperties = true,
         checkVariables = true,
-        // regex string to ignore certain identifier names (e.g. 'filter')
         ignore = "filter",
     } = options;
 
@@ -29,7 +28,6 @@ export const create = (
         );
     };
 
-    // compile ignore regex once
     let ignoreRegex: null | RegExp = null;
     try {
         ignoreRegex = new RegExp(ignore, "i");
@@ -187,7 +185,6 @@ export const create = (
         if (reported && reported.has(key)) {
             return;
         }
-        // skip names matching ignore regex
         if (ignoreRegex && ignoreRegex.test(name)) {
             return;
         }
@@ -242,7 +239,6 @@ export const create = (
 
             if (node.id && functionReturnsBooleanType(node)) {
                 const name = node.id.name;
-                // skip names matching ignore regex
                 if (ignoreRegex && ignoreRegex.test(name)) {
                     return;
                 }
@@ -384,7 +380,6 @@ export const create = (
 
                         if (propertyType) {
                             const name = node.value.name;
-                            // skip names matching ignore regex
                             if (ignoreRegex && ignoreRegex.test(name)) {
                                 return;
                             }
@@ -436,7 +431,6 @@ export const create = (
                                         typeString === "true" ||
                                         typeString === "false"
                                     ) {
-                                        // skip names matching ignore regex
                                         if (
                                             ignoreRegex &&
                                             ignoreRegex.test(valueName)
@@ -477,7 +471,6 @@ export const create = (
                     AST_NODE_TYPES.TSBooleanKeyword
                 ) {
                     const name = node.id.name;
-                    // skip names matching ignore regex
                     if (ignoreRegex && ignoreRegex.test(name)) {
                         return;
                     }
@@ -503,7 +496,6 @@ export const create = (
                         functionReturnsBooleanType(node.init)
                     ) {
                         const name = node.id.name;
-                        // skip names matching ignore regex
                         if (ignoreRegex && ignoreRegex.test(name)) {
                             return;
                         }
@@ -519,7 +511,6 @@ export const create = (
                         }
                     } else if (isBooleanType(node.init)) {
                         const name = node.id.name;
-                        // skip names matching ignore regex
                         if (ignoreRegex && ignoreRegex.test(name)) {
                             return;
                         }
