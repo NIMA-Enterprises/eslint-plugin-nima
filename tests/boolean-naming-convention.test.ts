@@ -9,8 +9,7 @@
     Valid tests: 45
 */
 
-import { Messages } from "@models/boolean-naming-convention.model";
-import * as BooleanNamingConventions from "@rules/boolean-naming-convention";
+import { Messages, rule } from "@rules/boolean-naming-convention";
 import * as parser from "@typescript-eslint/parser";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
@@ -26,7 +25,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
+ruleTester.run("boolean-naming-convention", rule, {
   invalid: [
     // === VARIABLE TESTS ===
 
@@ -445,85 +444,77 @@ ruleTester.run("boolean-naming-convention", BooleanNamingConventions.rule, {
 });
 
 // Additional test with custom options
-ruleTester.run(
-  "boolean-naming-convention with custom prefixes",
-  BooleanNamingConventions.rule,
-  {
-    invalid: [
-      // 59. Custom allowedPrefixes option
-      {
-        code: "const active = true",
-        errors: [
-          {
-            data: {
-              name: "active",
-              suggestion: "isActive",
-            },
-            messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
+ruleTester.run("boolean-naming-convention with custom prefixes", rule, {
+  invalid: [
+    // 59. Custom allowedPrefixes option
+    {
+      code: "const active = true",
+      errors: [
+        {
+          data: {
+            name: "active",
+            suggestion: "isActive",
           },
-        ],
-        options: [{ allowedPrefixes: ["is", "has"] }],
-      },
-    ],
-    valid: [
-      // 60. Variable with allowed custom prefix
-      {
-        code: "const isActive = true",
-        options: [{ allowedPrefixes: ["is", "has"] }],
-      },
-      // 61. Variable with another allowed custom prefix
-      {
-        code: "const hasData = true",
-        options: [{ allowedPrefixes: ["is", "has"] }],
-      },
-    ],
-  }
-);
+          messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
+        },
+      ],
+      options: [{ allowedPrefixes: ["is", "has"] }],
+    },
+  ],
+  valid: [
+    // 60. Variable with allowed custom prefix
+    {
+      code: "const isActive = true",
+      options: [{ allowedPrefixes: ["is", "has"] }],
+    },
+    // 61. Variable with another allowed custom prefix
+    {
+      code: "const hasData = true",
+      options: [{ allowedPrefixes: ["is", "has"] }],
+    },
+  ],
+});
 
 // Test with disabled checks
-ruleTester.run(
-  "boolean-naming-convention with disabled checks",
-  BooleanNamingConventions.rule,
-  {
-    invalid: [
-      // 62. Only variables should be checked
-      {
-        code: "const active = true",
-        errors: [
-          {
-            data: {
-              name: "active",
-              suggestion: "isActive",
-            },
-            messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
+ruleTester.run("boolean-naming-convention with disabled checks", rule, {
+  invalid: [
+    // 62. Only variables should be checked
+    {
+      code: "const active = true",
+      errors: [
+        {
+          data: {
+            name: "active",
+            suggestion: "isActive",
           },
-        ],
-        options: [
-          {
-            checkFunctions: false,
-            checkParameters: false,
-            checkProperties: false,
-            checkVariables: true,
-          },
-        ],
-      },
-    ],
-    valid: [
-      // 63. Function should not trigger when checkFunctions is false
-      {
-        code: "function validate(): boolean { return true; }",
-        options: [{ checkFunctions: false }],
-      },
-      // 64. Parameter should not trigger when checkParameters is false
-      {
-        code: "const fn = (active: boolean) => {}",
-        options: [{ checkParameters: false }],
-      },
-      // 65. Property should not trigger when checkProperties is false
-      {
-        code: "const obj = { active: true }",
-        options: [{ checkProperties: false }],
-      },
-    ],
-  }
-);
+          messageId: Messages.BAD_VARIABLE_BOOLEAN_PREFIX,
+        },
+      ],
+      options: [
+        {
+          checkFunctions: false,
+          checkParameters: false,
+          checkProperties: false,
+          checkVariables: true,
+        },
+      ],
+    },
+  ],
+  valid: [
+    // 63. Function should not trigger when checkFunctions is false
+    {
+      code: "function validate(): boolean { return true; }",
+      options: [{ checkFunctions: false }],
+    },
+    // 64. Parameter should not trigger when checkParameters is false
+    {
+      code: "const fn = (active: boolean) => {}",
+      options: [{ checkParameters: false }],
+    },
+    // 65. Property should not trigger when checkProperties is false
+    {
+      code: "const obj = { active: true }",
+      options: [{ checkProperties: false }],
+    },
+  ],
+});

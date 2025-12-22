@@ -18,9 +18,11 @@ export default defineConfig([
 
   {
     files: ["**/*.{ts,tsx}"],
+
     plugins: {
       "unused-imports": unusedImportsPlugin,
     },
+
     rules: {
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unused-vars": "off",
@@ -58,6 +60,7 @@ export default defineConfig([
       "nima/restrict-function-usage": "error",
       "nima/restrict-imports": "error",
     },
+
     languageOptions: {
       globals: globals.node,
       parserOptions: {
@@ -67,6 +70,5 @@ export default defineConfig([
     },
   },
 
-  // @ts-ignore - Type compatibility issue
-  { ignores: ["**/dist/**", "**/*.{mjs,mts}", "**/tests/**"] },
+  { ignores: ["**/dist/**", "*.config.*", "**/tests/**"] },
 ]);
