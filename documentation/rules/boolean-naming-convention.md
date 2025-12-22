@@ -8,34 +8,34 @@ Consistent prefixes improve readability and make boolean intent explicit.
 ## Table of contents
 
 - [`boolean-naming-convention`](#boolean-naming-convention)
-    - [Table of contents](#table-of-contents)
-    - [Rule summary](#rule-summary)
-    - [What the rule checks](#what-the-rule-checks)
-    - [Options (all configurations)](#options-all-configurations)
-        - [Default options](#default-options)
-        - [Option details](#option-details)
-            - [allowedPrefixes](#allowedprefixes)
-            - [ignore](#ignore)
-            - [checkFunctions](#checkfunctions)
-            - [checkParameters](#checkparameters)
-            - [checkProperties](#checkproperties)
-            - [checkVariables](#checkvariables)
-    - [Examples (by option)](#examples-by-option)
-        - [Default behavior](#default-behavior)
-        - [Custom prefixes](#custom-prefixes)
-        - [Disabling specific checks](#disabling-specific-checks)
-            - [Example](#example)
-        - [Destructured params \& typed object patterns](#destructured-params--typed-object-patterns)
-        - [Function-valued properties and variable initializers](#function-valued-properties-and-variable-initializers)
-        - [Destructured variable declarators (typed)](#destructured-variable-declarators-typed)
-    - [Messages](#messages)
-    - [Implementation notes \& requirements](#implementation-notes--requirements)
-    - [Limitations \& edge cases](#limitations--edge-cases)
-    - [Quick configuration snippets](#quick-configuration-snippets)
-        - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-        - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-    - [Version](#version)
-    - [Further Reading](#further-reading)
+  - [Table of contents](#table-of-contents)
+  - [Rule summary](#rule-summary)
+  - [What the rule checks](#what-the-rule-checks)
+  - [Options (all configurations)](#options-all-configurations)
+    - [Default options](#default-options)
+    - [Option details](#option-details)
+      - [allowedPrefixes](#allowedprefixes)
+      - [ignore](#ignore)
+      - [checkFunctions](#checkfunctions)
+      - [checkParameters](#checkparameters)
+      - [checkProperties](#checkproperties)
+      - [checkVariables](#checkvariables)
+  - [Examples (by option)](#examples-by-option)
+    - [Default behavior](#default-behavior)
+    - [Custom prefixes](#custom-prefixes)
+    - [Disabling specific checks](#disabling-specific-checks)
+      - [Example](#example)
+    - [Destructured params \& typed object patterns](#destructured-params--typed-object-patterns)
+    - [Function-valued properties and variable initializers](#function-valued-properties-and-variable-initializers)
+    - [Destructured variable declarators (typed)](#destructured-variable-declarators-typed)
+  - [Messages](#messages)
+  - [Implementation notes \& requirements](#implementation-notes--requirements)
+  - [Limitations \& edge cases](#limitations--edge-cases)
+  - [Quick configuration snippets](#quick-configuration-snippets)
+    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+  - [Version](#version)
+  - [Further Reading](#further-reading)
 
 ---
 
@@ -337,8 +337,8 @@ NIMA: Function 'active' returns a boolean, use a prefix like isActive
 ## Implementation notes & requirements
 
 - **Type information:** For reliable detection of return types and variable types this rule uses TypeScript type information via `context.sourceCode.parserServices.program` and `TypeChecker`. To enable this:
-    - Use `@typescript-eslint/parser` or ESLint Flat config with TypeScript program available.
-    - Ensure `parserOptions.project` points to your `tsconfig.json` (type-aware rules require a configured TypeScript program).
+- Use `@typescript-eslint/parser` or ESLint Flat config with TypeScript program available.
+- Ensure `parserOptions.project` points to your `tsconfig.json` (type-aware rules require a configured TypeScript program).
 - **Graceful fallback:** Where type information is unavailable or an exception occurs, the rule falls back safely and will generally not report (avoids false positives).
 - **Suggestion generation:** The suggestion is generated as `"is" + PascalCase(name)`. For example `visible` → `isVisible`.
 - **No automatic fix:** This rule currently reports suggestions in messages but does not provide an ESLint autofix.
