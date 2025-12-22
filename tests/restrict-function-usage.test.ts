@@ -10,13 +10,12 @@
     Valid tests: 7
 */
 
-import { Messages } from "@models/restrict-function-usage.model";
-import * as ManageFunctions from "@rules/restrict-function-usage";
+import { Messages, rule } from "@rules/restrict-function-usage";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("manage-functions", ManageFunctions.rule, {
+ruleTester.run("manage-functions", rule, {
   invalid: [
     // === BASIC RESTRICTION TESTS ===
 

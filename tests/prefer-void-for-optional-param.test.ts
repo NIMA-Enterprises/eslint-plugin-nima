@@ -1,5 +1,4 @@
-import { Messages } from "@models/prefer-void-for-optional-param.model";
-import { name, rule } from "@rules/prefer-void-for-optional-param";
+import { Messages, name, rule } from "@rules/prefer-void-for-optional-param";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();

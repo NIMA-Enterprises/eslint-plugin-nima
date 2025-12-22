@@ -10,13 +10,12 @@
     Valid tests: 7
 */
 
-import { Messages } from "@models/restrict-imports.model";
-import * as RestrictImports from "@rules/restrict-imports";
+import { Messages, rule } from "@rules/restrict-imports";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("restrict-imports", RestrictImports.rule, {
+ruleTester.run("restrict-imports", rule, {
   invalid: [
     // === BASIC RESTRICTION TESTS ===
 

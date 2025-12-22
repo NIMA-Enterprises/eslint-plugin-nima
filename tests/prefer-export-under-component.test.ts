@@ -9,8 +9,7 @@
     Valid tests: 5
 */
 
-import { Messages } from "@models/prefer-export-under-component.model";
-import * as PreferExportUnderComponent from "@rules/prefer-export-under-component";
+import { Messages, rule } from "@rules/prefer-export-under-component";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester({
@@ -21,58 +20,55 @@ const ruleTester = new RuleTester({
   },
 });
 
-ruleTester.run(
-  "prefer-export-under-component",
-  PreferExportUnderComponent.rule,
-  {
-    invalid: [
-      {
-        code: `export const MyComponent = () => {
+ruleTester.run("prefer-export-under-component", rule, {
+  invalid: [
+    {
+      code: `export const MyComponent = () => {
           return <div>Hello</div>;
         };`,
-        errors: [{ messageId: Messages.EXPORT_BELOW_COMPONENT }],
-        output: `const MyComponent = () => {
+      errors: [{ messageId: Messages.EXPORT_BELOW_COMPONENT }],
+      output: `const MyComponent = () => {
           return <div>Hello</div>;
         };\n\nexport { MyComponent };`,
-      },
+    },
 
-      {
-        code: `export default function MyComponent() {
+    {
+      code: `export default function MyComponent() {
           return <div>Hello</div>;
         }`,
-        errors: [{ messageId: Messages.EXPORT_BELOW_COMPONENT }],
-        output: `function MyComponent() {
+      errors: [{ messageId: Messages.EXPORT_BELOW_COMPONENT }],
+      output: `function MyComponent() {
           return <div>Hello</div>;
         }\n\nexport { MyComponent };`,
-      },
+    },
 
-      {
-        code: `export const Button = ({ children }) => {
+    {
+      code: `export const Button = ({ children }) => {
                 return <button>{children}</button>;
               };`,
-        errors: [{ messageId: Messages.EXPORT_BELOW_COMPONENT }],
-        output: `const Button = ({ children }) => {
+      errors: [{ messageId: Messages.EXPORT_BELOW_COMPONENT }],
+      output: `const Button = ({ children }) => {
                 return <button>{children}</button>;
               };\n\nexport { Button };`,
-      },
+    },
 
-      {
-        code: `
+    {
+      code: `
         export const Header = () => <h1>Title</h1>;
         export const Footer = () => <footer>End</footer>;
       `,
-        errors: [
-          { messageId: Messages.EXPORT_BELOW_COMPONENT },
-          { messageId: Messages.EXPORT_BELOW_COMPONENT },
-        ],
-        output: `
+      errors: [
+        { messageId: Messages.EXPORT_BELOW_COMPONENT },
+        { messageId: Messages.EXPORT_BELOW_COMPONENT },
+      ],
+      output: `
         const Header = () => <h1>Title</h1>;\n\nexport { Header };
         const Footer = () => <footer>End</footer>;\n\nexport { Footer };
       `,
-      },
+    },
 
-      {
-        code: `
+    {
+      code: `
         interface Props {
           title: string;
         }
@@ -80,8 +76,8 @@ ruleTester.run(
           return <h1>{title}</h1>;
         };
       `,
-        errors: [{ messageId: Messages.EXPORT_BELOW_COMPONENT }],
-        output: `
+      errors: [{ messageId: Messages.EXPORT_BELOW_COMPONENT }],
+      output: `
         interface Props {
           title: string;
         }
@@ -89,38 +85,37 @@ ruleTester.run(
           return <h1>{title}</h1>;
         };\n\nexport { Component };
       `,
-      },
-    ],
+    },
+  ],
 
-    valid: [
-      `
+  valid: [
+    `
       const MyComponent = () => {
         return <div>Hello</div>;
       };\n\nexport { MyComponent };
     `,
 
-      `
+    `
       function MyComponent() {
         return <div>Hello</div>;
       }\n\nexport default MyComponent;
     `,
 
-      `
+    `
       const Header = () => <h1>Title</h1>;
       const Footer = () => <footer>End</footer>;
       export { Header, Footer };
     `,
 
-      `
+    `
       export const API_URL = 'https://api.example.com';
       export const utils = { helper: () => {} };
     `,
 
-      `
+    `
       export const CONFIG = { api: 'url' };
       const MyComponent = () => <div>Component</div>;
 export { MyComponent };
     `,
-    ],
-  }
-);
+  ],
+});

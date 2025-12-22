@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "module": "node16",
-    "moduleResolution": "node16",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "esnext",
     "esModuleInterop": true,
     "sourceMap": true,
@@ -15,9 +15,8 @@
     "paths": {
       "@/src/*": ["src/*"],
       "@utility/*": ["src/utility/*"],
-      "@models/*": ["src/models/*"],
-      "@rules/*": ["src/rules/*"],
-      "@constants/*": ["src/constants/*"]
+      "@constants/*": ["src/constants/*"],
+      "@rules/*": ["src/rules/*"]
     }
   },
   "exclude": ["node_modules", "dist"]

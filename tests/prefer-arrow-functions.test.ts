@@ -9,13 +9,12 @@
     Valid tests: 8
 */
 
-import { Messages } from "@models/prefer-arrow-functions.model";
-import * as PreferArrowFunctions from "@rules/prefer-arrow-functions";
+import { Messages, rule } from "@rules/prefer-arrow-functions";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("prefer-arrow-functions", PreferArrowFunctions.rule, {
+ruleTester.run("prefer-arrow-functions", rule, {
   invalid: [
     // Function declaration
     {
