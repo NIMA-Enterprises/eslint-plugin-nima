@@ -16,95 +16,101 @@ import { RuleTester } from "@typescript-eslint/rule-tester";
 const ruleTester = new RuleTester();
 
 ruleTester.run("prefer-react-with-hooks", rule, {
-  invalid: [
-    // === DIRECT HOOK CALLS WITHOUT REACT IMPORT ===
+    invalid: [
+        // === DIRECT HOOK CALLS WITHOUT REACT IMPORT ===
 
-    // 1. Direct hook call without any import
-    {
-      code: "useEffect();",
-      errors: [
+        // 1. Direct hook call without any import
         {
-          data: { hook: "useEffect" },
-          messageId: Messages.PREFER_REACT_PREFIX,
+            code: "useEffect();",
+            errors: [
+                {
+                    data: { hook: "useEffect" },
+                    messageId: Messages.PREFER_REACT_PREFIX,
+                },
+            ],
+            output: `import React from "react";\nReact.useEffect();`,
         },
-      ],
-      output: `import React from "react";\nReact.useEffect();`,
-    },
 
-    // === NAMED IMPORTS OF HOOKS ===
+        // === NAMED IMPORTS OF HOOKS ===
 
-    // 2. Named import of a single hook
-    {
-      code: `import { useState } from "react";\nuseState();`,
-      errors: [
+        // 2. Named import of a single hook
         {
-          data: { hook: "useState" },
-          messageId: Messages.PREFER_REACT,
+            code: `import { useState } from "react";\nuseState();`,
+            errors: [
+                {
+                    data: { hook: "useState" },
+                    messageId: Messages.PREFER_REACT,
+                },
+                {
+                    data: { hook: "useState" },
+                    messageId: Messages.PREFER_REACT_PREFIX,
+                },
+            ],
+            output: `import React from "react";\nReact.useState();`,
         },
+
+        // 3. Named import of a single hook with other non-hook imports
         {
-          data: { hook: "useState" },
-          messageId: Messages.PREFER_REACT_PREFIX,
+            code: `import { useState, FC } from "react";\nuseState();`,
+            errors: [
+                {
+                    data: { hook: "useState" },
+                    messageId: Messages.PREFER_REACT,
+                },
+                {
+                    data: { hook: "useState" },
+                    messageId: Messages.PREFER_REACT_PREFIX,
+                },
+            ],
+            output: `import React, { FC } from "react";\nReact.useState();`,
         },
-      ],
-      output: `import React from "react";\nReact.useState();`,
-    },
 
-    // 3. Named import of a single hook with other non-hook imports
-    {
-      code: `import { useState, FC } from "react";\nuseState();`,
-      errors: [
+        // 4. Multiple hook calls from a named import
         {
-          data: { hook: "useState" },
-          messageId: Messages.PREFER_REACT,
+            code: `import { useState, useEffect } from "react";\nuseState();\nuseEffect();`,
+            errors: [
+                {
+                    data: {
+                        hook: "useState and useEffect",
+                    },
+                    messageId: Messages.PREFER_REACT,
+                },
+                {
+                    data: { hook: "useState" },
+                    messageId: Messages.PREFER_REACT_PREFIX,
+                },
+                {
+                    data: { hook: "useEffect" },
+                    messageId: Messages.PREFER_REACT_PREFIX,
+                },
+            ],
+            output: `import React from "react";\nReact.useState();\nReact.useEffect();`,
         },
+
+        // 5. Hook call with arguments in a function expression
         {
-          data: { hook: "useState" },
-          messageId: Messages.PREFER_REACT_PREFIX,
+            code: `const MyComponent = () => {\n  useState(0);\n};`,
+            errors: [
+                {
+                    messageId: Messages.PREFER_REACT_PREFIX,
+                },
+            ],
+            output: `import React from "react";\nconst MyComponent = () => {\n  React.useState(0);\n};`,
         },
-      ],
-      output: `import React, { FC } from "react";\nReact.useState();`,
-    },
+    ],
+    valid: [
+        // === VALID HOOK USAGE ===
 
-    // 4. Multiple hook calls from a named import
-    {
-      code: `import { useState, useEffect } from "react";\nuseState();\nuseEffect();`,
-      errors: [
-        {
-          data: { hook: "useState and useEffect" },
-          messageId: Messages.PREFER_REACT,
-        },
-        {
-          data: { hook: "useState" },
-          messageId: Messages.PREFER_REACT_PREFIX,
-        },
-        {
-          data: { hook: "useEffect" },
-          messageId: Messages.PREFER_REACT_PREFIX,
-        },
-      ],
-      output: `import React from "react";\nReact.useState();\nReact.useEffect();`,
-    },
+        // 6. Valid: React namespace import and hook call
+        "import React from 'react'; React.useState();",
 
-    // 5. Hook call with arguments in a function expression
-    {
-      code: `const MyComponent = () => {\n  useState(0);\n};`,
-      errors: [{ messageId: Messages.PREFER_REACT_PREFIX }],
-      output: `import React from "react";\nconst MyComponent = () => {\n  React.useState(0);\n};`,
-    },
-  ],
-  valid: [
-    // === VALID HOOK USAGE ===
+        // 7. Valid: Namespace import and hook call
+        "import * as React from 'react'; React.useState();",
 
-    // 6. Valid: React namespace import and hook call
-    "import React from 'react'; React.useState();",
+        // 8. Valid: Default and named import, valid hook usage
+        "import React, { memo } from 'react'; React.useState();",
 
-    // 7. Valid: Namespace import and hook call
-    "import * as React from 'react'; React.useState();",
-
-    // 8. Valid: Default and named import, valid hook usage
-    "import React, { memo } from 'react'; React.useState();",
-
-    // 9. Valid: Non-hook import and function call
-    "import { someOtherFunction } from 'some-library'; someOtherFunction();",
-  ],
+        // 9. Valid: Non-hook import and function call
+        "import { someOtherFunction } from 'some-library'; someOtherFunction();",
+    ],
 });

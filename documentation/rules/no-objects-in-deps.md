@@ -8,26 +8,26 @@ Direct object references in dependency arrays cause unnecessary re-renders becau
 ## Table of contents
 
 - [`no-objects-in-deps`](#no-objects-in-deps)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-    - [Object expressions](#object-expressions)
-    - [Array expressions](#array-expressions)
-    - [New expressions](#new-expressions)
-    - [Variable references](#variable-references)
-    - [Recommended solutions](#recommended-solutions)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-  - [Version](#version)
-  - [Further Reading](#further-reading)
+    - [Table of contents](#table-of-contents)
+    - [Rule summary](#rule-summary)
+    - [What the rule checks](#what-the-rule-checks)
+    - [Options (all configurations)](#options-all-configurations)
+        - [Default options](#default-options)
+    - [Examples (by option)](#examples-by-option)
+        - [Default behavior](#default-behavior)
+        - [Object expressions](#object-expressions)
+        - [Array expressions](#array-expressions)
+        - [New expressions](#new-expressions)
+        - [Variable references](#variable-references)
+        - [Recommended solutions](#recommended-solutions)
+    - [Messages](#messages)
+    - [Implementation notes \& requirements](#implementation-notes--requirements)
+    - [Limitations \& edge cases](#limitations--edge-cases)
+    - [Quick configuration snippets](#quick-configuration-snippets)
+        - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+        - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+    - [Version](#version)
+    - [Further Reading](#further-reading)
 
 ---
 
@@ -113,11 +113,11 @@ Incorrect:
 
 ```ts
 useEffect(() => {
-  fetchData(config);
+    fetchData(config);
 }, [{ url: "/api/data", method: "GET" }]); // Direct object
 
 useMemo(() => {
-  return calculateValue(options);
+    return calculateValue(options);
 }, [{ precision: 2, round: true }]); // Direct object
 ```
 
@@ -126,18 +126,18 @@ Correct:
 ```ts
 // Option 1: Use JSON.stringify
 useEffect(() => {
-  fetchData(config);
+    fetchData(config);
 }, [JSON.stringify({ url: "/api/data", method: "GET" })]);
 
 // Option 2: Extract to stable reference
 const config = { url: "/api/data", method: "GET" };
 useEffect(() => {
-  fetchData(config);
+    fetchData(config);
 }, [config]); // Only if config is stable
 
 // Option 3: Use individual properties
 useEffect(() => {
-  fetchData({ url: "/api/data", method: "GET" });
+    fetchData({ url: "/api/data", method: "GET" });
 }, ["/api/data", "GET"]);
 ```
 
@@ -147,11 +147,11 @@ Incorrect:
 
 ```ts
 useCallback(() => {
-  return items.filter((item) => filterValues.includes(item.type));
+    return items.filter((item) => filterValues.includes(item.type));
 }, [["type1", "type2", "type3"]]); // Direct array
 
 useEffect(() => {
-  processItems(selectedIds);
+    processItems(selectedIds);
 }, [[1, 2, 3, 4]]); // Direct array
 ```
 
@@ -160,18 +160,18 @@ Correct:
 ```ts
 // Option 1: Use JSON.stringify
 useCallback(() => {
-  return items.filter((item) => filterValues.includes(item.type));
+    return items.filter((item) => filterValues.includes(item.type));
 }, [JSON.stringify(["type1", "type2", "type3"])]);
 
 // Option 2: Extract to stable reference
 const filterTypes = ["type1", "type2", "type3"];
 useCallback(() => {
-  return items.filter((item) => filterTypes.includes(item.type));
+    return items.filter((item) => filterTypes.includes(item.type));
 }, [filterTypes]); // Only if filterTypes is stable
 
 // Option 3: Use individual values (when practical)
 useEffect(() => {
-  processItems([1, 2, 3, 4]);
+    processItems([1, 2, 3, 4]);
 }, [1, 2, 3, 4]);
 ```
 
@@ -181,12 +181,12 @@ Incorrect:
 
 ```ts
 useEffect(() => {
-  const date = new Date();
-  processDate(date);
+    const date = new Date();
+    processDate(date);
 }, [new Date()]); // New expression in deps
 
 useMemo(() => {
-  return new RegExp(pattern, "gi");
+    return new RegExp(pattern, "gi");
 }, [new RegExp(pattern, "gi")]); // New expression in deps
 ```
 
@@ -195,20 +195,20 @@ Correct:
 ```ts
 // Option 1: Use JSON.stringify with constructor arguments
 useEffect(() => {
-  const date = new Date();
-  processDate(date);
+    const date = new Date();
+    processDate(date);
 }, [JSON.stringify(new Date())]); // Though this specific case needs different handling
 
 // Option 2: Use primitive values
 useEffect(() => {
-  const date = new Date();
-  processDate(date);
+    const date = new Date();
+    processDate(date);
 }, [Date.now()]); // Use timestamp instead
 
 // Option 3: Extract to stable reference
 const regex = new RegExp(pattern, "gi");
 useMemo(() => {
-  return regex;
+    return regex;
 }, [regex]); // Only if regex is stable
 ```
 
@@ -218,16 +218,16 @@ Incorrect:
 
 ```ts
 function MyComponent() {
-  const config = { api: "/data" }; // Variable with object
-  const items = [1, 2, 3]; // Variable with array
+    const config = { api: "/data" }; // Variable with object
+    const items = [1, 2, 3]; // Variable with array
 
-  useEffect(() => {
-    fetchData(config);
-  }, [config]); // Variable reference flagged
+    useEffect(() => {
+        fetchData(config);
+    }, [config]); // Variable reference flagged
 
-  useEffect(() => {
-    processItems(items);
-  }, [items]); // Variable reference flagged
+    useEffect(() => {
+        processItems(items);
+    }, [items]); // Variable reference flagged
 }
 ```
 
@@ -239,27 +239,27 @@ const CONFIG = { api: "/data" };
 const ITEMS = [1, 2, 3];
 
 function MyComponent() {
-  useEffect(() => {
-    fetchData(CONFIG);
-  }, [CONFIG]); // External reference is stable
+    useEffect(() => {
+        fetchData(CONFIG);
+    }, [CONFIG]); // External reference is stable
 
-  useEffect(() => {
-    processItems(ITEMS);
-  }, [ITEMS]); // External reference is stable
+    useEffect(() => {
+        processItems(ITEMS);
+    }, [ITEMS]); // External reference is stable
 }
 
 // Option 2: Use JSON.stringify
 function MyComponent() {
-  const config = { api: "/data" };
-  const items = [1, 2, 3];
+    const config = { api: "/data" };
+    const items = [1, 2, 3];
 
-  useEffect(() => {
-    fetchData(config);
-  }, [JSON.stringify(config)]);
+    useEffect(() => {
+        fetchData(config);
+    }, [JSON.stringify(config)]);
 
-  useEffect(() => {
-    processItems(items);
-  }, [JSON.stringify(items)]);
+    useEffect(() => {
+        processItems(items);
+    }, [JSON.stringify(items)]);
 }
 ```
 
@@ -318,12 +318,12 @@ NIMA: Objects inside of dependency arrays aren't allowed. Try doing JSON.stringi
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima: pluginNIMA },
-    rules: {
-      "nima/no-objects-in-deps": "error",
+    {
+        plugins: { nima: pluginNIMA },
+        rules: {
+            "nima/no-objects-in-deps": "error",
+        },
     },
-  },
 ];
 ```
 
@@ -331,10 +331,10 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/no-objects-in-deps": "error"
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/no-objects-in-deps": "error"
+    }
 }
 ```
 

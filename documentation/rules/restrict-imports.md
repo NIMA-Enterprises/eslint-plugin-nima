@@ -8,36 +8,36 @@ This rule provides fine-grained control over import usage across your codebase, 
 ## Table of contents
 
 - [`restrict-imports`](#restrict-imports)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-    - [Option details](#option-details)
-      - [allowImports](#allowimports)
-      - [disableImports](#disableimports)
-      - [files](#files)
-      - [folders](#folders)
-      - [from](#from)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-    - [Disabling imports globally](#disabling-imports-globally)
-    - [Disabling imports in specific files](#disabling-imports-in-specific-files)
-    - [Disabling imports in specific folders](#disabling-imports-in-specific-folders)
-    - [Allow-list approach](#allow-list-approach)
-    - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
-    - [Multiple configuration blocks](#multiple-configuration-blocks)
-    - [Restricting imports from specific modules](#restricting-imports-from-specific-modules)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Minimal (disable a single import)](#minimal-disable-a-single-import)
-    - [File-scoped restriction](#file-scoped-restriction)
-    - [Folder-scoped restriction](#folder-scoped-restriction)
-    - [Module-scoped restriction (using `from`)](#module-scoped-restriction-using-from)
-  - [Version](#version)
-  - [Further Reading](#further-reading)
+    - [Table of contents](#table-of-contents)
+    - [Rule summary](#rule-summary)
+    - [What the rule checks](#what-the-rule-checks)
+    - [Options (all configurations)](#options-all-configurations)
+        - [Default options](#default-options)
+        - [Option details](#option-details)
+            - [allowImports](#allowimports)
+            - [disableImports](#disableimports)
+            - [files](#files)
+            - [folders](#folders)
+            - [from](#from)
+    - [Examples (by option)](#examples-by-option)
+        - [Default behavior](#default-behavior)
+        - [Disabling imports globally](#disabling-imports-globally)
+        - [Disabling imports in specific files](#disabling-imports-in-specific-files)
+        - [Disabling imports in specific folders](#disabling-imports-in-specific-folders)
+        - [Allow-list approach](#allow-list-approach)
+        - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
+        - [Multiple configuration blocks](#multiple-configuration-blocks)
+        - [Restricting imports from specific modules](#restricting-imports-from-specific-modules)
+    - [Messages](#messages)
+    - [Implementation notes \& requirements](#implementation-notes--requirements)
+    - [Limitations \& edge cases](#limitations--edge-cases)
+    - [Quick configuration snippets](#quick-configuration-snippets)
+        - [Minimal (disable a single import)](#minimal-disable-a-single-import)
+        - [File-scoped restriction](#file-scoped-restriction)
+        - [Folder-scoped restriction](#folder-scoped-restriction)
+        - [Module-scoped restriction (using `from`)](#module-scoped-restriction-using-from)
+    - [Version](#version)
+    - [Further Reading](#further-reading)
 
 ---
 
@@ -68,13 +68,13 @@ The rule accepts an array of configuration objects, each defining a scope and im
 
 ```ts
 type Options = [
-  Partial<{
-    allowImports: string[];
-    disableImports: string[];
-    files: string[];
-    folders: string[];
-    from: string[];
-  }>[]
+    Partial<{
+        allowImports: string[];
+        disableImports: string[];
+        files: string[];
+        folders: string[];
+        from: string[];
+    }>[],
 ];
 ```
 
@@ -139,12 +139,12 @@ By default, the rule is disabled and does not restrict any imports.
 import nima from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima },
-    rules: {
-      "nima/restrict-imports": "error", // No effect without configuration
+    {
+        plugins: { nima },
+        rules: {
+            "nima/restrict-imports": "error", // No effect without configuration
+        },
     },
-  },
 ];
 ```
 
@@ -157,19 +157,19 @@ Restrict specific imports across the entire codebase:
 import nima from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima },
-    rules: {
-      "nima/restrict-imports": [
-        "error",
-        [
-          {
-            disableImports: ["lodash", "moment"],
-          },
-        ],
-      ],
+    {
+        plugins: { nima },
+        rules: {
+            "nima/restrict-imports": [
+                "error",
+                [
+                    {
+                        disableImports: ["lodash", "moment"],
+                    },
+                ],
+            ],
+        },
     },
-  },
 ];
 ```
 
@@ -196,20 +196,20 @@ Restrict imports only in files matching a pattern:
 import nima from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima },
-    rules: {
-      "nima/restrict-imports": [
-        "error",
-        [
-          {
-            disableImports: ["enzyme"],
-            files: ["*.test.tsx", "*.spec.tsx"],
-          },
-        ],
-      ],
+    {
+        plugins: { nima },
+        rules: {
+            "nima/restrict-imports": [
+                "error",
+                [
+                    {
+                        disableImports: ["enzyme"],
+                        files: ["*.test.tsx", "*.spec.tsx"],
+                    },
+                ],
+            ],
+        },
     },
-  },
 ];
 ```
 
@@ -222,20 +222,20 @@ Restrict imports in specific directories:
 import nima from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima },
-    rules: {
-      "nima/restrict-imports": [
-        "error",
-        [
-          {
-            disableImports: ["fs", "path"],
-            folders: ["**/client/**", "**/frontend/**"],
-          },
-        ],
-      ],
+    {
+        plugins: { nima },
+        rules: {
+            "nima/restrict-imports": [
+                "error",
+                [
+                    {
+                        disableImports: ["fs", "path"],
+                        folders: ["**/client/**", "**/frontend/**"],
+                    },
+                ],
+            ],
+        },
     },
-  },
 ];
 ```
 
@@ -248,23 +248,23 @@ Allow specific imports only in certain files (your use case - Route only in Page
 import nima from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima },
-    rules: {
-      "nima/restrict-imports": [
-        "error",
-        [
-          {
-            disableImports: ["Route"],
-          },
-          {
-            allowImports: ["Route"],
-            files: ["*Page.tsx"],
-          },
-        ],
-      ],
+    {
+        plugins: { nima },
+        rules: {
+            "nima/restrict-imports": [
+                "error",
+                [
+                    {
+                        disableImports: ["Route"],
+                    },
+                    {
+                        allowImports: ["Route"],
+                        files: ["*Page.tsx"],
+                    },
+                ],
+            ],
+        },
     },
-  },
 ];
 ```
 
@@ -289,21 +289,21 @@ Combine file and folder patterns for precise control:
 import nima from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima },
-    rules: {
-      "nima/restrict-imports": [
-        "error",
-        [
-          {
-            disableImports: ["internalApi"],
-            files: ["*.public.ts"],
-            folders: ["**/api/**"],
-          },
-        ],
-      ],
+    {
+        plugins: { nima },
+        rules: {
+            "nima/restrict-imports": [
+                "error",
+                [
+                    {
+                        disableImports: ["internalApi"],
+                        files: ["*.public.ts"],
+                        folders: ["**/api/**"],
+                    },
+                ],
+            ],
+        },
     },
-  },
 ];
 ```
 
@@ -316,30 +316,30 @@ Use multiple configuration blocks for complex scenarios:
 import nima from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima },
-    rules: {
-      "nima/restrict-imports": [
-        "error",
-        [
-          // Disable Route globally
-          {
-            disableImports: ["Route"],
-          },
-          // Allow Route in Page files
-          {
-            allowImports: ["Route"],
-            files: ["*Page.tsx"],
-          },
-          // Disable fs in frontend code
-          {
-            disableImports: ["fs"],
-            folders: ["**/frontend/**"],
-          },
-        ],
-      ],
+    {
+        plugins: { nima },
+        rules: {
+            "nima/restrict-imports": [
+                "error",
+                [
+                    // Disable Route globally
+                    {
+                        disableImports: ["Route"],
+                    },
+                    // Allow Route in Page files
+                    {
+                        allowImports: ["Route"],
+                        files: ["*Page.tsx"],
+                    },
+                    // Disable fs in frontend code
+                    {
+                        disableImports: ["fs"],
+                        folders: ["**/frontend/**"],
+                    },
+                ],
+            ],
+        },
     },
-  },
 ];
 ```
 
@@ -352,21 +352,21 @@ Use the `from` option to restrict imports only from specific modules. This is us
 import nima from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima },
-    rules: {
-      "nima/restrict-imports": [
-        "error",
-        [
-          {
-            allowImports: ["Route"],
-            files: ["*Page.tsx"],
-            from: ["react-router", "react-router-dom"],
-          },
-        ],
-      ],
+    {
+        plugins: { nima },
+        rules: {
+            "nima/restrict-imports": [
+                "error",
+                [
+                    {
+                        allowImports: ["Route"],
+                        files: ["*Page.tsx"],
+                        from: ["react-router", "react-router-dom"],
+                    },
+                ],
+            ],
+        },
     },
-  },
 ];
 ```
 

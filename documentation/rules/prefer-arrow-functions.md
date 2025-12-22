@@ -8,35 +8,35 @@ Arrow functions provide lexical `this` binding, shorter syntax, and more consist
 ## Table of contents
 
 - [`prefer-arrow-functions`](#prefer-arrow-functions)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-    - [Option details](#option-details)
-      - [allowAsync](#allowasync)
-      - [allowConstructors](#allowconstructors)
-      - [allowFunctionDeclarations](#allowfunctiondeclarations)
-      - [allowFunctionExpressions](#allowfunctionexpressions)
-      - [allowGenerators](#allowgenerators)
-      - [allowMethodDefinitions](#allowmethoddefinitions)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-    - [Function declarations](#function-declarations)
-    - [Function expressions](#function-expressions)
-    - [Method definitions](#method-definitions)
-    - [Export handling](#export-handling)
-    - [Async functions](#async-functions)
-    - [Generator functions](#generator-functions)
-    - [Constructor functions](#constructor-functions)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-  - [Version](#version)
-  - [Further Reading](#further-reading)
+    - [Table of contents](#table-of-contents)
+    - [Rule summary](#rule-summary)
+    - [What the rule checks](#what-the-rule-checks)
+    - [Options (all configurations)](#options-all-configurations)
+        - [Default options](#default-options)
+        - [Option details](#option-details)
+            - [allowAsync](#allowasync)
+            - [allowConstructors](#allowconstructors)
+            - [allowFunctionDeclarations](#allowfunctiondeclarations)
+            - [allowFunctionExpressions](#allowfunctionexpressions)
+            - [allowGenerators](#allowgenerators)
+            - [allowMethodDefinitions](#allowmethoddefinitions)
+    - [Examples (by option)](#examples-by-option)
+        - [Default behavior](#default-behavior)
+        - [Function declarations](#function-declarations)
+        - [Function expressions](#function-expressions)
+        - [Method definitions](#method-definitions)
+        - [Export handling](#export-handling)
+        - [Async functions](#async-functions)
+        - [Generator functions](#generator-functions)
+        - [Constructor functions](#constructor-functions)
+    - [Messages](#messages)
+    - [Implementation notes \& requirements](#implementation-notes--requirements)
+    - [Limitations \& edge cases](#limitations--edge-cases)
+    - [Quick configuration snippets](#quick-configuration-snippets)
+        - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+        - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+    - [Version](#version)
+    - [Further Reading](#further-reading)
 
 ---
 
@@ -67,14 +67,14 @@ The rule accepts a single options object. Type definition:
 
 ```ts
 type Options = [
-  Partial<{
-    allowAsync: boolean;
-    allowConstructors: boolean;
-    allowFunctionDeclarations: boolean;
-    allowFunctionExpressions: boolean;
-    allowGenerators: boolean;
-    allowMethodDefinitions: boolean;
-  }>
+    Partial<{
+        allowAsync: boolean;
+        allowConstructors: boolean;
+        allowFunctionDeclarations: boolean;
+        allowFunctionExpressions: boolean;
+        allowGenerators: boolean;
+        allowMethodDefinitions: boolean;
+    }>,
 ];
 ```
 
@@ -82,12 +82,12 @@ type Options = [
 
 ```json
 {
-  "allowAsync": true,
-  "allowConstructors": true,
-  "allowFunctionDeclarations": false,
-  "allowFunctionExpressions": false,
-  "allowGenerators": true,
-  "allowMethodDefinitions": false
+    "allowAsync": true,
+    "allowConstructors": true,
+    "allowFunctionDeclarations": false,
+    "allowFunctionExpressions": false,
+    "allowGenerators": true,
+    "allowMethodDefinitions": false
 }
 ```
 
@@ -140,23 +140,23 @@ Incorrect:
 
 ```ts
 function greet(name) {
-  return `Hello, ${name}!`;
+    return `Hello, ${name}!`;
 }
 
 const calculate = function (a, b) {
-  return a + b;
+    return a + b;
 };
 
 class MyClass {
-  method() {
-    return "hello";
-  }
+    method() {
+        return "hello";
+    }
 }
 
 const obj = {
-  method() {
-    return "world";
-  },
+    method() {
+        return "world";
+    },
 };
 ```
 
@@ -164,23 +164,23 @@ Correct (after auto-fix):
 
 ```ts
 const greet = (name) => {
-  return `Hello, ${name}!`;
+    return `Hello, ${name}!`;
 };
 
 const calculate = (a, b) => {
-  return a + b;
+    return a + b;
 };
 
 class MyClass {
-  method = () => {
-    return "hello";
-  };
+    method = () => {
+        return "hello";
+    };
 }
 
 const obj = {
-  method: () => {
-    return "world";
-  },
+    method: () => {
+        return "world";
+    },
 };
 ```
 
@@ -190,16 +190,16 @@ Incorrect:
 
 ```ts
 function add(a, b) {
-  return a + b;
+    return a + b;
 }
 
 function processData(data) {
-  return data.map((item) => item * 2);
+    return data.map((item) => item * 2);
 }
 
 // With TypeScript types
 function multiply(a: number, b: number): number {
-  return a * b;
+    return a * b;
 }
 ```
 
@@ -207,16 +207,16 @@ Correct (after auto-fix):
 
 ```ts
 const add = (a, b) => {
-  return a + b;
+    return a + b;
 };
 
 const processData = (data) => {
-  return data.map((item) => item * 2);
+    return data.map((item) => item * 2);
 };
 
 // TypeScript types preserved
 const multiply = (a: number, b: number): number => {
-  return a * b;
+    return a * b;
 };
 ```
 
@@ -226,16 +226,16 @@ Incorrect:
 
 ```ts
 const handler = function (event) {
-  event.preventDefault();
+    event.preventDefault();
 };
 
 const callback = function () {
-  console.log("called");
+    console.log("called");
 };
 
 // Single parameter without parentheses after conversion
 const transform = function (value) {
-  return value.toString();
+    return value.toString();
 };
 ```
 
@@ -243,16 +243,16 @@ Correct (after auto-fix):
 
 ```ts
 const handler = (event) => {
-  event.preventDefault();
+    event.preventDefault();
 };
 
 const callback = () => {
-  console.log("called");
+    console.log("called");
 };
 
 // Single parameter without type annotation gets no parentheses
 const transform = (value) => {
-  return value.toString();
+    return value.toString();
 };
 ```
 
@@ -262,23 +262,23 @@ Incorrect:
 
 ```ts
 class Calculator {
-  add(a, b) {
-    return a + b;
-  }
+    add(a, b) {
+        return a + b;
+    }
 
-  static multiply(a, b) {
-    return a * b;
-  }
+    static multiply(a, b) {
+        return a * b;
+    }
 }
 
 const utils = {
-  format(value) {
-    return `Value: ${value}`;
-  },
+    format(value) {
+        return `Value: ${value}`;
+    },
 
-  parse(str) {
-    return parseInt(str);
-  },
+    parse(str) {
+        return parseInt(str);
+    },
 };
 ```
 
@@ -286,23 +286,23 @@ Correct (after auto-fix):
 
 ```ts
 class Calculator {
-  add = (a, b) => {
-    return a + b;
-  };
+    add = (a, b) => {
+        return a + b;
+    };
 
-  static multiply = (a, b) => {
-    return a * b;
-  };
+    static multiply = (a, b) => {
+        return a * b;
+    };
 }
 
 const utils = {
-  format: (value) => {
-    return `Value: ${value}`;
-  },
+    format: (value) => {
+        return `Value: ${value}`;
+    },
 
-  parse: (str) => {
-    return parseInt(str);
-  },
+    parse: (str) => {
+        return parseInt(str);
+    },
 };
 ```
 
@@ -312,15 +312,15 @@ Incorrect:
 
 ```ts
 export function helper(data) {
-  return data.processed;
+    return data.processed;
 }
 
 export default function main() {
-  return "main function";
+    return "main function";
 }
 
 function internal() {
-  return "internal";
+    return "internal";
 }
 ```
 
@@ -328,16 +328,16 @@ Correct (after auto-fix):
 
 ```ts
 export const helper = (data) => {
-  return data.processed;
+    return data.processed;
 };
 
 const main = () => {
-  return "main function";
+    return "main function";
 };
 export default main;
 
 const internal = () => {
-  return "internal";
+    return "internal";
 };
 ```
 
@@ -349,12 +349,12 @@ Incorrect:
 
 ```ts
 async function fetchData(url) {
-  const response = await fetch(url);
-  return response.json();
+    const response = await fetch(url);
+    return response.json();
 }
 
 const processAsync = async function (data) {
-  return await transformData(data);
+    return await transformData(data);
 };
 ```
 
@@ -362,12 +362,12 @@ Correct (after auto-fix):
 
 ```ts
 const fetchData = async (url) => {
-  const response = await fetch(url);
-  return response.json();
+    const response = await fetch(url);
+    return response.json();
 };
 
 const processAsync = async (data) => {
-  return await transformData(data);
+    return await transformData(data);
 };
 ```
 
@@ -377,14 +377,14 @@ With `allowGenerators: true` (default), generator functions are not flagged:
 
 ```ts
 function* generateNumbers() {
-  yield 1;
-  yield 2;
-  yield 3;
+    yield 1;
+    yield 2;
+    yield 3;
 }
 
 const generator = function* () {
-  yield "hello";
-  yield "world";
+    yield "hello";
+    yield "world";
 };
 ```
 
@@ -394,14 +394,14 @@ With `allowConstructors: true` (default), constructor functions are not flagged:
 
 ```ts
 class MyClass {
-  constructor(value) {
-    this.value = value;
-  }
+    constructor(value) {
+        this.value = value;
+    }
 
-  // Other methods would be flagged if allowMethodDefinitions: false
-  method() {
-    return this.value;
-  }
+    // Other methods would be flagged if allowMethodDefinitions: false
+    method() {
+        return this.value;
+    }
 }
 ```
 
@@ -459,22 +459,22 @@ NIMA: Prefer arrow functions over function declarations.
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima: pluginNIMA },
-    rules: {
-      "nima/prefer-arrow-functions": [
-        "error",
-        {
-          allowAsync: true,
-          allowConstructors: true,
-          allowFunctionDeclarations: false,
-          allowFunctionExpressions: false,
-          allowGenerators: true,
-          allowMethodDefinitions: false,
+    {
+        plugins: { nima: pluginNIMA },
+        rules: {
+            "nima/prefer-arrow-functions": [
+                "error",
+                {
+                    allowAsync: true,
+                    allowConstructors: true,
+                    allowFunctionDeclarations: false,
+                    allowFunctionExpressions: false,
+                    allowGenerators: true,
+                    allowMethodDefinitions: false,
+                },
+            ],
         },
-      ],
     },
-  },
 ];
 ```
 
@@ -482,20 +482,20 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/prefer-arrow-functions": [
-      "error",
-      {
-        "allowAsync": true,
-        "allowConstructors": true,
-        "allowFunctionDeclarations": false,
-        "allowFunctionExpressions": false,
-        "allowGenerators": true,
-        "allowMethodDefinitions": false
-      }
-    ]
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/prefer-arrow-functions": [
+            "error",
+            {
+                "allowAsync": true,
+                "allowConstructors": true,
+                "allowFunctionDeclarations": false,
+                "allowFunctionExpressions": false,
+                "allowGenerators": true,
+                "allowMethodDefinitions": false
+            }
+        ]
+    }
 }
 ```
 

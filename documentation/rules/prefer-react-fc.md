@@ -8,26 +8,26 @@ This ensures consistent typing, better IntelliSense support, and explicit compon
 ## Table of contents
 
 - [`prefer-react-fc`](#prefer-react-fc)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-    - [Arrow function components](#arrow-function-components)
-    - [Function declaration components](#function-declaration-components)
-    - [Custom component types](#custom-component-types)
-    - [Complex JSX returns](#complex-jsx-returns)
-    - [Non-component functions](#non-component-functions)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-  - [Version](#version)
-  - [Further Reading](#further-reading)
+    - [Table of contents](#table-of-contents)
+    - [Rule summary](#rule-summary)
+    - [What the rule checks](#what-the-rule-checks)
+    - [Options (all configurations)](#options-all-configurations)
+        - [Default options](#default-options)
+    - [Examples (by option)](#examples-by-option)
+        - [Default behavior](#default-behavior)
+        - [Arrow function components](#arrow-function-components)
+        - [Function declaration components](#function-declaration-components)
+        - [Custom component types](#custom-component-types)
+        - [Complex JSX returns](#complex-jsx-returns)
+        - [Non-component functions](#non-component-functions)
+    - [Messages](#messages)
+    - [Implementation notes \& requirements](#implementation-notes--requirements)
+    - [Limitations \& edge cases](#limitations--edge-cases)
+    - [Quick configuration snippets](#quick-configuration-snippets)
+        - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+        - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+    - [Version](#version)
+    - [Further Reading](#further-reading)
 
 ---
 
@@ -76,22 +76,22 @@ Incorrect:
 ```tsx
 // Arrow function component without React.FC
 const MyComponent = ({ name }) => {
-  return <div>Hello {name}</div>;
+    return <div>Hello {name}</div>;
 };
 
 // Function declaration without React.FC
 function AnotherComponent({ title }) {
-  return <h1>{title}</h1>;
+    return <h1>{title}</h1>;
 }
 
 // Component with props but no type annotation
 const UserCard = (props) => {
-  return (
-    <div className="card">
-      <h2>{props.name}</h2>
-      <p>{props.email}</p>
-    </div>
-  );
+    return (
+        <div className="card">
+            <h2>{props.name}</h2>
+            <p>{props.email}</p>
+        </div>
+    );
 };
 ```
 
@@ -102,22 +102,22 @@ import React from "react";
 
 // Arrow function with React.FC
 const MyComponent: React.FC<{ name: string }> = ({ name }) => {
-  return <div>Hello {name}</div>;
+    return <div>Hello {name}</div>;
 };
 
 // Function declaration with return type annotation
 function AnotherComponent({ title }: { title: string }): React.ReactElement {
-  return <h1>{title}</h1>;
+    return <h1>{title}</h1>;
 }
 
 // Using FC alias
 const UserCard: FC<{ name: string; email: string }> = (props) => {
-  return (
-    <div className="card">
-      <h2>{props.name}</h2>
-      <p>{props.email}</p>
-    </div>
-  );
+    return (
+        <div className="card">
+            <h2>{props.name}</h2>
+            <p>{props.email}</p>
+        </div>
+    );
 };
 ```
 
@@ -127,18 +127,18 @@ Incorrect:
 
 ```tsx
 const Button = ({ onClick, children }) => {
-  return <button onClick={onClick}>{children}</button>;
+    return <button onClick={onClick}>{children}</button>;
 };
 
 const Modal = ({ isOpen, onClose }) =>
-  isOpen ? (
-    <div className="modal">
-      <button onClick={onClose}>Close</button>
-    </div>
-  ) : null;
+    isOpen ? (
+        <div className="modal">
+            <button onClick={onClose}>Close</button>
+        </div>
+    ) : null;
 
 const LoadingSpinner = () => {
-  return <div className="spinner">Loading...</div>;
+    return <div className="spinner">Loading...</div>;
 };
 ```
 
@@ -146,26 +146,26 @@ Correct:
 
 ```tsx
 interface ButtonProps {
-  onClick: () => void;
-  children: React.ReactNode;
+    onClick: () => void;
+    children: React.ReactNode;
 }
 
 const Button: React.FC<ButtonProps> = ({ onClick, children }) => {
-  return <button onClick={onClick}>{children}</button>;
+    return <button onClick={onClick}>{children}</button>;
 };
 
 const Modal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
-  isOpen,
-  onClose,
+    isOpen,
+    onClose,
 }) =>
-  isOpen ? (
-    <div className="modal">
-      <button onClick={onClose}>Close</button>
-    </div>
-  ) : null;
+    isOpen ? (
+        <div className="modal">
+            <button onClick={onClose}>Close</button>
+        </div>
+    ) : null;
 
 const LoadingSpinner: React.FC = () => {
-  return <div className="spinner">Loading...</div>;
+    return <div className="spinner">Loading...</div>;
 };
 ```
 
@@ -175,22 +175,22 @@ Incorrect:
 
 ```tsx
 function Header({ title, subtitle }) {
-  return (
-    <header>
-      <h1>{title}</h1>
-      {subtitle && <h2>{subtitle}</h2>}
-    </header>
-  );
+    return (
+        <header>
+            <h1>{title}</h1>
+            {subtitle && <h2>{subtitle}</h2>}
+        </header>
+    );
 }
 
 function ProductList({ products }) {
-  return (
-    <ul>
-      {products.map((product) => (
-        <li key={product.id}>{product.name}</li>
-      ))}
-    </ul>
-  );
+    return (
+        <ul>
+            {products.map((product) => (
+                <li key={product.id}>{product.name}</li>
+            ))}
+        </ul>
+    );
 }
 ```
 
@@ -198,36 +198,36 @@ Correct:
 
 ```tsx
 interface HeaderProps {
-  title: string;
-  subtitle?: string;
+    title: string;
+    subtitle?: string;
 }
 
 function Header({ title, subtitle }: HeaderProps): React.ReactElement {
-  return (
-    <header>
-      <h1>{title}</h1>
-      {subtitle && <h2>{subtitle}</h2>}
-    </header>
-  );
+    return (
+        <header>
+            <h1>{title}</h1>
+            {subtitle && <h2>{subtitle}</h2>}
+        </header>
+    );
 }
 
 interface Product {
-  id: string;
-  name: string;
+    id: string;
+    name: string;
 }
 
 function ProductList({
-  products,
+    products,
 }: {
-  products: Product[];
+    products: Product[];
 }): React.ReactElement {
-  return (
-    <ul>
-      {products.map((product) => (
-        <li key={product.id}>{product.name}</li>
-      ))}
-    </ul>
-  );
+    return (
+        <ul>
+            {products.map((product) => (
+                <li key={product.id}>{product.name}</li>
+            ))}
+        </ul>
+    );
 }
 ```
 
@@ -240,17 +240,17 @@ Correct (not flagged):
 type CustomComponent<T = {}> = (props: T) => React.ReactElement;
 
 const MyComponent: CustomComponent<{ name: string }> = ({ name }) => {
-  return <div>Hello {name}</div>;
+    return <div>Hello {name}</div>;
 };
 
 // Interface extending component behavior
 interface MyComponentType {
-  (props: { title: string }): React.ReactElement;
-  displayName?: string;
+    (props: { title: string }): React.ReactElement;
+    displayName?: string;
 }
 
 const ExtendedComponent: MyComponentType = ({ title }) => {
-  return <h1>{title}</h1>;
+    return <h1>{title}</h1>;
 };
 ```
 
@@ -262,22 +262,22 @@ Incorrect:
 
 ```tsx
 const ConditionalComponent = ({ condition, data }) => {
-  if (condition) {
-    return <div>Condition is true</div>;
-  }
-  return <div>Condition is false</div>;
+    if (condition) {
+        return <div>Condition is true</div>;
+    }
+    return <div>Condition is false</div>;
 };
 
 const LogicalComponent = ({ show, content }) => {
-  return show && <div>{content}</div>;
+    return show && <div>{content}</div>;
 };
 
 const TernaryComponent = ({ type }) => {
-  return type === "success" ? (
-    <div className="success">Success!</div>
-  ) : (
-    <div className="error">Error!</div>
-  );
+    return type === "success" ? (
+        <div className="success">Success!</div>
+    ) : (
+        <div className="error">Error!</div>
+    );
 };
 ```
 
@@ -285,30 +285,30 @@ Correct:
 
 ```tsx
 const ConditionalComponent: React.FC<{ condition: boolean; data: any }> = ({
-  condition,
-  data,
+    condition,
+    data,
 }) => {
-  if (condition) {
-    return <div>Condition is true</div>;
-  }
-  return <div>Condition is false</div>;
+    if (condition) {
+        return <div>Condition is true</div>;
+    }
+    return <div>Condition is false</div>;
 };
 
 const LogicalComponent: React.FC<{ show: boolean; content: string }> = ({
-  show,
-  content,
+    show,
+    content,
 }) => {
-  return show && <div>{content}</div>;
+    return show && <div>{content}</div>;
 };
 
 const TernaryComponent: React.FC<{ type: "success" | "error" }> = ({
-  type,
+    type,
 }) => {
-  return type === "success" ? (
-    <div className="success">Success!</div>
-  ) : (
-    <div className="error">Error!</div>
-  );
+    return type === "success" ? (
+        <div className="success">Success!</div>
+    ) : (
+        <div className="error">Error!</div>
+    );
 };
 ```
 
@@ -319,21 +319,21 @@ Correct (not flagged):
 ```tsx
 // Utility functions (not PascalCase, not flagged)
 const formatDate = (date) => {
-  return date.toLocaleDateString();
+    return date.toLocaleDateString();
 };
 
 const calculateTotal = (items) => {
-  return items.reduce((sum, item) => sum + item.price, 0);
+    return items.reduce((sum, item) => sum + item.price, 0);
 };
 
 // Functions that don't return JSX (not flagged)
 function ProcessData(data) {
-  return data.map((item) => item.processed);
+    return data.map((item) => item.processed);
 }
 
 // Hook functions (not flagged due to naming convention)
 const useCustomHook = () => {
-  return { value: "hook result" };
+    return { value: "hook result" };
 };
 ```
 
@@ -386,18 +386,18 @@ NIMA: Component functions must use React.FC type annotation.
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima: pluginNIMA },
-    rules: {
-      "nima/prefer-react-fc": [
-        "error",
-        {
-          allowArrowFunctions: true,
-          allowFunctionDeclarations: true,
+    {
+        plugins: { nima: pluginNIMA },
+        rules: {
+            "nima/prefer-react-fc": [
+                "error",
+                {
+                    allowArrowFunctions: true,
+                    allowFunctionDeclarations: true,
+                },
+            ],
         },
-      ],
     },
-  },
 ];
 ```
 
@@ -405,16 +405,16 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/prefer-react-fc": [
-      "error",
-      {
-        "allowArrowFunctions": true,
-        "allowFunctionDeclarations": true
-      }
-    ]
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/prefer-react-fc": [
+            "error",
+            {
+                "allowArrowFunctions": true,
+                "allowFunctionDeclarations": true
+            }
+        ]
+    }
 }
 ```
 

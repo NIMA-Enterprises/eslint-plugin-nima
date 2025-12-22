@@ -8,35 +8,35 @@ This rule provides fine-grained control over function usage across your codebase
 ## Table of contents
 
 - [`restrict-function-usage`](#restrict-function-usage)
-  - [Table of contents](#table-of-contents)
-  - [Rule summary](#rule-summary)
-  - [What the rule checks](#what-the-rule-checks)
-  - [Options (all configurations)](#options-all-configurations)
-    - [Default options](#default-options)
-    - [Option details](#option-details)
-      - [allowFunctions](#allowfunctions)
-      - [disableFunctions](#disablefunctions)
-      - [files](#files)
-      - [folders](#folders)
-    - [Configuration Logic](#configuration-logic)
-  - [Examples (by option)](#examples-by-option)
-    - [Default behavior](#default-behavior)
-    - [Disabling functions globally](#disabling-functions-globally)
-    - [Disabling functions in specific files](#disabling-functions-in-specific-files)
-    - [Disabling functions in specific folders](#disabling-functions-in-specific-folders)
-    - [Allow-list approach](#allow-list-approach)
-    - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
-    - [Multiple configuration blocks](#multiple-configuration-blocks)
-  - [Messages](#messages)
-  - [Implementation notes \& requirements](#implementation-notes--requirements)
-    - [Configuration Processing Logic](#configuration-processing-logic)
-  - [Limitations \& edge cases](#limitations--edge-cases)
-  - [Quick configuration snippets](#quick-configuration-snippets)
-    - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
-    - [Legacy .eslintrc.json](#legacy-eslintrcjson)
-    - [Security-focused configuration](#security-focused-configuration)
-  - [Version](#version)
-  - [Further Reading](#further-reading)
+    - [Table of contents](#table-of-contents)
+    - [Rule summary](#rule-summary)
+    - [What the rule checks](#what-the-rule-checks)
+    - [Options (all configurations)](#options-all-configurations)
+        - [Default options](#default-options)
+        - [Option details](#option-details)
+            - [allowFunctions](#allowfunctions)
+            - [disableFunctions](#disablefunctions)
+            - [files](#files)
+            - [folders](#folders)
+        - [Configuration Logic](#configuration-logic)
+    - [Examples (by option)](#examples-by-option)
+        - [Default behavior](#default-behavior)
+        - [Disabling functions globally](#disabling-functions-globally)
+        - [Disabling functions in specific files](#disabling-functions-in-specific-files)
+        - [Disabling functions in specific folders](#disabling-functions-in-specific-folders)
+        - [Allow-list approach](#allow-list-approach)
+        - [Mixed file and folder restrictions](#mixed-file-and-folder-restrictions)
+        - [Multiple configuration blocks](#multiple-configuration-blocks)
+    - [Messages](#messages)
+    - [Implementation notes \& requirements](#implementation-notes--requirements)
+        - [Configuration Processing Logic](#configuration-processing-logic)
+    - [Limitations \& edge cases](#limitations--edge-cases)
+    - [Quick configuration snippets](#quick-configuration-snippets)
+        - [Flat ESLint config (eslint.config.js)](#flat-eslint-config-eslintconfigjs)
+        - [Legacy .eslintrc.json](#legacy-eslintrcjson)
+        - [Security-focused configuration](#security-focused-configuration)
+    - [Version](#version)
+    - [Further Reading](#further-reading)
 
 ---
 
@@ -66,12 +66,12 @@ The rule accepts an array of configuration objects, each defining a scope and fu
 
 ```ts
 type Options = [
-  Partial<{
-    allowFunctions: string[];
-    disableFunctions: string[];
-    files: string[];
-    folders: string[];
-  }>[]
+    Partial<{
+        allowFunctions: string[];
+        disableFunctions: string[];
+        files: string[];
+        folders: string[];
+    }>[],
 ];
 ```
 
@@ -147,16 +147,16 @@ Configuration:
 
 ```jsonc
 {
-  "rules": {
-    "nima/restrict-function-usage": [
-      "error",
-      [
-        {
-          "disableFunctions": ["eval", "setTimeout", "setInterval"]
-        }
-      ]
-    ]
-  }
+    "rules": {
+        "nima/restrict-function-usage": [
+            "error",
+            [
+                {
+                    "disableFunctions": ["eval", "setTimeout", "setInterval"],
+                },
+            ],
+        ],
+    },
 }
 ```
 
@@ -183,17 +183,17 @@ Configuration:
 
 ```jsonc
 {
-  "rules": {
-    "nima/restrict-function-usage": [
-      "error",
-      [
-        {
-          "disableFunctions": ["console.log", "debugger"],
-          "files": ["*.prod.js", "*.min.js"]
-        }
-      ]
-    ]
-  }
+    "rules": {
+        "nima/restrict-function-usage": [
+            "error",
+            [
+                {
+                    "disableFunctions": ["console.log", "debugger"],
+                    "files": ["*.prod.js", "*.min.js"],
+                },
+            ],
+        ],
+    },
 }
 ```
 
@@ -221,17 +221,17 @@ Configuration:
 
 ```jsonc
 {
-  "rules": {
-    "nima/restrict-function-usage": [
-      "error",
-      [
-        {
-          "disableFunctions": ["fetch", "XMLHttpRequest"],
-          "folders": ["**/components/**", "**/utils/**"]
-        }
-      ]
-    ]
-  }
+    "rules": {
+        "nima/restrict-function-usage": [
+            "error",
+            [
+                {
+                    "disableFunctions": ["fetch", "XMLHttpRequest"],
+                    "folders": ["**/components/**", "**/utils/**"],
+                },
+            ],
+        ],
+    },
 }
 ```
 
@@ -248,8 +248,8 @@ Correct:
 ```js
 // In src/components/UserCard.js - use dependency injection
 function UserCard({ apiService }) {
-  // apiService handles the HTTP calls
-  const users = apiService.getUsers();
+    // apiService handles the HTTP calls
+    const users = apiService.getUsers();
 }
 
 // In src/services/api.js - fetch is allowed outside restricted folders
@@ -262,17 +262,17 @@ Configuration:
 
 ```jsonc
 {
-  "rules": {
-    "nima/restrict-function-usage": [
-      "error",
-      [
-        {
-          "allowFunctions": ["console.log", "console.error"],
-          "folders": ["**/production/**"]
-        }
-      ]
-    ]
-  }
+    "rules": {
+        "nima/restrict-function-usage": [
+            "error",
+            [
+                {
+                    "allowFunctions": ["console.log", "console.error"],
+                    "folders": ["**/production/**"],
+                },
+            ],
+        ],
+    },
 }
 ```
 
@@ -299,18 +299,18 @@ Configuration:
 
 ```jsonc
 {
-  "rules": {
-    "nima/restrict-function-usage": [
-      "error",
-      [
-        {
-          "disableFunctions": ["localStorage", "sessionStorage"],
-          "files": ["*.component.js"],
-          "folders": ["**/components/**"]
-        }
-      ]
-    ]
-  }
+    "rules": {
+        "nima/restrict-function-usage": [
+            "error",
+            [
+                {
+                    "disableFunctions": ["localStorage", "sessionStorage"],
+                    "files": ["*.component.js"],
+                    "folders": ["**/components/**"],
+                },
+            ],
+        ],
+    },
 }
 ```
 
@@ -328,7 +328,7 @@ Correct:
 ```js
 // In src/components/User.component.js - use props/state
 function UserComponent({ user, onUserChange }) {
-  // Manage state through props, not direct storage access
+    // Manage state through props, not direct storage access
 }
 
 // In src/components/User.js - different filename, rule doesn't apply
@@ -344,26 +344,26 @@ Configuration:
 
 ```jsonc
 {
-  "rules": {
-    "nima/restrict-function-usage": [
-      "error",
-      [
-        {
-          "disableFunctions": ["eval", "Function"],
-          "folders": ["**/src/**"]
-        },
-        {
-          "allowFunctions": ["console.log"],
-          "files": ["*.test.js"]
-        },
-        {
-          "disableFunctions": ["process.exit"],
-          "files": ["*.js"],
-          "folders": ["**/routes/**"]
-        }
-      ]
-    ]
-  }
+    "rules": {
+        "nima/restrict-function-usage": [
+            "error",
+            [
+                {
+                    "disableFunctions": ["eval", "Function"],
+                    "folders": ["**/src/**"],
+                },
+                {
+                    "allowFunctions": ["console.log"],
+                    "files": ["*.test.js"],
+                },
+                {
+                    "disableFunctions": ["process.exit"],
+                    "files": ["*.js"],
+                    "folders": ["**/routes/**"],
+                },
+            ],
+        ],
+    },
 }
 ```
 
@@ -430,24 +430,24 @@ Do not use fetch inside src/components/UserList.js.
 import pluginNIMA from "eslint-plugin-nima";
 
 export default [
-  {
-    plugins: { nima: pluginNIMA },
-    rules: {
-      "nima/restrict-function-usage": [
-        "error",
-        [
-          {
-            disableFunctions: ["eval", "setTimeout"],
-            folders: ["**/src/**"],
-          },
-          {
-            allowFunctions: ["console.log", "console.error"],
-            files: ["*.test.js"],
-          },
-        ],
-      ],
+    {
+        plugins: { nima: pluginNIMA },
+        rules: {
+            "nima/restrict-function-usage": [
+                "error",
+                [
+                    {
+                        disableFunctions: ["eval", "setTimeout"],
+                        folders: ["**/src/**"],
+                    },
+                    {
+                        allowFunctions: ["console.log", "console.error"],
+                        files: ["*.test.js"],
+                    },
+                ],
+            ],
+        },
     },
-  },
 ];
 ```
 
@@ -455,22 +455,22 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/restrict-function-usage": [
-      "error",
-      [
-        {
-          "disableFunctions": ["eval", "Function"],
-          "folders": ["**/production/**"]
-        },
-        {
-          "allowFunctions": ["fetch"],
-          "folders": ["**/services/**"]
-        }
-      ]
-    ]
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/restrict-function-usage": [
+            "error",
+            [
+                {
+                    "disableFunctions": ["eval", "Function"],
+                    "folders": ["**/production/**"]
+                },
+                {
+                    "allowFunctions": ["fetch"],
+                    "folders": ["**/services/**"]
+                }
+            ]
+        ]
+    }
 }
 ```
 
@@ -478,23 +478,23 @@ export default [
 
 ```json
 {
-  "plugins": ["nima"],
-  "rules": {
-    "nima/restrict-function-usage": [
-      "error",
-      [
-        {
-          "disableFunctions": [
-            "eval",
-            "Function",
-            "setTimeout",
-            "setInterval",
-            "setImmediate"
-          ]
-        }
-      ]
-    ]
-  }
+    "plugins": ["nima"],
+    "rules": {
+        "nima/restrict-function-usage": [
+            "error",
+            [
+                {
+                    "disableFunctions": [
+                        "eval",
+                        "Function",
+                        "setTimeout",
+                        "setInterval",
+                        "setImmediate"
+                    ]
+                }
+            ]
+        ]
+    }
 }
 ```
 
