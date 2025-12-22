@@ -2,7 +2,7 @@ import { pathsToModuleNameMapper } from "ts-jest";
 
 import { compilerOptions } from "./tsconfig.json";
 
-module.exports = {
+export default {
   collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts"],
   moduleFileExtensions: ["ts", "js"],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {

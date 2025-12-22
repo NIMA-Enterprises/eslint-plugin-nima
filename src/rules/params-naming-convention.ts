@@ -14,7 +14,7 @@ export const rule = createRule<Options, Messages>({
       ignorePrefixes = ["$"],
     } = options;
 
-    function checkParams(node: TSESTree.FunctionLike) {
+    const checkParams = (node: TSESTree.FunctionLike) => {
       const parameters = node.params;
       const fnName = getFunctionName(node);
 
@@ -66,7 +66,7 @@ export const rule = createRule<Options, Messages>({
           node,
         });
       }
-    }
+    };
     return {
       "FunctionDeclaration, FunctionExpression, ArrowFunctionExpression":
         checkParams,
@@ -80,8 +80,15 @@ export const rule = createRule<Options, Messages>({
       ignorePrefixes: ["$"],
     },
   ],
-
   meta: {
+    defaultOptions: [
+      {
+        allowedParameters: 1,
+        ignore: ["e"],
+        ignoreFunctions: ["reduce"],
+        ignorePrefixes: ["$"],
+      },
+    ],
     docs: {
       description: "Enforce using a single object parameter for all functions",
       recommended: false,
@@ -96,18 +103,21 @@ export const rule = createRule<Options, Messages>({
         additionalProperties: false,
         properties: {
           allowedParameters: {
-            default: 1,
+            description: "Allowed number of positional parameters",
             type: "number",
           },
           ignore: {
+            description: "Parameter names to ignore",
             items: { type: "string" },
             type: "array",
           },
           ignoreFunctions: {
+            description: "Function names to ignore",
             items: { type: "string" },
             type: "array",
           },
           ignorePrefixes: {
+            description: "Prefixes that mark parameters as ignored",
             items: { type: "string" },
             type: "array",
           },

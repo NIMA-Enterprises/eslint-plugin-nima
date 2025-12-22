@@ -13,9 +13,6 @@ This ensures consistent typing, better IntelliSense support, and explicit compon
   - [What the rule checks](#what-the-rule-checks)
   - [Options (all configurations)](#options-all-configurations)
     - [Default options](#default-options)
-    - [Option details](#option-details)
-      - [allowArrowFunctions](#allowarrowfunctions)
-      - [allowFunctionDeclarations](#allowfunctiondeclarations)
   - [Examples (by option)](#examples-by-option)
     - [Default behavior](#default-behavior)
     - [Arrow function components](#arrow-function-components)
@@ -56,41 +53,17 @@ When a React component function lacks proper type annotation, the rule reports a
 
 ## Options (all configurations)
 
-The rule accepts a single options object. Type definition:
+This rule has no configuration options.
 
 ```ts
-type Options = [
-  Partial<{
-    allowArrowFunctions: boolean;
-    allowFunctionDeclarations: boolean;
-  }>
-];
+type Options = [];
 ```
 
 ### Default options
 
 ```json
-{
-  "allowArrowFunctions": true,
-  "allowFunctionDeclarations": true
-}
+{}
 ```
-
-### Option details
-
-#### allowArrowFunctions
-
-- **Type:** `boolean`
-- **Default:** `true`
-- **Description:** When `true`, allows arrow function components to be checked by the rule. When `false`, arrow function components are ignored.
-- **Note:** This controls whether arrow functions are subject to the React.FC requirement, not whether they're allowed.
-
-#### allowFunctionDeclarations
-
-- **Type:** `boolean`
-- **Default:** `true`
-- **Description:** When `true`, allows function declaration components to be checked by the rule. When `false`, function declaration components are ignored.
-- **Note:** This controls whether function declarations are subject to the React.FC requirement, not whether they're allowed.
 
 ---
 

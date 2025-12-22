@@ -1,50 +1,24 @@
 import { Messages, Options } from "@models/restrict-imports.model";
-import { TSESTree } from "@typescript-eslint/utils";
+import { AST_NODE_TYPES, TSESTree } from "@typescript-eslint/utils";
 import { createRule } from "@utility/core";
+import { isFileMatched } from "@utility/file-helpers";
 import { minimatch } from "minimatch";
-import path from "path";
 
 export const name = "restrict-imports";
 
 export const rule = createRule<Options, Messages>({
-  create(context, [options = []]) {
-    function isFileMatched(
-      filename: string,
-      folders: string[],
-      files: string[]
-    ) {
-      const dir = path.dirname(filename);
-      const base = path.basename(filename);
+  create: (context, [options = []]) => {
+    // use shared isFileMatched helper from utilities
 
-      const hasFolders = folders.length > 0;
-      const hasFiles = files.length > 0;
-
-      if (!hasFolders && !hasFiles) {
-        return false;
-      }
-
-      if (hasFolders && hasFiles) {
-        const folderMatch = folders.some((f) => minimatch(dir, f));
-        const fileMatch = files.some((f) => minimatch(base, f));
-        return folderMatch && fileMatch;
-      }
-
-      if (hasFolders && !hasFiles) {
-        return folders.some((f) => minimatch(dir, f));
-      }
-
-      if (!hasFolders && hasFiles) {
-        return files.some((f) => minimatch(base, f));
-      }
-
-      return false;
-    }
-
-    function isImportDisabled(
-      importName: string,
-      importSource: string,
-      filename: string
-    ) {
+    const isImportDisabled = ({
+      filename,
+      importName,
+      importSource,
+    }: {
+      filename: string;
+      importName: string;
+      importSource: string;
+    }) => {
       return options.some((option) => {
         const {
           allowImports = [],
@@ -56,37 +30,34 @@ export const rule = createRule<Options, Messages>({
 
         const hasFromRestriction = from.length > 0;
         if (hasFromRestriction) {
-          const sourceMatches = from.some((pattern) =>
+          const isSourceMatches = from.some((pattern) =>
             minimatch(importSource, pattern)
           );
-          if (!sourceMatches) {
+          if (!isSourceMatches) {
             return false;
           }
         }
 
-        let appliesToFile = false;
-        if (files.length === 0 && folders.length === 0) {
-          appliesToFile = true;
-        } else {
-          appliesToFile = isFileMatched(filename, folders, files);
-        }
+        let isAppliesToFile = false;
+        isAppliesToFile =
+          files.length === 0 && folders.length === 0
+            ? true
+            : isFileMatched({ filename, files, folders });
 
         if (allowImports.length > 0) {
-          const importIsInAllowList = allowImports.some(
+          const isImportInAllowList = allowImports.some(
             (imp) => imp.toLowerCase() === importName.toLowerCase()
           );
 
-          if (importIsInAllowList) {
-            if (files.length === 0 && folders.length === 0) {
-              return false;
-            } else {
-              return !appliesToFile;
-            }
+          if (isImportInAllowList) {
+            return files.length === 0 && folders.length === 0
+              ? false
+              : !isAppliesToFile;
           }
           return false;
         }
 
-        if (!appliesToFile) {
+        if (!isAppliesToFile) {
           return false;
         }
 
@@ -100,10 +71,10 @@ export const rule = createRule<Options, Messages>({
 
         return false;
       });
-    }
+    };
 
     return {
-      ImportDeclaration(node: TSESTree.ImportDeclaration) {
+      ImportDeclaration: (node: TSESTree.ImportDeclaration) => {
         const filename = context.filename;
         const importSource =
           typeof node.source.value === "string" ? node.source.value : "";
@@ -111,21 +82,36 @@ export const rule = createRule<Options, Messages>({
         for (const specifier of node.specifiers) {
           let importName: string;
 
-          if (specifier.type === "ImportSpecifier") {
-            importName =
-              specifier.imported.type === "Identifier"
-                ? specifier.imported.name
-                : specifier.imported.value;
-          } else if (specifier.type === "ImportDefaultSpecifier") {
-            importName = specifier.local.name;
-          } else if (specifier.type === "ImportNamespaceSpecifier") {
-            importName = specifier.local.name;
-          } else {
-            continue;
+          switch (specifier.type) {
+            case AST_NODE_TYPES.ImportDefaultSpecifier: {
+              importName = specifier.local.name;
+
+              break;
+            }
+            case AST_NODE_TYPES.ImportNamespaceSpecifier: {
+              importName = specifier.local.name;
+
+              break;
+            }
+            case AST_NODE_TYPES.ImportSpecifier: {
+              importName =
+                specifier.imported.type === AST_NODE_TYPES.Identifier
+                  ? specifier.imported.name
+                  : specifier.imported.value;
+
+              break;
+            }
+            default: {
+              continue;
+            }
           }
 
           if (
-            isImportDisabled(importName.toLowerCase(), importSource, filename)
+            isImportDisabled({
+              filename,
+              importName: importName.toLowerCase(),
+              importSource,
+            })
           ) {
             context.report({
               data: { filename, importName },
@@ -139,6 +125,7 @@ export const rule = createRule<Options, Messages>({
   },
   defaultOptions: [[]],
   meta: {
+    defaultOptions: [[]],
     docs: {
       description:
         "Disallow use of any imports in any files or folders unless explicitly allowed.",
@@ -151,14 +138,37 @@ export const rule = createRule<Options, Messages>({
     },
     schema: [
       {
+        description: "List of rule option objects for restricting imports",
         items: {
           additionalProperties: false,
+          description:
+            "Rule option that configures allowed/disabled imports and file matching",
           properties: {
-            allowImports: { items: { type: "string" }, type: "array" },
-            disableImports: { items: { type: "string" }, type: "array" },
-            files: { items: { type: "string" }, type: "array" },
-            folders: { items: { type: "string" }, type: "array" },
-            from: { items: { type: "string" }, type: "array" },
+            allowImports: {
+              description: "Imports to allow",
+              items: { type: "string" },
+              type: "array",
+            },
+            disableImports: {
+              description: "Imports to disable",
+              items: { type: "string" },
+              type: "array",
+            },
+            files: {
+              description: "Files to match for rule",
+              items: { type: "string" },
+              type: "array",
+            },
+            folders: {
+              description: "Folders to match for rule",
+              items: { type: "string" },
+              type: "array",
+            },
+            from: {
+              description: "Source patterns to match (from)",
+              items: { type: "string" },
+              type: "array",
+            },
           },
           type: "object",
         },

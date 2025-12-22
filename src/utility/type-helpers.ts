@@ -1,9 +1,12 @@
 import type { TSESLint, TSESTree } from "@typescript-eslint/utils";
 
-export function getType(
-  context: Readonly<TSESLint.RuleContext<string, unknown[]>>,
-  node: TSESTree.Node
-) {
+export const getType = ({
+  context,
+  node,
+}: {
+  context: Readonly<TSESLint.RuleContext<string, unknown[]>>;
+  node: TSESTree.Node;
+}) => {
   const sourceCode = context.sourceCode;
   const services = sourceCode.parserServices;
 
@@ -24,4 +27,4 @@ export function getType(
   } catch {
     return;
   }
-}
+};

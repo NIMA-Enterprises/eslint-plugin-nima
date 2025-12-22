@@ -6,11 +6,11 @@ import { createRule } from "@utility/core";
 export const name = "restrict-console-methods";
 
 export const rule = createRule<Options, Messages>({
-  create(context, [options]) {
+  create: (context, [options]) => {
     const { allow = ["info"] } = options;
 
     return {
-      CallExpression(node) {
+      CallExpression: (node) => {
         if (
           node.callee.type === AST_NODE_TYPES.MemberExpression &&
           node.callee.object.type === AST_NODE_TYPES.Identifier &&
@@ -43,8 +43,12 @@ export const rule = createRule<Options, Messages>({
       allow: ["info"],
     },
   ],
-
   meta: {
+    defaultOptions: [
+      {
+        allow: ["info"],
+      },
+    ],
     docs: {
       description: "Restrict the usage of console in the codebase",
       recommended: true,
@@ -59,6 +63,7 @@ export const rule = createRule<Options, Messages>({
         additionalProperties: false,
         properties: {
           allow: {
+            description: "List of console methods to allow",
             items: { type: "string" },
             type: "array",
           },

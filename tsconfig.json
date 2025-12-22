@@ -13,6 +13,7 @@
     "baseUrl": ".",
     "resolveJsonModule": true,
     "paths": {
+      "@/src/*": ["src/*"],
       "@utility/*": ["src/utility/*"],
       "@models/*": ["src/models/*"],
       "@rules/*": ["src/rules/*"],

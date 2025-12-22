@@ -42,10 +42,10 @@ Each rule has three levels of explanation:
 - **prefer-arrow-functions**  
   Enforces the use of arrow functions instead of other function forms.
 
-- **prefer-body-destructuring**  
+- **prefer-void-for-optional-param**  
   Enforces destructuring function parameters inside the function body with `| void` union type.
 
-- **prefer-export-under-components**  
+- **prefer-export-under-component**  
   Requires components to be exported below their declaration.
 
 - **prefer-react-fc**  
@@ -66,7 +66,7 @@ This rule requires booleans to start with appropriate prefixes. It makes them ea
 
 **Configuration options:**
 
-1. **allowedPrefixes** - default: `is`, `has`, `will`. Overrides the default allowed prefixes.
+1. **allowedPrefixes** - default: `["is", "has", "can", "should", "will", "are", "were", "was"]`. Overrides the default allowed prefixes.
 1. **checkFunctions** - default: true. Enables or disables checking of function names.
 1. **checkParameters** - default: true. Enables or disables checking of parameter names.
 1. **checkProperties** - default: true. Enables or disables checking of property names.
@@ -137,9 +137,7 @@ This rule disallows the use of console methods.
 
 **Configuration options:**
 
-1. **allowConsoleLog** - default: false. Enables or disables `console.log`.
-1. **allowConsoleError** - default: false. Enables or disables `console.error`.
-1. **allowConsoleWarn** - default: false. Enables or disables `console.warn`.
+1. **allow** - default: `["info"]`. Array of console method names that are allowed.
 
 See the dedicated [restrict-console-methods documentation](./rules/restrict-console-methods.md) for full details.
 
@@ -187,6 +185,7 @@ This rule disallows specific imports in specified files or folders, with support
 1. **disableImports** - imports disabled in specified files or folders.
 1. **files** - target files for the configuration.
 1. **folders** - target folders for the configuration.
+1. **from** - source modules to restrict imports from.
 
 By default, this rule does nothing. See the dedicated [restrict-imports documentation](./rules/restrict-imports.md) for full details.
 
@@ -272,15 +271,13 @@ const NIMA = {
 
 ---
 
-#### prefer-body-destructuring
+#### prefer-void-for-optional-param
 
 This rule enforces destructuring function parameters inside the function body instead of in the parameter list, with `| void` union type.
 
-**Configuration options:**
+**Configuration options:** none.
 
-1. **functionTypes** - default: "all". Can be "all", "arrow-only", or "function-only".
-
-See the dedicated [prefer-body-destructuring documentation](./rules/prefer-body-destructuring.md) for full details.
+See the dedicated [prefer-void-for-optional-param documentation](./rules/prefer-void-for-optional-param.md) for full details.
 
 **Examples:**
 
@@ -296,13 +293,13 @@ const fn = (props: { a?: number, b?: string } | void) => {
 
 ---
 
-#### prefer-export-under-components
+#### prefer-export-under-component
 
 This rule enforces exporting components under their declaration, disallowing inline `export`.
 
 **Configuration options:** none.
 
-See the dedicated [prefer-export-under-components documentation](./rules/prefer-export-under-components.md) for full details.
+See the dedicated [prefer-export-under-component documentation](./rules/prefer-export-under-component.md) for full details.
 
 **Examples:**
 
@@ -368,7 +365,7 @@ All rules have their own dedicated page with detailed configuration, usage, and 
 - [no-objects-in-deps](./no-objects-in-deps.md)
 - [params-naming-convention](./params-naming-convention.md)
 - [prefer-arrow-functions](./prefer-arrow-functions.md)
-- [prefer-body-destructuring](./prefer-body-destructuring.md)
+- [prefer-void-for-optional-param](./prefer-void-for-optional-param.md)
 - [prefer-export-under-component](./prefer-export-under-component.md)
 - [prefer-react-fc](./prefer-react-fc.md)
 - [prefer-react-with-hooks](./prefer-react-with-hooks.md)

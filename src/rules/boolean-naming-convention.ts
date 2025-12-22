@@ -14,31 +14,41 @@ export const rule = createRule<Options, Messages>({
       checkParameters = true,
       checkProperties = true,
       checkVariables = true,
+      // regex string to ignore certain identifier names (e.g. 'filter')
+      ignore = "filter",
     } = options;
 
     const services = context.sourceCode.parserServices;
 
     const checker = services?.program?.getTypeChecker();
 
-    function hasValidBooleanPrefix(name: string) {
+    const hasValidBooleanPrefix = (name: string) => {
       return allowedPrefixes?.some((prefix) =>
         name.toLowerCase().startsWith(prefix.toLowerCase())
       );
+    };
+
+    // compile ignore regex once
+    let ignoreRegex: null | RegExp = null;
+    try {
+      ignoreRegex = new RegExp(ignore, "i");
+    } catch {
+      ignoreRegex = null;
     }
 
-    function generateSuggestion(name: string) {
+    const generateSuggestion = (name: string) => {
       return "is" + name.charAt(0).toUpperCase() + name.slice(1);
-    }
+    };
 
-    function isBooleanType(node: TSESTree.Node) {
+    const isBooleanType = (node: TSESTree.Node) => {
       try {
-        const type = getType(context, node);
+        const type = getType({ context, node });
 
         return type === "boolean" || type === "true" || type === "false";
       } catch {
         return false;
       }
-    }
+    };
 
     const isParamBoolean = (node: TSESTree.FunctionLike) => {
       const reported = new Set<string>();
@@ -49,7 +59,7 @@ export const rule = createRule<Options, Messages>({
           param.typeAnnotation?.typeAnnotation.type ===
             AST_NODE_TYPES.TSBooleanKeyword
         ) {
-          checkNameOnce(param.name, param, reported);
+          checkNameOnce({ name: param.name, node: param, reported });
         }
 
         if (
@@ -64,26 +74,30 @@ export const rule = createRule<Options, Messages>({
                 AST_NODE_TYPES.TSBooleanKeyword &&
               member.key.type === AST_NODE_TYPES.Identifier
             ) {
-              checkNameOnce(member.key.name, member, reported);
+              checkNameOnce({ name: member.key.name, node: member, reported });
             }
           }
         }
 
         if (param.type === AST_NODE_TYPES.ObjectPattern) {
-          checkObjectPattern(
-            param,
-            param.typeAnnotation?.typeAnnotation,
-            reported
-          );
+          checkObjectPattern({
+            pattern: param,
+            reported,
+            typeAnnotation: param.typeAnnotation?.typeAnnotation,
+          });
         }
       }
     };
 
-    function checkObjectPattern(
-      pattern: TSESTree.ObjectPattern,
-      typeAnnotation?: TSESTree.TypeNode,
-      reported?: Set<string>
-    ) {
+    const checkObjectPattern = ({
+      pattern,
+      reported,
+      typeAnnotation,
+    }: {
+      pattern: TSESTree.ObjectPattern;
+      reported?: Set<string>;
+      typeAnnotation?: TSESTree.TypeNode;
+    }) => {
       for (const prop of pattern.properties) {
         if (prop.type === AST_NODE_TYPES.Property) {
           const propKey = prop.key;
@@ -98,7 +112,7 @@ export const rule = createRule<Options, Messages>({
               AST_NODE_TYPES.TSBooleanKeyword;
 
             if (hasDirectAnnotation) {
-              checkNameOnce(propKey.name, propKey, reported);
+              checkNameOnce({ name: propKey.name, node: propKey, reported });
             } else if (typeAnnotation?.type === AST_NODE_TYPES.TSTypeLiteral) {
               for (const member of typeAnnotation.members) {
                 if (
@@ -108,45 +122,55 @@ export const rule = createRule<Options, Messages>({
                   member.typeAnnotation?.typeAnnotation.type ===
                     AST_NODE_TYPES.TSBooleanKeyword
                 ) {
-                  checkNameOnce(propKey.name, propKey, reported);
+                  checkNameOnce({
+                    name: propKey.name,
+                    node: propKey,
+                    reported,
+                  });
                   break;
                 }
               }
             }
           } else if (
             propKey.type === AST_NODE_TYPES.Identifier &&
-            propValue.type === AST_NODE_TYPES.ObjectPattern
+            propValue.type === AST_NODE_TYPES.ObjectPattern &&
+            typeAnnotation?.type === AST_NODE_TYPES.TSTypeLiteral
           ) {
-            if (typeAnnotation?.type === AST_NODE_TYPES.TSTypeLiteral) {
-              for (const member of typeAnnotation.members) {
-                if (
-                  member.type === AST_NODE_TYPES.TSPropertySignature &&
-                  member.key.type === AST_NODE_TYPES.Identifier &&
-                  member.key.name === propKey.name
-                ) {
-                  checkObjectPattern(
-                    propValue,
-                    member.typeAnnotation?.typeAnnotation,
-                    reported
-                  );
-                  break;
-                }
+            for (const member of typeAnnotation.members) {
+              if (
+                member.type === AST_NODE_TYPES.TSPropertySignature &&
+                member.key.type === AST_NODE_TYPES.Identifier &&
+                member.key.name === propKey.name
+              ) {
+                checkObjectPattern({
+                  pattern: propValue,
+                  reported,
+                  typeAnnotation: member.typeAnnotation?.typeAnnotation,
+                });
+                break;
               }
             }
           }
         }
       }
-    }
+    };
 
-    function checkNameOnce(
-      name: string,
-      node: TSESTree.Node,
-      reported?: Set<string>
-    ) {
+    const checkNameOnce = ({
+      name,
+      node,
+      reported,
+    }: {
+      name: string;
+      node: TSESTree.Node;
+      reported?: Set<string>;
+    }) => {
       const key = `${name}-${node.loc.start.line}`;
       if (reported && reported.has(key)) {
         return;
       }
+      // skip names matching ignore regex
+      if (ignoreRegex && ignoreRegex.test(name)) return;
+
       if (!hasValidBooleanPrefix(name)) {
         reported?.add(key);
         context.report({
@@ -155,9 +179,9 @@ export const rule = createRule<Options, Messages>({
           node,
         });
       }
-    }
+    };
 
-    function functionReturnsBooleanType(node: TSESTree.FunctionLike) {
+    const functionReturnsBooleanType = (node: TSESTree.FunctionLike) => {
       try {
         const tsNode = services?.esTreeNodeToTSNodeMap?.get(node);
         if (!tsNode) return false;
@@ -176,10 +200,10 @@ export const rule = createRule<Options, Messages>({
       } catch {
         return false;
       }
-    }
+    };
 
     return {
-      ArrowFunctionExpression(node) {
+      ArrowFunctionExpression: (node) => {
         if (checkParameters) {
           isParamBoolean(node);
         }
@@ -190,6 +214,8 @@ export const rule = createRule<Options, Messages>({
 
         if (node.id && functionReturnsBooleanType(node)) {
           const name = node.id.name;
+          // skip names matching ignore regex
+          if (ignoreRegex && ignoreRegex.test(name)) return;
           if (!hasValidBooleanPrefix(name)) {
             context.report({
               data: {
@@ -207,7 +233,7 @@ export const rule = createRule<Options, Messages>({
         }
       },
 
-      FunctionExpression(node) {
+      FunctionExpression: (node) => {
         if (checkParameters) {
           isParamBoolean(node);
         }
@@ -221,25 +247,24 @@ export const rule = createRule<Options, Messages>({
             prop.type === AST_NODE_TYPES.Property &&
             prop.key.type === AST_NODE_TYPES.Identifier &&
             !prop.computed &&
-            prop.value
-          ) {
-            if (
-              isBooleanType(prop.value) ||
+            prop.value &&
+            (isBooleanType(prop.value) ||
               ((prop.value.type === AST_NODE_TYPES.FunctionExpression ||
                 prop.value.type === AST_NODE_TYPES.ArrowFunctionExpression) &&
-                functionReturnsBooleanType(prop.value))
-            ) {
-              const name = prop.key.name;
-              if (!hasValidBooleanPrefix(name)) {
-                context.report({
-                  data: {
-                    name,
-                    suggestion: generateSuggestion(name),
-                  },
-                  messageId: Messages.BAD_PROPERTY_BOOLEAN_PREFIX,
-                  node: prop.key,
-                });
-              }
+                functionReturnsBooleanType(prop.value)))
+          ) {
+            const name = prop.key.name;
+            // skip names matching ignore regex
+            if (ignoreRegex && ignoreRegex.test(name)) continue;
+            if (!hasValidBooleanPrefix(name)) {
+              context.report({
+                data: {
+                  name,
+                  suggestion: generateSuggestion(name),
+                },
+                messageId: Messages.BAD_PROPERTY_BOOLEAN_PREFIX,
+                node: prop.key,
+              });
             }
           }
         }
@@ -297,8 +322,7 @@ export const rule = createRule<Options, Messages>({
                 if (
                   member.type === AST_NODE_TYPES.TSPropertySignature &&
                   member.key?.type === AST_NODE_TYPES.Identifier &&
-                  (member.key as TSESTree.Identifier).name ===
-                    (node.key as TSESTree.Identifier).name
+                  member.key.name === (node.key as TSESTree.Identifier).name
                 ) {
                   return (
                     member.typeAnnotation?.typeAnnotation.type ===
@@ -309,7 +333,9 @@ export const rule = createRule<Options, Messages>({
               });
 
               if (propertyType) {
-                const name = (node.value as TSESTree.Identifier).name;
+                const name = node.value.name;
+                // skip names matching ignore regex
+                if (ignoreRegex && ignoreRegex.test(name)) return;
                 if (!hasValidBooleanPrefix(name)) {
                   context.report({
                     data: {
@@ -327,11 +353,11 @@ export const rule = createRule<Options, Messages>({
       },
 
       VariableDeclarator: (node) => {
-        if (node.id.type === "ObjectPattern") {
+        if (node.id.type === AST_NODE_TYPES.ObjectPattern) {
           if (!checkParameters) return;
 
-          if (node.id.type === AST_NODE_TYPES.ObjectPattern && node.init) {
-            node.id.properties.forEach((prop) => {
+          if (node.init) {
+            for (const prop of node.id.properties) {
               if (
                 prop.type === AST_NODE_TYPES.Property &&
                 prop.key.type === AST_NODE_TYPES.Identifier &&
@@ -352,6 +378,8 @@ export const rule = createRule<Options, Messages>({
                       typeString === "true" ||
                       typeString === "false"
                     ) {
+                      // skip names matching ignore regex
+                      if (ignoreRegex && ignoreRegex.test(valueName)) continue;
                       if (!hasValidBooleanPrefix(valueName)) {
                         context.report({
                           data: {
@@ -366,7 +394,7 @@ export const rule = createRule<Options, Messages>({
                   }
                 } catch {}
               }
-            });
+            }
           }
         }
 
@@ -378,6 +406,8 @@ export const rule = createRule<Options, Messages>({
             AST_NODE_TYPES.TSBooleanKeyword
           ) {
             const name = node.id.name;
+            // skip names matching ignore regex
+            if (ignoreRegex && ignoreRegex.test(name)) return;
             if (!hasValidBooleanPrefix(name)) {
               context.report({
                 data: {
@@ -398,6 +428,8 @@ export const rule = createRule<Options, Messages>({
               functionReturnsBooleanType(node.init)
             ) {
               const name = node.id.name;
+              // skip names matching ignore regex
+              if (ignoreRegex && ignoreRegex.test(name)) return;
               if (!hasValidBooleanPrefix(name)) {
                 context.report({
                   data: {
@@ -410,6 +442,8 @@ export const rule = createRule<Options, Messages>({
               }
             } else if (isBooleanType(node.init)) {
               const name = node.id.name;
+              // skip names matching ignore regex
+              if (ignoreRegex && ignoreRegex.test(name)) return;
               if (!hasValidBooleanPrefix(name)) {
                 context.report({
                   data: {
@@ -433,9 +467,20 @@ export const rule = createRule<Options, Messages>({
       checkParameters: true,
       checkProperties: true,
       checkVariables: true,
+      ignore: "filter",
     },
   ],
   meta: {
+    defaultOptions: [
+      {
+        allowedPrefixes: DEFAULT_PREFIXES,
+        checkFunctions: true,
+        checkParameters: true,
+        checkProperties: true,
+        checkVariables: true,
+        ignore: "filter",
+      },
+    ],
     docs: {
       description:
         "Enforces boolean variables to use appropriate prefixes (is, has, can, should, etc.)",
@@ -457,14 +502,30 @@ export const rule = createRule<Options, Messages>({
         additionalProperties: false,
         properties: {
           allowedPrefixes: {
-            default: DEFAULT_PREFIXES,
+            description: "Allowed boolean name prefixes (is, has, can, etc.)",
             items: { type: "string" },
             type: "array",
           },
-          checkFunctions: { default: true, type: "boolean" },
-          checkParameters: { default: true, type: "boolean" },
-          checkProperties: { default: true, type: "boolean" },
-          checkVariables: { default: true, type: "boolean" },
+          checkFunctions: {
+            description: "Check top-level functions",
+            type: "boolean",
+          },
+          checkParameters: {
+            description: "Check function parameters",
+            type: "boolean",
+          },
+          checkProperties: {
+            description: "Check object properties",
+            type: "boolean",
+          },
+          checkVariables: {
+            description: "Check variable declarators",
+            type: "boolean",
+          },
+          ignore: {
+            description: "Regex string to ignore certain names",
+            type: "string",
+          },
         },
         type: "object",
       },

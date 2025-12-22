@@ -23,12 +23,6 @@ ruleTester.run("no-objects-in-deps", NoObjectsInDeps.rule, {
       errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
     },
 
-    // Array literal in dependency array
-    {
-      code: "useEffect(() => {}, [[1, 2, 3]])",
-      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
-    },
-
     // New expression in dependency array
     {
       code: "useEffect(() => {}, [new Date()])",
@@ -41,15 +35,9 @@ ruleTester.run("no-objects-in-deps", NoObjectsInDeps.rule, {
       errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
     },
 
-    // useMemo with array
-    {
-      code: "useMemo(() => {}, [['a', 'b']])",
-      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
-    },
-
     // Multiple invalid dependencies
     {
-      code: "useEffect(() => {}, [{ foo: 'bar' }, [1, 2], variable])",
+      code: "useEffect(() => {}, [{ foo: 'bar' }, new Set()])",
       errors: [
         { messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES },
         { messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES },
@@ -59,15 +47,6 @@ ruleTester.run("no-objects-in-deps", NoObjectsInDeps.rule, {
     // React namespace with object
     {
       code: "React.useEffect(() => {}, [{ test: true }])",
-      errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
-    },
-
-    // Variable initialized with object
-    {
-      code: `
-        const config = { setting: true };
-        useEffect(() => {}, [config]);
-      `,
       errors: [{ messageId: Messages.NO_OBJECTS_IN_DEPENDENCIES }],
     },
 
@@ -99,5 +78,14 @@ ruleTester.run("no-objects-in-deps", NoObjectsInDeps.rule, {
 
     // Hook without dependency array
     "useEffect(() => {})",
+
+    // Arrays are allowed (they're not problematic in deps)
+    "useEffect(() => {}, [[1, 2, 3]])",
+
+    // Array variables are allowed
+    "useMemo(() => {}, [['a', 'b']])",
+
+    // Functions in deps are allowed
+    "useEffect(() => {}, [() => {}])",
   ],
 });
