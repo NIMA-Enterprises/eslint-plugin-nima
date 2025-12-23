@@ -31,7 +31,7 @@ export const config: {
     },
     messages: {
         [Messages.FUNCTION_DISALLOWED]:
-            "Do not use {{ fnName }} inside {{ filename }}.",
+            "NIMA: Do not use {{ fnName }} inside {{ filename }}.",
     },
     schema: [
         {

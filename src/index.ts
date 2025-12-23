@@ -6,6 +6,7 @@ import type { ESLint, Linter } from "eslint";
 
 import {
     BooleanNamingConvention,
+    NoAmar,
     NoHandlerSuffix,
     NoObjectsInDeps,
     ParamsNamingConvention,
@@ -21,6 +22,7 @@ import {
 
 const rules = {
     [BooleanNamingConvention.name]: BooleanNamingConvention.rule,
+    [NoAmar.name]: NoAmar.rule,
     [NoHandlerSuffix.name]: NoHandlerSuffix.rule,
     [NoObjectsInDeps.name]: NoObjectsInDeps.rule,
     [ParamsNamingConvention.name]: ParamsNamingConvention.rule,

@@ -26,7 +26,7 @@
         "test": "jest",
         "prepare": "husky",
         "typecheck": "tsc --noEmit",
-        "sanitize": "eslint . --fix && prettier --write .",
+        "sanitize": "eslint . --fix && prettier --write . && echo '\nCode sanitized!'",
         "validate": "eslint . && tsc --noEmit && prettier --check . && echo '\nYou are a great developer!'"
     },
     "dependencies": {
@@ -47,7 +47,7 @@
         "eslint-plugin-depend": "^1.4.0",
         "eslint-plugin-github": "6.0.0",
         "eslint-plugin-jsdoc": "61.5.0",
-        "eslint-plugin-nima": "1.2.4",
+        "eslint-plugin-nima": "1.2.5",
         "typescript-eslint": "8.46.3",
         "@eslint/core": "0.15.2",
         "@types/jest": "30.0.0",

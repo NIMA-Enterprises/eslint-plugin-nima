@@ -24,7 +24,7 @@ export const config: {
     fixable: "code",
     messages: {
         [Messages.BAD_HANDLER_NAME]:
-            "NIMA: You shouldn't use the handler suffix, use the handle prefix instead ({{ fnWithGoodName }})",
+            "NIMA: Use the handle prefix instead of handler suffix ({{ fnWithGoodName }}).",
     },
     schema: [],
     type: "problem",

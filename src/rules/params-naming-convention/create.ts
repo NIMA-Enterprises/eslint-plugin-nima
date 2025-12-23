@@ -70,8 +70,10 @@ export const create = (
             });
         }
     };
+
     return {
-        "FunctionDeclaration, FunctionExpression, ArrowFunctionExpression":
-            checkParams,
+        ArrowFunctionExpression: checkParams,
+        FunctionDeclaration: checkParams,
+        FunctionExpression: checkParams,
     };
 };

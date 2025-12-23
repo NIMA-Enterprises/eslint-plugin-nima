@@ -23,7 +23,7 @@ export const config: {
     },
     messages: {
         [Messages.NO_OBJECTS_IN_DEPENDENCIES]:
-            "NIMA: Objects inside of dependency arrays aren't allowed. Try doing JSON.stringify({{ object }}).",
+            "NIMA: Do not use objects in dependency arrays. Use JSON.stringify({{ object }}) instead.",
     },
     schema: [],
     type: "suggestion",

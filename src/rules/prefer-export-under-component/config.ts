@@ -25,7 +25,7 @@ export const config: {
     fixable: "code",
     messages: {
         [Messages.EXPORT_BELOW_COMPONENT]:
-            "NIMA: Declare React component '{{ fnName }}' separately from its export statement",
+            "NIMA: Declare React component '{{ fnName }}' separately from its export statement.",
     },
     schema: [],
     type: "problem",

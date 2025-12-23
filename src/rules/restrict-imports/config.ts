@@ -32,7 +32,7 @@ export const config: {
     },
     messages: {
         [Messages.IMPORT_DISALLOWED]:
-            "Do not import {{ importName }} inside {{ filename }}.",
+            "NIMA: Do not import {{ importName }} inside {{ filename }}.",
     },
     schema: [
         {

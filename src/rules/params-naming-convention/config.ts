@@ -31,7 +31,7 @@ export const config: {
     },
     messages: {
         [Messages.USE_OBJECT_PARAMETERS]:
-            "NIMA: Function has {{count}} extra parameter(s). Either prefix them: {{params}}, or put all parameters in one object.",
+            "NIMA: Function has {{count}} extra parameter(s). Use a prefix for {{params}}, or consolidate all parameters into a single object.",
     },
     schema: [
         {

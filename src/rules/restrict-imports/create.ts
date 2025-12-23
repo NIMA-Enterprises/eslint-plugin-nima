@@ -76,57 +76,58 @@ export const create = (
         });
     };
 
-    return {
-        ImportDeclaration: (node: TSESTree.ImportDeclaration) => {
-            const filename = context.filename;
-            const importSource =
-                typeof node.source.value === "string" ? node.source.value : "";
+    const checkImportDeclaration = (node: TSESTree.ImportDeclaration) => {
+        const filename = context.filename;
+        const importSource =
+            typeof node.source.value === "string" ? node.source.value : "";
 
-            for (const specifier of node.specifiers) {
-                let importName: string;
+        for (const specifier of node.specifiers) {
+            let importName: string;
 
-                switch (specifier.type) {
-                    case AST_NODE_TYPES.ImportDefaultSpecifier: {
-                        importName = specifier.local.name;
+            switch (specifier.type) {
+                case AST_NODE_TYPES.ImportDefaultSpecifier: {
+                    importName = specifier.local.name;
 
-                        break;
-                    }
-                    case AST_NODE_TYPES.ImportNamespaceSpecifier: {
-                        importName = specifier.local.name;
-
-                        break;
-                    }
-                    case AST_NODE_TYPES.ImportSpecifier: {
-                        importName =
-                            specifier.imported.type ===
-                            AST_NODE_TYPES.Identifier
-                                ? specifier.imported.name
-                                : specifier.imported.value;
-
-                        break;
-                    }
-                    default: {
-                        continue;
-                    }
+                    break;
                 }
+                case AST_NODE_TYPES.ImportNamespaceSpecifier: {
+                    importName = specifier.local.name;
 
-                if (
-                    isImportDisabled({
-                        filename,
-                        importName: importName.toLowerCase(),
-                        importSource,
-                    })
-                ) {
-                    context.report({
-                        data: {
-                            filename,
-                            importName,
-                        },
-                        messageId: Messages.IMPORT_DISALLOWED,
-                        node: specifier,
-                    });
+                    break;
+                }
+                case AST_NODE_TYPES.ImportSpecifier: {
+                    importName =
+                        specifier.imported.type === AST_NODE_TYPES.Identifier
+                            ? specifier.imported.name
+                            : specifier.imported.value;
+
+                    break;
+                }
+                default: {
+                    continue;
                 }
             }
-        },
+
+            if (
+                isImportDisabled({
+                    filename,
+                    importName: importName.toLowerCase(),
+                    importSource,
+                })
+            ) {
+                context.report({
+                    data: {
+                        filename,
+                        importName,
+                    },
+                    messageId: Messages.IMPORT_DISALLOWED,
+                    node: specifier,
+                });
+            }
+        }
+    };
+
+    return {
+        ImportDeclaration: checkImportDeclaration,
     };
 };

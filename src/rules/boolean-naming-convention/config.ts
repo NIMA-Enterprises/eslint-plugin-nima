@@ -37,13 +37,13 @@ export const config: {
     },
     messages: {
         [Messages.BAD_FUNCTION_BOOLEAN_PREFIX]:
-            "NIMA: Function '{{name}}' returns a boolean, use a prefix like {{suggestion}}",
+            "NIMA: Function '{{name}}' returns a boolean. Use a prefix like {{suggestion}}.",
         [Messages.BAD_PARAMETER_BOOLEAN_PREFIX]:
-            "NIMA: Boolean parameter '{{name}}' should use a prefix like {{suggestion}}",
+            "NIMA: Boolean parameter '{{name}}' should use a prefix like {{suggestion}}.",
         [Messages.BAD_PROPERTY_BOOLEAN_PREFIX]:
-            "NIMA: Boolean property '{{name}}' should use a prefix like {{suggestion}}",
+            "NIMA: Boolean property '{{name}}' should use a prefix like {{suggestion}}.",
         [Messages.BAD_VARIABLE_BOOLEAN_PREFIX]:
-            "NIMA: Boolean variable '{{name}}' should use a prefix like {{suggestion}}",
+            "NIMA: Boolean variable '{{name}}' should use a prefix like {{suggestion}}.",
     },
     schema: [
         {

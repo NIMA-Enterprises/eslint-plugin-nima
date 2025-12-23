@@ -66,125 +66,128 @@ export const create = (
         return `${asyncKeyword}${params}${returnType} => ${body}`;
     };
 
+    const checkFunctionDeclaration = (node: TSESTree.FunctionDeclaration) => {
+        if (allowFunctionDeclarations || shouldSkipFunction(node)) {
+            return;
+        }
+        context.report({
+            fix: (fixer) => {
+                if (!node.id) {
+                    return null;
+                }
+                const functionName = node.id.name;
+                const arrowFunction = generateArrowFunction(node);
+                let replacement;
+                if (
+                    node.parent?.type ===
+                    AST_NODE_TYPES.ExportDefaultDeclaration
+                ) {
+                    const constDeclaration = `const ${functionName} = ${arrowFunction}`;
+                    const exportDeclaration = `export default ${functionName}`;
+                    replacement = `${constDeclaration};\n${exportDeclaration}`;
+                    return fixer.replaceText(node.parent, replacement);
+                } else if (
+                    node.parent?.type === AST_NODE_TYPES.ExportNamedDeclaration
+                ) {
+                    replacement = `export const ${functionName} = ${arrowFunction}`;
+                    return fixer.replaceText(node.parent, replacement);
+                } else {
+                    replacement = `const ${functionName} = ${arrowFunction}`;
+                    return fixer.replaceText(node, replacement);
+                }
+            },
+            messageId: Messages.PREFER_ARROW_FUNCTIONS,
+            node: node.id || node,
+        });
+    };
+
+    const checkFunctionExpression = (node: TSESTree.FunctionExpression) => {
+        if (
+            (node.parent?.type === AST_NODE_TYPES.MethodDefinition ||
+                (node.parent?.type === AST_NODE_TYPES.Property &&
+                    (node.parent.method || !node.parent.method))) &&
+            allowMethodDefinitions
+        ) {
+            return;
+        }
+
+        if (
+            node.parent?.type === AST_NODE_TYPES.Property &&
+            node.parent.method
+        ) {
+            return;
+        }
+
+        if (allowFunctionExpressions || shouldSkipFunction(node)) {
+            return;
+        }
+
+        context.report({
+            fix: (fixer) => {
+                const arrowFunction = generateArrowFunction(node);
+                return fixer.replaceText(node, arrowFunction);
+            },
+            messageId: Messages.PREFER_ARROW_FUNCTION_EXPRESSION,
+            node,
+        });
+    };
+
+    const checkMethodDefinition = (node: TSESTree.MethodDefinition) => {
+        if (
+            allowMethodDefinitions ||
+            node.kind === "constructor" ||
+            node.kind === "get" ||
+            node.kind === "set"
+        ) {
+            return;
+        }
+        if (
+            node.value.type === AST_NODE_TYPES.FunctionExpression &&
+            !shouldSkipFunction(node.value)
+        ) {
+            context.report({
+                fix: (fixer) => {
+                    const key = sourceCode.getText(node.key);
+                    const arrowFunction = generateArrowFunction(node.value);
+                    const static_ = node.static ? "static " : "";
+                    const replacement = `${static_}${key} = ${arrowFunction}`;
+                    return fixer.replaceText(node, replacement);
+                },
+                messageId: Messages.PREFER_ARROW_METHOD,
+                node: node.key,
+            });
+        }
+    };
+
+    const checkProperty = (node: TSESTree.Property) => {
+        if (
+            allowMethodDefinitions ||
+            !node.method ||
+            node.kind === "get" ||
+            node.kind === "set" ||
+            node.value.type !== AST_NODE_TYPES.FunctionExpression
+        ) {
+            return;
+        }
+        const functionNode = node.value;
+        if (!shouldSkipFunction(functionNode)) {
+            context.report({
+                fix: (fixer) => {
+                    const key = sourceCode.getText(node.key);
+                    const arrowFunction = generateArrowFunction(functionNode);
+                    const replacement = `${key}: ${arrowFunction}`;
+                    return fixer.replaceText(node, replacement);
+                },
+                messageId: Messages.PREFER_ARROW_METHOD,
+                node: node.key,
+            });
+        }
+    };
+
     return {
-        FunctionDeclaration: (node: TSESTree.FunctionDeclaration) => {
-            if (allowFunctionDeclarations || shouldSkipFunction(node)) {
-                return;
-            }
-            context.report({
-                fix: (fixer) => {
-                    if (!node.id) {
-                        return null;
-                    }
-                    const functionName = node.id.name;
-                    const arrowFunction = generateArrowFunction(node);
-                    let replacement;
-                    if (
-                        node.parent?.type ===
-                        AST_NODE_TYPES.ExportDefaultDeclaration
-                    ) {
-                        const constDeclaration = `const ${functionName} = ${arrowFunction}`;
-                        const exportDeclaration = `export default ${functionName}`;
-                        replacement = `${constDeclaration};\n${exportDeclaration}`;
-                        return fixer.replaceText(node.parent, replacement);
-                    } else if (
-                        node.parent?.type ===
-                        AST_NODE_TYPES.ExportNamedDeclaration
-                    ) {
-                        replacement = `export const ${functionName} = ${arrowFunction}`;
-                        return fixer.replaceText(node.parent, replacement);
-                    } else {
-                        replacement = `const ${functionName} = ${arrowFunction}`;
-                        return fixer.replaceText(node, replacement);
-                    }
-                },
-                messageId: Messages.PREFER_ARROW_FUNCTIONS,
-                node: node.id || node,
-            });
-        },
-
-        FunctionExpression: (node: TSESTree.FunctionExpression) => {
-            if (
-                (node.parent?.type === AST_NODE_TYPES.MethodDefinition ||
-                    (node.parent?.type === AST_NODE_TYPES.Property &&
-                        (node.parent.method || !node.parent.method))) &&
-                allowMethodDefinitions
-            ) {
-                return;
-            }
-
-            if (
-                node.parent?.type === AST_NODE_TYPES.Property &&
-                node.parent.method
-            ) {
-                return;
-            }
-
-            if (allowFunctionExpressions || shouldSkipFunction(node)) {
-                return;
-            }
-
-            context.report({
-                fix: (fixer) => {
-                    const arrowFunction = generateArrowFunction(node);
-                    return fixer.replaceText(node, arrowFunction);
-                },
-                messageId: Messages.PREFER_ARROW_FUNCTION_EXPRESSION,
-                node,
-            });
-        },
-
-        MethodDefinition: (node: TSESTree.MethodDefinition) => {
-            if (
-                allowMethodDefinitions ||
-                node.kind === "constructor" ||
-                node.kind === "get" ||
-                node.kind === "set"
-            ) {
-                return;
-            }
-            if (
-                node.value.type === AST_NODE_TYPES.FunctionExpression &&
-                !shouldSkipFunction(node.value)
-            ) {
-                context.report({
-                    fix: (fixer) => {
-                        const key = sourceCode.getText(node.key);
-                        const arrowFunction = generateArrowFunction(node.value);
-                        const static_ = node.static ? "static " : "";
-                        const replacement = `${static_}${key} = ${arrowFunction}`;
-                        return fixer.replaceText(node, replacement);
-                    },
-                    messageId: Messages.PREFER_ARROW_METHOD,
-                    node: node.key,
-                });
-            }
-        },
-
-        Property: (node: TSESTree.Property) => {
-            if (
-                allowMethodDefinitions ||
-                !node.method ||
-                node.kind === "get" ||
-                node.kind === "set" ||
-                node.value.type !== AST_NODE_TYPES.FunctionExpression
-            ) {
-                return;
-            }
-            const functionNode = node.value;
-            if (!shouldSkipFunction(functionNode)) {
-                context.report({
-                    fix: (fixer) => {
-                        const key = sourceCode.getText(node.key);
-                        const arrowFunction =
-                            generateArrowFunction(functionNode);
-                        const replacement = `${key}: ${arrowFunction}`;
-                        return fixer.replaceText(node, replacement);
-                    },
-                    messageId: Messages.PREFER_ARROW_METHOD,
-                    node: node.key,
-                });
-            }
-        },
+        FunctionDeclaration: checkFunctionDeclaration,
+        FunctionExpression: checkFunctionExpression,
+        MethodDefinition: checkMethodDefinition,
+        Property: checkProperty,
     };
 };

@@ -11,6 +11,9 @@ import githubPlugin from "eslint-plugin-github";
 import sonarPlugin from "eslint-plugin-sonarjs";
 import prettierPlugin from "eslint-config-prettier";
 
+/* Test out new rules/changes */
+import distPlugin from "./dist/index.js";
+
 export default defineConfig([
     ...tseslint.configs.recommendedTypeChecked,
     pluginPerfectionist.configs["recommended-alphabetical"],
@@ -19,16 +22,16 @@ export default defineConfig([
     nimaPlugin.configs["flat/recommended"],
     jsDocPlugin.configs["flat/recommended"],
     sonarPlugin.configs.recommended,
-    githubPlugin.getFlatConfigs().recommended,
+    // githubPlugin.getFlatConfigs().recommended,
 
     {
-        files: ["**/*.{ts,tsx}"],
-
         plugins: {
             "unused-imports": unusedImportsPlugin,
+            // "dist-nima": distPlugin,
         },
 
         rules: {
+            "dist-nima/no-amar": "error",
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unused-vars": "off",
             "import/no-unresolved": "off",
@@ -43,14 +46,9 @@ export default defineConfig([
                     argsIgnorePattern: "^_",
                 },
             ],
-            // "nima/boolean-naming-convention": [
-            //   "error",
-            //   {
-            //     ignore: "recommended|check*|additionalProperties",
-            //   },
-            // ],
             "nima/no-handler-suffix": "error",
             "nima/no-objects-in-deps": "error",
+
             "nima/params-naming-convention": [
                 "error",
                 {
@@ -75,6 +73,18 @@ export default defineConfig([
                 tsconfigRootDir: import.meta.dirname,
             },
         },
+    },
+
+    {
+        rules: {
+            "nima/boolean-naming-convention": [
+                "error",
+                {
+                    ignore: "recommended|check*|additionalProperties",
+                },
+            ],
+        },
+        files: ["**/create.ts", "**/utility/**"],
     },
 
     {
