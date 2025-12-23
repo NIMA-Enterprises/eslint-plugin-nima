@@ -1,5 +1,4 @@
 export * as BooleanNamingConvention from "./boolean-naming-convention";
-export * as NoAmar from "./no-amar";
 export * as NoHandlerSuffix from "./no-handler-suffix";
 export * as NoObjectsInDeps from "./no-objects-in-deps";
 export * as ParamsNamingConvention from "./params-naming-convention";

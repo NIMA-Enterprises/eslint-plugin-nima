@@ -12,7 +12,7 @@ import sonarPlugin from "eslint-plugin-sonarjs";
 import prettierPlugin from "eslint-config-prettier";
 
 /* Test out new rules/changes */
-import distPlugin from "./dist/index.js";
+// import distPlugin from "./dist/index.js";
 
 export default defineConfig([
     ...tseslint.configs.recommendedTypeChecked,
@@ -31,7 +31,7 @@ export default defineConfig([
         },
 
         rules: {
-            "dist-nima/no-amar": "error",
+            // "dist-nima/no-amar": "error",
             "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/no-unused-vars": "off",
             "import/no-unresolved": "off",
