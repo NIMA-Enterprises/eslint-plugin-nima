@@ -7,6 +7,7 @@ export * as PreferExportUnderComponent from "./prefer-export-under-component";
 export * as PreferReactFc from "./prefer-react-fc";
 export * as PreferReactWithHooks from "./prefer-react-with-hooks";
 export * as PreferVoidForOptionalParam from "./prefer-void-for-optional-param";
+export * as RequireChainidParam from "./require-chainid-param";
 export * as RestrictConsoleMethods from "./restrict-console-methods";
 export * as RestrictFunctionUsage from "./restrict-function-usage";
 export * as RestrictImports from "./restrict-imports";
