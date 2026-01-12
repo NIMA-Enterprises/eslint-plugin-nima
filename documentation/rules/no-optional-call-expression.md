@@ -1,4 +1,4 @@
-# `restrict-optional-call-expression`
+# `no-optional-call-expression`
 
 Restricts the use of optional chaining in call expressions (e.g., `callback?.()`) to enforce more explicit null/undefined handling patterns.  
 Optional call expressions can hide potential issues and make code behavior less predictable.
@@ -7,7 +7,7 @@ Optional call expressions can hide potential issues and make code behavior less 
 
 ## Table of contents
 
-- [`restrict-optional-call-expression`](#restrict-optional-call-expression)
+- [`no-optional-call-expression`](#no-optional-call-expression)
   - [Table of contents](#table-of-contents)
   - [Rule summary](#rule-summary)
   - [What the rule checks](#what-the-rule-checks)
@@ -139,7 +139,7 @@ export default [
             nima,
         },
         rules: {
-            "nima/restrict-optional-call-expression": "error",
+            "nima/no-optional-call-expression": "error",
         },
     },
 ];
@@ -151,7 +151,7 @@ export default [
 {
     "plugins": ["nima"],
     "rules": {
-        "nima/restrict-optional-call-expression": "error"
+        "nima/no-optional-call-expression": "error"
     }
 }
 ```
