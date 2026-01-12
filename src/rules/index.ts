@@ -1,6 +1,7 @@
 export * as BooleanNamingConvention from "./boolean-naming-convention";
 export * as NoHandlerSuffix from "./no-handler-suffix";
 export * as NoObjectsInDeps from "./no-objects-in-deps";
+export * as NoOptionalCallExpression from "./no-optional-call-expression";
 export * as ParamsNamingConvention from "./params-naming-convention";
 export * as PreferArrowFunctions from "./prefer-arrow-functions";
 export * as PreferExportUnderComponent from "./prefer-export-under-component";
