@@ -1,4 +1,4 @@
-/* Test file for restrict-optional-call-expression rule
+/* Test file for no-optional-call-expression rule
     Ensures optional chaining on call expressions is properly detected
 
     Created by: Nima Labs
@@ -9,12 +9,12 @@
     Valid tests: 6
 */
 
-import { Messages, rule } from "@rules/restrict-optional-call-expression";
+import { Messages, rule } from "@/src/rules/no-optional-call-expression";
 import { RuleTester } from "@typescript-eslint/rule-tester";
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("restrict-optional-call-expression", rule, {
+ruleTester.run("no-optional-call-expression", rule, {
     invalid: [
         // Test 1: Basic optional call expression
         {
